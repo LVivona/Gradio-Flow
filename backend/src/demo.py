@@ -10,4 +10,4 @@ def add(x, y):
     return x + y
 
 if __name__ == "__main__":
-    tabularGradio([Hello_World(), add()], ["Hello World",])
+    tabularGradio([Hello_World(), add()], ["Hello World", "Add"])
