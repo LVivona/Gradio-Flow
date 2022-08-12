@@ -36,12 +36,12 @@ def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
     assert len(funcs) == len(names), f"{bcolor.BOLD}{bcolor.FAIL}🐛 something went wrong!!! The function you appended dose not match the lenght of the names{bcolor.ENDC}"
     # assert all([fn == "wrap" for fn in funcs]), f"{bcolor().BOLD}{bcolor().FAIL}not all of these are decorated with the right decorator{bcolor().ENDC}"
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
-
-    try:
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] if 'listen' in kwargs else 5000 }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
-    except Exception as e:
-        print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
-        return
+    if 'listen' in kwargs:
+        try:
+            requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
+        except Exception as e:
+            print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
+            return
     
     gr.TabbedInterface(funcs, names).launch(server_port=port,
                                             server_name=f"{DOCKER_LOCAL_HOST}",
@@ -63,12 +63,12 @@ def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
                                             ssl_certfile=kwargs['ssl_certfile'] if "ssl_certfile" in kwargs else None,
                                             ssl_keyfile_password=kwargs['ssl_keyfile_password'] if "ssl_keyfile_password" in kwargs else None,
                                             quiet=kwargs['quiet'] if "quiet" in kwargs else False)
-
-    try:
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] if 'listen' in kwargs else '5000' }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
-    except Exception as e:
-    
-        print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
+    if 'listen' in kwargs:
+        try:
+            requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
+        except Exception as e:
+        
+            print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
     
     return
 
@@ -181,12 +181,12 @@ def GradioModule(cls):
 
         def run(self, **kwargs):
             port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort() 
-
-            try:
-                requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] if 'listen' in kwargs else '5000' }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.cls.__class__), "name" : self.cls.__class__.__name__, "kwargs" : kwargs})
-            except Exception:
-                print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛")
-                return
+            if 'listen' in kwargs:
+                try:
+                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.cls.__class__), "name" : self.cls.__class__.__name__, "kwargs" : kwargs})
+                except Exception:
+                    print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛")
+                    return
 
             self.compile(live=kwargs[ 'live' ] if "live" in kwargs else False,
                          allow_flagging=kwargs[ 'allow_flagging' ] if "allow_flagging" in kwargs else None,
@@ -219,10 +219,11 @@ def GradioModule(cls):
                                   ssl_certfile=kwargs['ssl_certfile'] if "ssl_certfile" in kwargs else None,
                                   ssl_keyfile_password=kwargs['ssl_keyfile_password'] if "ssl_keyfile_password" in kwargs else None,
                                   quiet=kwargs['quiet'] if "quiet" in kwargs else False) 
-            try:
-                requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] if 'listen' in kwargs else '5000' }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.cls.__class__), "name" : self.cls.__class__.__name__, "kwargs" : kwargs})
-            except Exception:
-                print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛")
+            if 'listen' in kwargs:
+                try:
+                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.cls.__class__), "name" : self.cls.__class__.__name__, "kwargs" : kwargs})
+                except Exception:
+                    print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛")
             return
 
     return Decorator
