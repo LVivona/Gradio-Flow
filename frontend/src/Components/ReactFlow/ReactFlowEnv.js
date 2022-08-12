@@ -7,14 +7,16 @@ import ReactFlow, { Background,
                     ReactFlowProvider,
                     } from 'react-flow-renderer';
 import React ,{ useState, useCallback, useRef } from 'react';
-import Navbar from '../Navagation/navbar';
-
+import Navbar from '../Navagation/Navbar';
+import { useThemeDetector } from '../../helper/visual'
+ 
 const types = {
     custom : CustomNodeIframe,
   }
 
-export default function ReactEnviorment(props) {
+export default function ReactEnviorment() {
  
+    const [theme, setTheme] = useState(useThemeDetector)
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -68,15 +70,20 @@ export default function ReactEnviorment(props) {
 
 
     return (
-      <div className={`flex h-screen w-screen ${props.theme} transition-all`}>
-        <Navbar/>
-        <ReactFlowProvider>
-          <div className="h-screen w-screen" ref={reactFlowWrapper}>
-            <ReactFlow nodes={nodes} edges={edges} nodeTypes={types} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance} fitView>
-            <Background variant='dots' size={1} className=" bg-white dark:bg-neutral-800"/>
-          </ReactFlow>
-          </div>
-        </ReactFlowProvider>
-      </div>
+      <>          
+        <div className=' absolute top-4 right-5 z-50' >
+          <h1 className='text-3xl' onClick={()=> setTheme(theme === "" ? "dark" : "")}>{theme === "dark"  ? '🌙' : '☀️'}</h1>  
+        </div>
+        <div className={`flex h-screen w-screen ${theme} transition-all`}>
+          <Navbar/>
+          <ReactFlowProvider>
+            <div className="h-screen w-screen" ref={reactFlowWrapper}>
+              <ReactFlow nodes={nodes} edges={edges} nodeTypes={types} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance} fitView>
+              <Background variant='dots' size={1} className=" bg-white dark:bg-neutral-800"/>
+            </ReactFlow>
+            </div>
+          </ReactFlowProvider>
+        </div>
+      </>
     );
   }

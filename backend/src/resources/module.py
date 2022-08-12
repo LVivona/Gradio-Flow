@@ -70,22 +70,60 @@ def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
     return
 
     
-def register(inputs, outputs, examples=None):
+def register(inputs, outputs, examples=None, **kwargs):
     def register_gradio(func):
-        def wrap(*args, **kwargs):            
-            try:
-                self = args[0]
-                self.registered_gradio_functons
-            except AttributeError:
-                print("✨Initializing Class Functions...✨\n")
-                self.registered_gradio_functons = dict()
-
+        def wrap(*args, **wargs):                    
             fn_name = func.__name__ 
-            if fn_name in self.registered_gradio_functons: 
-                result = func(*args, **kwargs)
-                return result
-            else:
-                self.registered_gradio_functons[fn_name] = dict(inputs=inputs, outputs=outputs, examples=examples)
+
+            if 'self' in func.__code__.co_varnames and func.__name__ in dir(args[0]):
+                
+                """
+                given the decorator is on a class then
+                initialize a registered_gradio_functons
+                if not already initialize.
+                """
+                assert len(inputs) == func.__code__.co_argcount - 1, "❌ inputs should have the same length as arguments"
+
+                try:
+                    self = args[0]
+                    self.registered_gradio_functons
+                except AttributeError:
+                    print("✨Initializing Class Functions...✨\n")
+                    self.registered_gradio_functons = dict()
+                
+                
+
+                if not fn_name in self.registered_gradio_functons:
+                    self.registered_gradio_functons[fn_name] = dict(inputs=inputs, outputs=outputs, examples=examples)
+                
+                if len(args[1:]) == (func.__code__.co_argcount - 1):
+                    return func(*args, **wargs) 
+            else :
+                """
+                the function is not a class function
+                """
+                assert len(inputs) == func.__code__.co_argcount, "❌ inputs should have the same length as arguments"
+
+                if len(args) == (func.__code__.co_argcount):
+                    return func(*args, **wargs)
+
+                return gr.Interface(fn=func,
+                                    inputs=inputs,
+                                    outputs=outputs,
+                                    examples=examples,
+                                    cache_examples=kwargs['cache_examples'] if "cache_examples" in kwargs else None,
+                                    examples_per_page=kwargs['examples_per_page'] if "examples_per_page" in kwargs else 10,
+                                    interpretation=kwargs['interpretation'] if "interpretation" in kwargs else None,
+                                    num_shap=kwargs['num_shap'] if "num_shap" in kwargs else 2.0,
+                                    title=kwargs['title'] if "title" in kwargs else None,
+                                    article=kwargs['article'] if "article" in kwargs else None,
+                                    thumbnail=kwargs['thumbnail'] if "thumbnail" in kwargs else None,
+                                    css=kwargs['css'] if "css" in kwargs else None,
+                                    live=kwargs['live'] if "live" in kwargs else False,
+                                    allow_flagging=kwargs['allow_flagging'] if "allow_flagging" in kwargs else None,
+                                    theme='default', 
+                                    )
+
                 return None
         return wrap
     return register_gradio

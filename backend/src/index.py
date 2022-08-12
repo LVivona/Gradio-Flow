@@ -14,4 +14,6 @@ def Hello_World(name):
 
 
 if __name__ == "__main__":
-    Greeting().run(listen=2000) 
+    print(Hello_World("Luca"))
+    
+    # Greeting().run(listen=2000) 
