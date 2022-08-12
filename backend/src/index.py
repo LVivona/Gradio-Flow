@@ -1,5 +1,4 @@
 from resources import GradioModule, register
-import gradio as gr
 
 @GradioModule
 class Greeting:
@@ -8,12 +7,9 @@ class Greeting:
     def Hello_World(self, name):
         return f"Hello {name}, and welcome to Gradio Flow 🤗" 
 
-@register(["text"], ["text"])
-def Hello_World(name):
-    return f"Hello {name}, and welcome to Gradio Flow 🤗" 
-
+    @register(["number", "number"], ["number"], examples=[[1,1]])
+    def add(self, x, y):
+        return x + y
 
 if __name__ == "__main__":
-    print(Hello_World("Luca"))
-    
-    # Greeting().run(listen=2000) 
+    Greeting().run(listen=2000)

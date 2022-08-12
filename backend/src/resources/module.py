@@ -32,6 +32,9 @@ DOCKER_LOCAL_HOST = '0.0.0.0'
 DOCKER_PORT = Dock()
 
 def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
+    #print([fn.__name__ for fn in funcs])
+    assert len(funcs) == len(names), f"{bcolor.BOLD}{bcolor.FAIL}🐛 something went wrong!!! The function you appended dose not match the lenght of the names{bcolor.ENDC}"
+    # assert all([fn == "wrap" for fn in funcs]), f"{bcolor().BOLD}{bcolor().FAIL}not all of these are decorated with the right decorator{bcolor().ENDC}"
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
 
     try:
@@ -82,7 +85,7 @@ def register(inputs, outputs, examples=None, **kwargs):
                 initialize a registered_gradio_functons
                 if not already initialize.
                 """
-                assert len(inputs) == func.__code__.co_argcount - 1, "❌ inputs should have the same length as arguments"
+                assert len(inputs) == func.__code__.co_argcount - 1, f"❌ {bcolor.BOLD}{bcolor.FAIL}inputs should have the same length as arguments{bcolor.ENDC}"
 
                 try:
                     self = args[0]
@@ -102,7 +105,7 @@ def register(inputs, outputs, examples=None, **kwargs):
                 """
                 the function is not a class function
                 """
-                assert len(inputs) == func.__code__.co_argcount, "❌ inputs should have the same length as arguments"
+                assert len(inputs) == func.__code__.co_argcount, f"❌ {bcolor.BOLD}{bcolor.FAIL}inputs should have the same length as arguments{bcolor.ENDC}"
 
                 if len(args) == (func.__code__.co_argcount):
                     return func(*args, **wargs)
