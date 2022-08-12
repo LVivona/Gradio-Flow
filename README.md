@@ -46,7 +46,7 @@ stream both gradio and streamlit interfaces, within a single application.**
  
 ## Prerequisites 📝
 You will need:
-(Docker build 🐳 Currently Only on: Linux)
+(Docker build 🐳 Currently Only on: Linux/Windows/Mac)
 - [🐳  Docker](https://docs.docker.com/get-docker/)
 - [🐋 Docker Compose](https://docs.docker.com/compose/install/) (included with Docker Desktop on Windows and macOS)
  
@@ -105,42 +105,46 @@ python app.py -p 2000
 //**NOTE** -p 2000 just assignes it localhost port 2000 anyother port will not work
 ```
 #### **5.** Run Gradio within Gradio-Flow 
-It is quite simple, and similar within the docker build, the first way you can append your gradio to the Gradio flow is through running your application at a reachable url that is provided ed when you run Gradio and appending it via ``+ button`` within the frontend, another way that is possible is that within the directory ``./backend/src/helper`` there is a code that you can use to convert your own class or functional  base code into basic gradio tabular interface by using decorators, these decorators will send the nesarry information to the backend flask api and update the frontend menu state in which you'll will be able to interact with it within the front end creating a hub for gradio build functions(**read more** [**here**](https://github.com/LVivona/GradioWrapper)).
+It is quite simple, and similar within the docker build, the first way you can append your gradio to the Gradio flow is through running your application at a reachable url that is provided ed when you run Gradio and appending it via ``+ button`` within the frontend, another way that is possible is that within the directory ``./backend/src/resources`` there is a code that you can use to convert your own class or functional  base code into basic gradio tabular interface by using decorators, these decorators will send the nesarry information to the backend flask api and update the frontend menu state in which you'll will be able to interact with it within the front end creating a hub for gradio build functions(**read more** [**here**](https://github.com/LVivona/GradioWrapper)).
 
 **NOTE** If you use the gradio decorator compiler for gradio flow you need to set a listen port to 2000 or else the api will never get the key and will throw you an error, I'll also provided an example below if this isn't clear.
 
 ```python
 #backend/src/demo.py (functional base)
 ##########
-from helper.compiler import functionalCompiler, tabularGradio
-import gradio as gr
+from resources import register, tabularGradio
 
-@functionalCompiler(inputs=[gr.Textbox(label="name")], outputs=['text'], examples=[["Luca Vivona"]])
+@register(["text"], ["text"], examples=[["Luca Vivona"]])
 def Hello_World(name):
         return f"Hello {name}, and welcome to Gradio Flow 🤗" 
 
+@register(["number", "number"], ["number"], examples=[[1,1]])
+def add(x, y):
+    return x + y
+
 if __name__ == "__main__":
-    tabularGradio([Hello_World()], ["hello world"], listen=2000)
+    tabularGradio([Hello_World(), add()], ["Hello World",])
 ```
 
 ```python
 #backend/src/index.py (Class Base)
 ###########
-from helper.compiler import register, GradioCompiler
-import gradio as gr
+from resources import GradioModule, register
 
-@GradioCompiler
+@GradioModule
 class Greeting:
 
-    @register(inputs=[gr.Textbox(label="name")], outputs=['text'], examples=[["Luca Vivona"]])
+    @register(["text"], ["text"])
     def Hello_World(self, name):
         return f"Hello {name}, and welcome to Gradio Flow 🤗" 
 
+    @register(["number", "number"], ["number"], examples=[[1,1]])
+    def add(self, x, y):
+        return x + y
 
 
 if __name__ == "__main__":
     Greeting().run(listen=2000)
-```
- 
+```` 
 ## Application 🏛️
 ![Application](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/app.png)
