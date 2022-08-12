@@ -1,0 +1,46 @@
+.hexagon {
+    position: relative;
+    width: 200px; 
+    height: 115.47px;
+    background-color: #ffffff;
+    margin: 57.74px 0;
+    border-left: solid 3px #000000;
+    border-right: solid 3px #000000;
+    margin-left: auto;
+    margin-right: auto;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to left, #2de2e6, #f6019d);
+  }
+
+
+  .hexagon:before,
+  .hexagon:after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 141.42px;
+    height: 141.42px;
+    -webkit-transform: scaleY(0.5774) rotate(-30deg);
+    -ms-transform: scaleY(0.5774) rotate(-30deg);
+    transform: scaleY(0.5774) rotate(-45deg);
+    background-color: inherit;
+    left: 27.2893px;
+  }
+  
+  .hexagon:before {
+    top: -70.7107px;
+    border-top: solid 4.8284px #000000;
+    border-right: solid 4.8284px #000000;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to left, #2de2e6, #f6019d);
+
+  }
+  
+  .hexagon:after {
+    bottom: -70.7107px;
+    border-bottom: solid 4.8284px #000000;
+    border-left: solid 4.8284px;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to left, #2de2e6, #f6019d);
+       
+}

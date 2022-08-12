@@ -1,0 +1,27 @@
+version : "3.9"
+services:
+  backend :
+    container_name: backend
+    image : commune-ai/backend
+    build :
+      context : ./backend
+      dockerfile : Dockerfile
+    volumes:
+      - './backend:/app'
+    ports:
+      - "2000:2000"
+      - "7860-7880:7860-7880"
+    command: "python app.py -p 2000"
+  frontend :
+    container_name: frontend
+    image : commune-ai/frontend
+    build :
+      context : ./frontend
+      dockerfile : Dockerfile
+    ports:
+      - "3001:3000"
+    volumes:
+      - './frontend/src:/app/src'
+      - './frontend/public:/app/public'
+    command: "npm start"
+    
