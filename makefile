@@ -1,13 +1,15 @@
 up:
-	docker-compose up -d --remove-orphans;
+	docker-compose up -d;
 down:
 	docker-compose down;
-uninstall:
-	docker image rm -f 80e5f1196647 && docker image rm -f cacdc0cdd804;
 restart:
 	docker-compose down && docker-compose up -d --remove-orphans;
 stop_all:
 	docker-stop $(docker ps -a -q) && docker rm $(docker ps -a -q);
+rm:
+	docker rmi $(docker images --filter "reference=commune-ai/gradio-flow/*" --format "{{.ID}}")
+wipe:
+	make down && make rm
 build:
 	docker-compose build
 environment:

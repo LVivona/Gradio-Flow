@@ -2,7 +2,7 @@ version : "3.9"
 services:
   backend :
     container_name: backend
-    image : commune-ai/backend
+    image : commune-ai/gradio-flow/backend
     build :
       context : ./backend
       dockerfile : Dockerfile
@@ -14,7 +14,7 @@ services:
     command: "python app.py -p 2000"
   frontend :
     container_name: frontend
-    image : commune-ai/frontend
+    image : commune-ai/gradio-flow/frontend
     build :
       context : ./frontend
       dockerfile : Dockerfile
