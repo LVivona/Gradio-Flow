@@ -1,7 +1,7 @@
 # Gradio Flow 🤗
  
 **A web application with a backend in Flask and frontend in Rect, and React Flow that use [React flow](https://reactflow.dev/) node base environment to
-stream both gradio and streamlit interfaces, within a single application.**
+stream both gradio ( and later streamlit ) interfaces, within a single application.**
  
  
 ## Tabel Of Contents 📚
