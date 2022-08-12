@@ -123,7 +123,7 @@ def add(x, y):
     return x + y
 
 if __name__ == "__main__":
-    tabularGradio([Hello_World(), add()], ["Hello World", "Add"])
+    tabularGradio([Hello_World(), add()], ["Hello World", "Add"], listen=2000)
 ```
 
 ```python
