@@ -32,10 +32,15 @@ DOCKER_LOCAL_HOST = '0.0.0.0'
 DOCKER_PORT = Dock()
 
 def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
-    #print([fn.__name__ for fn in funcs])
-    assert len(funcs) == len(names), f"{bcolor.BOLD}{bcolor.FAIL}🐛 something went wrong!!! The function you appended dose not match the lenght of the names{bcolor.ENDC}"
-    # assert all([fn == "wrap" for fn in funcs]), f"{bcolor().BOLD}{bcolor().FAIL}not all of these are decorated with the right decorator{bcolor().ENDC}"
+    """
+    takes all gradio Interfaces, and names
+    from input and launch the gradio.
+    """
+
+    assert len(funcs) == len(names), f"{bcolor.BOLD}{bcolor.FAIL}🐛 something went wrong!!! The function you appended dose not match the length of the names{bcolor.ENDC}"
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
+    
+    # send this to the backend api for it to be read by the react frontend
     if 'listen' in kwargs:
         try:
             requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
@@ -43,6 +48,7 @@ def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
             print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
             return
     
+    # provided by gradio a tabularInterface function that take function and names
     gr.TabbedInterface(funcs, names).launch(server_port=port,
                                             server_name=f"{DOCKER_LOCAL_HOST}",
                                             inline= kwargs['inline'] if "inline" in kwargs else True,
@@ -63,53 +69,74 @@ def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
                                             ssl_certfile=kwargs['ssl_certfile'] if "ssl_certfile" in kwargs else None,
                                             ssl_keyfile_password=kwargs['ssl_keyfile_password'] if "ssl_keyfile_password" in kwargs else None,
                                             quiet=kwargs['quiet'] if "quiet" in kwargs else False)
+    
+    # Ctrl+C that ends the process and then continue the code which will remove from the api
     if 'listen' in kwargs:
         try:
             requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
-        except Exception as e:
-        
+        except Exception as e:    
             print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
     
     return
 
-    
+
+
 def register(inputs, outputs, examples=None, **kwargs):
     def register_gradio(func):
-        def wrap(*args, **wargs):                    
-            fn_name = func.__name__ 
+        
 
-            if 'self' in func.__code__.co_varnames and func.__name__ in dir(args[0]):
-                
+        def decorator(*args, **wargs):                    
+            if type(outputs) is list:
+                assert len(outputs) >= 1, f"❌ {bcolor.BOLD}{bcolor.FAIL}you have no outputs 🤨... {str(type(outputs))} {bcolor.ENDC}"
+            
+            fn_name = func.__name__ 
+            if 'self' in func.__code__.co_varnames and func.__code__.co_varnames[0] == 'self' and fn_name in dir(args[0]):     
                 """
                 given the decorator is on a class then
                 initialize a registered_gradio_functons
                 if not already initialize.
                 """
-                assert len(inputs) == func.__code__.co_argcount - 1, f"❌ {bcolor.BOLD}{bcolor.FAIL}inputs should have the same length as arguments{bcolor.ENDC}"
+               
+                if type(inputs) is list:
+                    assert len(inputs) == func.__code__.co_argcount - 1, f"❌ {bcolor.BOLD}{bcolor.FAIL}inputs should have the same length as arguments{bcolor.ENDC}"
 
                 try:
                     self = args[0]
                     self.registered_gradio_functons
                 except AttributeError:
-                    print("✨Initializing Class Functions...✨\n")
                     self.registered_gradio_functons = dict()
                 
-                
-
                 if not fn_name in self.registered_gradio_functons:
-                    self.registered_gradio_functons[fn_name] = dict(inputs=inputs, outputs=outputs, examples=examples)
-                
+                    self.registered_gradio_functons[fn_name] = dict(inputs=inputs,
+                                                                    outputs=outputs, 
+                                                                    examples=examples,
+                                                                    cache_examples=kwargs['cache_examples'] if "cache_examples" in kwargs else None,
+                                                                    examples_per_page=kwargs['examples_per_page'] if "examples_per_page" in kwargs else 10,
+                                                                    interpretation=kwargs['interpretation'] if "interpretation" in kwargs else None,
+                                                                    num_shap=kwargs['num_shap'] if "num_shap" in kwargs else 2.0,
+                                                                    title=kwargs['title'] if "title" in kwargs else None,
+                                                                    article=kwargs['article'] if "article" in kwargs else None,
+                                                                    thumbnail=kwargs['thumbnail'] if "thumbnail" in kwargs else None,
+                                                                    css=kwargs['css'] if "css" in kwargs else None,
+                                                                    live=kwargs['live'] if "live" in kwargs else False,
+                                                                    allow_flagging=kwargs['allow_flagging'] if "allow_flagging" in kwargs else None,
+                                                                    theme=kwargs['theme'] if "theme" in kwargs else  'default', )
+
                 if len(args[1:]) == (func.__code__.co_argcount - 1):
                     return func(*args, **wargs) 
+                return None
             else :
                 """
                 the function is not a class function
                 """
-                assert len(inputs) == func.__code__.co_argcount, f"❌ {bcolor.BOLD}{bcolor.FAIL}inputs should have the same length as arguments{bcolor.ENDC}"
+                if type(inputs) is list:    
+                    assert len(inputs) == func.__code__.co_argcount, f"❌ {bcolor.BOLD}{bcolor.FAIL}inputs should have the same length as arguments{bcolor.ENDC}"
 
+                # if the arguments within the functions are inputed then just return the output
                 if len(args) == (func.__code__.co_argcount):
                     return func(*args, **wargs)
 
+                # if there is nothing in the arugumrnt then return the gradio interface
                 return gr.Interface(fn=func,
                                     inputs=inputs,
                                     outputs=outputs,
@@ -126,82 +153,60 @@ def register(inputs, outputs, examples=None, **kwargs):
                                     allow_flagging=kwargs['allow_flagging'] if "allow_flagging" in kwargs else None,
                                     theme='default', 
                                     )
-
-                return None
-        return wrap
+        return decorator
     return register_gradio
 
 def GradioModule(cls):
     class Decorator:
 
         def __init__(self) -> None:
-            self.cls = cls()
+            self.__cls__ = cls()
+            self.__get_funcs_attr()
+            self.interface = self.__compile()
+        
+        def get_funcs_names(self):
+            assert self.get_registered_map() != None, "this is not possible..."
+            return [ name for name in self.get_registered_map().keys()]
 
-        def get_funcs(self):
-            return [func for func in dir(self.cls) if not func.startswith("__") and type(getattr(self.cls, func, None)) == type(self.get_funcs) ]
+        def get_registered_map(self):
+            assert self.__cls__.registered_gradio_functons != None, "what happen!!!!"
+            return self.__cls__.registered_gradio_functons
+        
+        def __get_funcs_attr(self):
+            for func in dir(self.__cls__):
+                fn = getattr(self.__cls__, func, None)
+                if not func.startswith("__") and fn.__name__ == "decorator":
+                    fn()
 
-        def compile(self, **kwargs):
-            print("Just putting on the finishing touches... 🔧🧰")
-            for func in self.get_funcs():
-                this = getattr(self.cls, func, None)
-                if this.__name__ == "wrap":
-                    this()
-
+        def __compile(self):
+            """
+            Initialize all the function 
+            within the class that are registeed
+            """
             demos, names = [], []
-            for func, param in self.get_registered_gradio_functons().items():                
+            for func, param in self.get_registered_map().items():                
                 names.append(func)
-                demos.append(gr.Interface(fn=getattr(self.cls, func, None),
-                                            inputs=param['inputs'],
-                                            outputs=param['outputs'],
-                                            examples=param['examples'],
-                                            cache_examples=kwargs['cache_examples'] if "cache_examples" in kwargs else None,
-                                            examples_per_page=kwargs['cache_examples'] if "cache_examples" in kwargs else 10,
-                                            interpretation=kwargs['interpretation'] if "interpretation" in kwargs else None,
-                                            num_shap=kwargs['num_shap'] if "num_shap" in kwargs else 2.0,
-                                            title=kwargs['title'] if "title" in kwargs else None,
-                                            article=kwargs['article'] if "article" in kwargs else None,
-                                            thumbnail=kwargs['thumbnail'] if "thumbnail" in kwargs else None,
-                                            css=kwargs['css'] if "css" in kwargs else None,
-                                            live=kwargs['live'] if "live" in kwargs else False,
-                                            allow_flagging=kwargs['allow_flagging'] if "allow_flagging" in kwargs else None,
-                                            theme='default', 
-                                            ))
-                print(f"{func}....{bcolor.BOLD}{bcolor.OKGREEN} done {bcolor.ENDC}")
+                try:
+                    demos.append(gr.Interface(fn=getattr(self.__cls__, func, None), **param))
+                except Exception as e :
+                    raise e
 
-            print("\nHappy Visualizing... 🚀")
+            print(f"{bcolor.OKBLUE}COMPLETED: {bcolor.ENDC}All functions are mapped, and ready to launch 🚀",
+                 "\n===========================================================\n")
             return gr.TabbedInterface(demos, names)
             
-        def get_registered_gradio_functons(self):
-            try:
-                self.cls.registered_gradio_functons
-            except AttributeError:
-                return None
-            return self.cls.registered_gradio_functons
-        
-
-        def run(self, **kwargs):
+        def launch(self, **kwargs):
             port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort() 
             if 'listen' in kwargs:
                 try:
-                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.cls.__class__), "name" : self.cls.__class__.__name__, "kwargs" : kwargs})
+                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.__cls__.__class__), "name" : self.__cls__.__class__.__name__, "kwargs" : kwargs})
                 except Exception:
                     print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛")
                     return
 
-            self.compile(live=kwargs[ 'live' ] if "live" in kwargs else False,
-                         allow_flagging=kwargs[ 'allow_flagging' ] if "allow_flagging" in kwargs else None,
-                         cache_examples=kwargs['cache_examples'] if "cache_examples" in kwargs else None,
-                         examples_per_page=kwargs['cache_examples'] if "cache_examples" in kwargs else 10,
-                         interpretation=kwargs['interpretation'] if "interpretation" in kwargs else None,
-                         num_shap=kwargs['num_shap'] if "num_shap" in kwargs else 2.0,
-                         title=kwargs['title'] if "title" in kwargs else None,
-                         article=kwargs['article'] if "article" in kwargs else None,
-                         thumbnail=kwargs['thumbnail'] if "thumbnail" in kwargs else None,
-                         css=kwargs['css'] if "css" in kwargs else None,
-                         theme=kwargs['theme'] if "theme" in kwargs else None, 
-                         ).launch(server_port=port,
+            self.interface.launch(server_port=port,
                                   server_name=f"{DOCKER_LOCAL_HOST}",
-                                  inline= kwargs['inline'] if "inline" in kwargs else True,
+                                  inline= kwargs['inline'] if "inline" in kwargs else None,
                                   share=kwargs['share'] if "share" in kwargs else None,
                                   debug=kwargs['debug'] if "debug" in kwargs else False,
                                   enable_queue=kwargs['enable_queue'] if "enable_queue" in kwargs else None,
@@ -221,14 +226,12 @@ def GradioModule(cls):
                                   quiet=kwargs['quiet'] if "quiet" in kwargs else False) 
             if 'listen' in kwargs:
                 try:
-                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.cls.__class__), "name" : self.cls.__class__.__name__, "kwargs" : kwargs})
+                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.__cls__.__class__), "name" : self.__cls__.__class__.__name__, "kwargs" : kwargs})
                 except Exception:
                     print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛")
             return
 
     return Decorator
-
-
 
 class bcolor:
     HEADER = '\033[95m'

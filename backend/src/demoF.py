@@ -10,4 +10,9 @@ def add(x, y):
     return x + y
 
 if __name__ == "__main__":
+    # run single gradio
     tabularGradio([Hello_World(), add()], ["Hello World", "Add"])
+
+    # run it within Gradio-Flow
+    # tabularGradio([Hello_World(), add()], ["Hello World", "Add"], listen=2000)
+    

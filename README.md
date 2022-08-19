@@ -1,7 +1,7 @@
 # Gradio Flow 🤗
  
-**A web application with a backend in Flask and frontend in Rect, and React Flow that use [React flow](https://reactflow.dev/) node base environment to
-stream both gradio and streamlit interfaces, within a single application.**
+**A web application with a backend in Flask and frontend in Rect, and  [React flow](https://reactflow.dev/) node base environment to
+stream both [gradio](https://gradio.app) ( and later [streamlit](https://streamlit.io) ) interfaces, within a single application.**
  
  
 ## Tabel Of Contents 📚
@@ -78,7 +78,7 @@ Now that you're within the docker backend container environment you can start ad
 
 ```console
 > cd ./src
-> python index.py
+> python demoC.py
 //run example gradio application
 ```
 
@@ -110,7 +110,7 @@ It is quite simple, and similar within the docker build, the first way you can a
 **NOTE** If you use the gradio decorator compiler for gradio flow you need to set a listen port to 2000 or else the api will never get the key and will throw you an error, I'll also provided an example below if this isn't clear.
 
 ```python
-#backend/src/demo.py (functional base)
+#backend/src/demoF.py (functional base)
 ##########
 from resources import register, tabularGradio
 
@@ -118,33 +118,41 @@ from resources import register, tabularGradio
 def Hello_World(name):
         return f"Hello {name}, and welcome to Gradio Flow 🤗" 
 
-@register(["number", "number"], ["number"], examples=[[1,1]])
+@register(inputs=["number", "number"], outputs=["number"], examples=[[1,1]])
 def add(x, y):
     return x + y
 
 if __name__ == "__main__":
+    # run single gradio
     tabularGradio([Hello_World(), add()], ["Hello World", "Add"])
+
+    # run it within Gradio-Flow
+    # tabularGradio([Hello_World(), add()], ["Hello World", "Add"], listen=2000)
+    
 ```
 
 ```python
-#backend/src/index.py (Class Base)
+#backend/src/demoC.py (Class Base)
 ###########
 from resources import GradioModule, register
 
 @GradioModule
 class Greeting:
 
-    @register(["text"], ["text"])
+    @register(["text"], ["text"], examples=[["Luca Vivona"]])
     def Hello_World(self, name):
         return f"Hello {name}, and welcome to Gradio Flow 🤗" 
 
-    @register(["number", "number"], ["number"], examples=[[1,1]])
+    @register(inputs=["number", "number"], outputs=["number"], examples=[[1,1]])
     def add(self, x, y):
         return x + y
 
 
 if __name__ == "__main__":
-    Greeting().run(listen=2000)
+    # run just gradio
+    Greeting().launch()
+    # run it within Gradio-flow
+    # Greeting().launch(listen=2000)
 ```` 
 ## Application 🏛️
 ![Application](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/app.png)

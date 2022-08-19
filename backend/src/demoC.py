@@ -3,7 +3,7 @@ from resources import GradioModule, register
 @GradioModule
 class Greeting:
 
-    @register(["text"], ["text"])
+    @register(["text"], ["text"], examples=[["Luca Vivona"]])
     def Hello_World(self, name):
         return f"Hello {name}, and welcome to Gradio Flow 🤗" 
 
@@ -11,5 +11,11 @@ class Greeting:
     def add(self, x, y):
         return x + y
 
+
 if __name__ == "__main__":
-    Greeting().run(listen=2000)
+    # run just gradio
+    Greeting().launch()
+    # run it within Gradio-flow
+    # Greeting().launch(listen=2000)
+
+    

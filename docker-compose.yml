@@ -11,6 +11,7 @@ services:
     ports:
       - "2000:2000"
       - "7860-7880:7860-7880"
+      # - "8501:8501" # streamlit application test
     command: "python app.py -p 2000"
   frontend :
     container_name: frontend

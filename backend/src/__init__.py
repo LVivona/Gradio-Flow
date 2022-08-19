@@ -1,4 +1,4 @@
 import examples
 import resource
-import src.demo 
-import src.index
+import src.demoF 
+import src.demoC
