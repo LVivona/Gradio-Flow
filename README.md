@@ -1,7 +1,7 @@
 # Gradio Flow 🤗
  
-**A web application with a backend in Flask and frontend in Rect, and  [React flow](https://reactflow.dev/) node base environment to
-stream both [gradio](https://gradio.app) ( and later [streamlit](https://streamlit.io) ) interfaces, within a single application.**
+**A web application with a backend in [Flask](https://flask.palletsprojects.com/en/2.2.x/) and frontend in [React](https://reactjs.org), and  [React flow](https://reactflow.dev/) node base environment to
+stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streamlit.io) ) interfaces, within a single application.**
  
  
 ## Tabel Of Contents 📚

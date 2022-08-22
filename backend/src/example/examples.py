@@ -7,11 +7,19 @@ import torch
 from torch import nn
 import numpy as np
 import PIL
+<<<<<<< HEAD
 
 sys.path.insert(0, "../resources")
 from resources.module import GradioModule, register
 
 
+=======
+
+sys.path.insert(0, "../resources")
+from resources.module import GradioModule, register
+
+"""
+>>>>>>> origin/main
 @GradioModule
 class Pictionary:
 
@@ -103,6 +111,41 @@ class FSD:
         carr = np.array(pixels / np.max(pixels, axis=(0, 1)) * 255, dtype=np.uint8)
         return [PIL.Image.fromarray(carr), self.palette_reduce(img, nc) ]
 
+<<<<<<< HEAD
+=======
+    @register(inputs=[gr.Image(), gr.Image(), gr.Slider(0.00, 16)], outputs=gr.Gallery())
+    def examples(self, img, img2, nc, ) -> 'list[PIL.Image.Image]':
+        pixels = np.array(img, dtype=float) / 255
+        new_height, new_width, _ = img.shape 
+        for row in range(new_height):
+            for col in range(new_width):
+                old_val = pixels[row, col].copy()
+                new_val = self.get_new_val(old_val, nc)
+                pixels[row, col] = new_val
+                err = old_val - new_val
+                if col < new_width - 1:
+                    pixels[row, col + 1] += err * 7 / 16
+                if row < new_height - 1:
+                    if col > 0:
+                        pixels[row + 1, col - 1] += err * 3 / 16
+                    pixels[row + 1, col] += err * 5 / 16
+                    if col < new_width - 1:
+                        pixels[row + 1, col + 1] += err * 1 / 16
+        carr = np.array(pixels / np.max(pixels, axis=(0, 1)) * 255, dtype=np.uint8)
+        return [PIL.Image.fromarray(carr), self.palette_reduce(img, nc) ]
+
+
+@GradioModule
+class C:
+
+    def Hello(self):
+        return "Hello"
+    
+    @register(inputs="text", outputs="text")
+    def Greeting(self, name):
+        return self.Hello() + " " + name
+
+>>>>>>> origin/main
 @GradioModule
 class stock_forecast:
     
