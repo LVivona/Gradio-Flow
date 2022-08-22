@@ -50,9 +50,6 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
     - just import and launch or run them within the demoE.py file in ``backend/src``
 - launch interface functions that takes the interface and appends it within the gradio-flow so if it's (load, from_pipline, Block, or any other prebuilt interface you have you can append them into Gradio-Flow)
 
-### Frontend 🖥️
-- no new updates
-
 ```python
 def InterLauncher(name, interface, listen=2000, **kwargs):
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
@@ -90,6 +87,9 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
         print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
 ```
 
+
+### Frontend 🖥️
+- no new updates
 
  ## App Architecture 🏗️
 ![architecture](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/architecture.png)
