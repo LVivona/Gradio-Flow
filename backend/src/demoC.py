@@ -1,4 +1,5 @@
-from resources import GradioModule, register
+from resources import GradioModule, register, InterLauncher
+import gradio as gr
 
 @GradioModule
 class Greeting:
@@ -14,8 +15,8 @@ class Greeting:
 
 if __name__ == "__main__":
     # run just gradio
-    Greeting().launch()
+    # Greeting().launch()
     # run it within Gradio-flow
-    # Greeting().launch(listen=2000)
+    Greeting().launch(listen=2000)
 
     

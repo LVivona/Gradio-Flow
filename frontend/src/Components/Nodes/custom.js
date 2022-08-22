@@ -22,14 +22,15 @@ import React from "react"
     render(){
       
       console.log(this.state.reachable)
+      var frame = document.getElementById("Iframe");
 
       return (
         <>
         { this.state.selected && this.state.reachable ? 
-        <div className='relative h-[540px] w-[600px] overflow-hidden m-0 p-0' onClick={()=>this.handelSelected()}>
-          <div className={`absolute h-full w-full ${this.state.data.colour} border-1shadow-2xl shadow-black rounded-xl -z-10`}></div>
-          <iframe src={this.state.data.host} title={this.state.data.label} frameBorder={0} allowFullScreen className=" h-full w-full p-2 overflow-y-scroll"></iframe>
-        </div> :
+                <div className='relative h-[540px] w-[600px] overflow-hidden m-0 p-0' onClick={()=>this.handelSelected()}>
+                <div className={`absolute h-full w-full ${this.state.data.colour} border-1shadow-2xl shadow-black rounded-xl -z-10`}></div>
+                <iframe src={this.state.data.host} title={this.state.data.label} frameBorder={0} allowFullScreen className=" h-full w-full p-2 overflow-y-scroll"></iframe>
+              </div>:
         <>
         <div className='break-words'> 
           <div className=' h-auto text-center pointer-events-none'>  

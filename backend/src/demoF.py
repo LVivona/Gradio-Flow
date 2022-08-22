@@ -1,5 +1,6 @@
 import gradio as gr
 from resources import register, tabularGradio
+from example.examples import FSD, Pictionary
 
 @register(["text"], ["text"], examples=[["Luca Vivona"]])
 def Hello_World(name):
@@ -11,6 +12,7 @@ def add(x, y):
 
 if __name__ == "__main__":
     # run single gradio
+    
     tabularGradio([Hello_World(), add()], ["Hello World", "Add"])
 
     # run it within Gradio-Flow

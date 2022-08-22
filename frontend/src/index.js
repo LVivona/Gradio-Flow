@@ -5,7 +5,7 @@ import App from './App';
 //import Navbar from './Components/Navagation/navbar';
 import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('Gradio-Flow'));
 root.render(
   <React.StrictMode>
     < App/>

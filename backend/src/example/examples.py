@@ -1,19 +1,23 @@
 import gradio as gr
+import sys
 import matplotlib
 import matplotlib.pyplot as plt
+from pathlib import Path
+import torch
+from torch import nn
 import numpy as np
 import PIL
-from helper.compiler import GradioCompiler, register
+
+sys.path.insert(0, "../resources")
+from resources.module import GradioModule, register
 
 
-
-"""
-@gradio_compile
+@GradioModule
 class Pictionary:
 
-    def __init__(self) -> None:
-        self.LABELS = Path('./src/examples/data/labels.txt').read_text().splitlines()
-    
+    def __init__(self, txt, model) -> None:
+        self.LABELS = Path(txt).read_text().splitlines()
+        print(txt, model)
         self.model = nn.Sequential(
                 nn.Conv2d(1, 32, 3, padding='same'),
                 nn.ReLU(),
@@ -29,11 +33,11 @@ class Pictionary:
                 nn.ReLU(),
                 nn.Linear(256, len(self.LABELS)),
                 )   
-        state_dict = torch.load('./src/examples/data/pytorch_model.bin',    map_location='cpu')
+        state_dict = torch.load(model,    map_location='cpu')
         self.model.load_state_dict(state_dict, strict=False)
         self.model.eval()
 
-    @register(inputs="sketchpad", outputs=gr.Label())
+    @register(inputs="sketchpad", outputs=gr.Label(), examples=None, live=True)
     def perdict(self, img) -> 'dict[str, float]':
         if type(img) == type(None): return {}
         x = torch.tensor(img, dtype=torch.float32).unsqueeze(0).unsqueeze(0) / 255.
@@ -43,9 +47,8 @@ class Pictionary:
         values, indices = torch.topk(probabilities, 5)
         confidences = {self.LABELS[i]: v.item() for i, v in zip(indices, values)}
         return confidences
-"""
 
-@GradioCompiler
+@GradioModule
 class HelloWorld_2_0:
 
     @register(inputs=["text", "text", gr.Radio(["morning", "evening", "night"])], outputs="text")
@@ -65,14 +68,14 @@ class HelloWorld_2_0:
 
 
 
-@GradioCompiler
+@GradioModule
 class FSD:
 
     def get_new_val(self, old_val, nc):
         return np.round(old_val * (nc - 1)) / (nc - 1)
 
 
-    def palette_reduce(self, img : PIL.Image.Image, nc : 'tuple[float, float, float]'=(0.0000, 0, 16)):
+    def palette_reduce(self, img : PIL.Image.Image, nc):
         pixels = np.array(img, dtype=float) / 255
         pixels = self.get_new_val(pixels, nc)
 
@@ -80,7 +83,7 @@ class FSD:
         return PIL.Image.fromarray(carr)
 
     @register(inputs=[gr.Image(), gr.Slider(0.00, 16)], outputs=gr.Gallery())
-    def Floyd_Steinberg_dithering(self, img, nc : 'tuple[float, float, float]'=(0.0000, 0, 16) ) -> 'list[PIL.Image.Image]':
+    def Floyd_Steinberg_dithering(self, img, nc  ):
         pixels = np.array(img, dtype=float) / 255
         new_height, new_width, _ = img.shape 
         for row in range(new_height):
@@ -100,19 +103,7 @@ class FSD:
         carr = np.array(pixels / np.max(pixels, axis=(0, 1)) * 255, dtype=np.uint8)
         return [PIL.Image.fromarray(carr), self.palette_reduce(img, nc) ]
 
-
-
-@GradioCompiler
-class C:
-
-    def Hello(self):
-        return "Hello"
-    
-    @register(inputs="text", outputs="text")
-    def Greeting(self, name):
-        return self.Hello() + " " + name
-
-@GradioCompiler
+@GradioModule
 class stock_forecast:
     
     def __init__(self):

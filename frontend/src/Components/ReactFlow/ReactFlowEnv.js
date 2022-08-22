@@ -71,8 +71,8 @@ export default function ReactEnviorment() {
 
     return (
       <>          
-        <div className=' absolute top-4 right-5 z-50' >
-          <h1 className='text-3xl' onClick={()=> setTheme(theme === "" ? "dark" : "")}>{theme === "dark"  ? '🌙' : '☀️'}</h1>  
+        <div className=' absolute top-4 right-5 z-50' onClick={()=> setTheme(theme === "" ? "dark" : "")}>
+          <h1 className='text-4xl' >{theme === "dark"  ? '🌙' : '☀️'}</h1>  
         </div>
         <div className={`flex h-screen w-screen ${theme} transition-all`}>
           <Navbar/>

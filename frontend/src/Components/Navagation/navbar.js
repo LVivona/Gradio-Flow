@@ -202,7 +202,7 @@ export default class Navbar extends Component{
                 </div>
 
                 <div className={`rounded-md text-center ${this.state.open ? "" : "px-0"} py-3`} onClick={() => {this.handelModal(true)}}>
-                    <div className={` text-center bg-transparent w-full h-10 border border-slate-300 hover:border-sky-500 hover:animate-pulse border-dashed rounded-md py-2 pl-5 ${this.state.open ? "pr-3" : "hidden"} shadow-sm sm:text-sm`}>
+                    <div className={` text-center bg-transparent w-full h-10 border border-slate-300 hover:border-Retro-purple hover:animate-pulse border-dashed rounded-md py-2 pl-5 ${this.state.open ? "pr-3" : "hidden"} shadow-sm sm:text-sm`}>
                         <Icon className=" block mr-auto ml-auto" name="plus"/>
                     </div>
                 </div>

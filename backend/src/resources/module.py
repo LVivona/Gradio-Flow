@@ -9,7 +9,7 @@ class Dock:
 
     def __init__(self) -> None:
             self.num_ports = 20
-            self.port_range = (7860, 7880)
+            self.port_range = (3002, 8000)
 
     def portConnection(self, port : int):
             s = socket.socket(
@@ -18,10 +18,11 @@ class Dock:
             if result == 0: return True
             return False
 
-    def determinePort(self, max_trial_count=10):
+    def determinePort(self, max_trial_count=20):
             trial_count = 0 
             while trial_count <= max_trial_count:
                 port=random.randint(*self.port_range)
+                print(port)
                 if not self.portConnection(port):
                     return port
                 trial_count += 1
@@ -30,6 +31,41 @@ class Dock:
 
 DOCKER_LOCAL_HOST = '0.0.0.0'
 DOCKER_PORT = Dock()
+
+def InterLauncher(name, interface, listen=2000, **kwargs):
+    port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
+    print(listen)
+    try:
+        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : "Not Applicable", "name" : {name}, "kwargs" : kwargs})
+    except Exception as e:
+        print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
+        return
+
+    interface.launch(server_port=port,
+                     server_name=f"{DOCKER_LOCAL_HOST}",
+                     inline= kwargs['inline'] if "inline" in kwargs else True,
+                     share=kwargs['share'] if "share" in kwargs else None,
+                     debug=kwargs['debug'] if "debug" in kwargs else False,
+                     enable_queue=kwargs['enable_queue'] if "enable_queue" in kwargs else None,
+                     max_threads=kwargs['max_threads'] if "max_threads" in kwargs else None,
+                     auth=kwargs['auth'] if "auth" in kwargs else None,
+                     auth_message=kwargs['auth_message'] if "auth_message" in kwargs else None,
+                     prevent_thread_lock=kwargs['prevent_thread_lock'] if "prevent_thread_lock" in kwargs else False,
+                     show_error=kwargs['show_error'] if "show_error" in kwargs else True,
+                     show_tips=kwargs['show_tips'] if "show_tips" in kwargs else False,
+                     height=kwargs['height'] if "height" in kwargs else 500,
+                     width=kwargs['width'] if "width" in kwargs else 900,
+                     encrypt=kwargs['encrypt'] if "encrypt" in kwargs else False,
+                     favicon_path=kwargs['favicon_path'] if "favicon_path" in kwargs else None,
+                     ssl_keyfile=kwargs['ssl_keyfile'] if "ssl_keyfile" in kwargs else None,
+                     ssl_certfile=kwargs['ssl_certfile'] if "ssl_certfile" in kwargs else None,
+                     ssl_keyfile_password=kwargs['ssl_keyfile_password'] if "ssl_keyfile_password" in kwargs else None,
+                     quiet=kwargs['quiet'] if "quiet" in kwargs else False)
+    
+    try:
+        requests.post(f"http://{DOCKER_LOCAL_HOST}:{ listen }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
+    except Exception as e:    
+        print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
 
 def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
     """
@@ -153,14 +189,15 @@ def register(inputs, outputs, examples=None, **kwargs):
                                     allow_flagging=kwargs['allow_flagging'] if "allow_flagging" in kwargs else None,
                                     theme='default', 
                                     )
+        decorator.__decorator__ = "__gradio__"
         return decorator
     return register_gradio
 
 def GradioModule(cls):
     class Decorator:
 
-        def __init__(self) -> None:
-            self.__cls__ = cls()
+        def __init__(self, *args, **kwargs) -> None:
+            self.__cls__ = cls(*args, **kwargs)
             self.__get_funcs_attr()
             self.interface = self.__compile()
         
@@ -175,7 +212,9 @@ def GradioModule(cls):
         def __get_funcs_attr(self):
             for func in dir(self.__cls__):
                 fn = getattr(self.__cls__, func, None)
-                if not func.startswith("__") and fn.__name__ == "decorator":
+                
+                if callable(fn) and not func.startswith("__") and  "__decorator__" in dir(fn) and fn.__decorator__ == "__gradio__":
+                    print(func,  callable(fn))
                     fn()
 
         def __compile(self):
