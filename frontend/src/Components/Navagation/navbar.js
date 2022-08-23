@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {BsArrowLeftShort, BsSearch} from 'react-icons/bs';
 import "../../css/dist/output.css"
+import {ReactComponent as ReactLogo} from '../../images/logo.svg'
 import { random_colour, random_emoji } from "../../helper/visual";
 import { Message, Header, Modal, Button, Icon } from 'semantic-ui-react'
 
@@ -182,15 +183,6 @@ export default class Navbar extends Component{
 
 
     render(){
-
-
-        
-        // compare the menu if the menu has changed change the state of the navbar
-        
-        // states to change
-        // 1. tabs
-
-        // 2. add colour
         return (<div>
         
             <div className={`z-10 flex-1 float-left bg-white dark:bg-stone-900 h-screen p-5 pt-8 ${this.state.open ? "lg:w-72 md:64 sm:w-60" : "w-10"} duration-300 absolute shadow-2xl border-black border-r-[1px] dark:border-white dark:text-white`}>
@@ -198,7 +190,7 @@ export default class Navbar extends Component{
             <BsArrowLeftShort onClick={this.handelNavbar} className={`  bg-white text-Retro-darl-blue text-3xl rounded-full absolute -right-3 top-9 border border-black cursor-pointer ${!this.state.open && 'rotate-180'} dark:border-white duration-300 dark:text-white dark:bg-stone-900 `}/>
 
                 <div className="inline-flex w-full">
-                    <h1 className={`font-sans font-bold text-lg ${this.state.open ? "" : "hidden"} duration-500 ml-auto mr-auto`}>Gradio Flow 🤗</h1>
+                    <h1 className={`font-sans font-bold text-lg ${this.state.open ? "" : "hidden"} duration-500 ml-auto mr-auto`}> <ReactLogo className="w-9 h-9 ml-auto mr-auto"/> Gradio Flow </h1>
                 </div>
 
                 <div className={`rounded-md text-center ${this.state.open ? "" : "px-0"} py-3`} onClick={() => {this.handelModal(true)}}>

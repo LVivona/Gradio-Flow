@@ -586,10 +586,6 @@ video {
   bottom: 0px;
 }
 
-.top-0 {
-  top: 0px;
-}
-
 .top-4 {
   top: 1rem;
 }
@@ -602,12 +598,12 @@ video {
   z-index: 10;
 }
 
-.z-50 {
-  z-index: 50;
-}
-
 .-z-10 {
   z-index: -10;
+}
+
+.z-50 {
+  z-index: 50;
 }
 
 .float-left {
@@ -662,6 +658,10 @@ video {
   height: 100vh;
 }
 
+.h-6 {
+  height: 1.5rem;
+}
+
 .h-10 {
   height: 2.5rem;
 }
@@ -670,24 +670,20 @@ video {
   height: auto;
 }
 
+.h-\[540px\] {
+  height: 540px;
+}
+
 .h-full {
   height: 100%;
 }
 
-.h-\[95\%\] {
-  height: 95%;
+.h-8 {
+  height: 2rem;
 }
 
-.h-\[500px\] {
-  height: 500px;
-}
-
-.h-\[300px\] {
-  height: 300px;
-}
-
-.h-\[540px\] {
-  height: 540px;
+.h-9 {
+  height: 2.25rem;
 }
 
 .w-10 {
@@ -698,28 +694,28 @@ video {
   width: 100%;
 }
 
-.w-\[1000px\] {
-  width: 1000px;
+.w-8 {
+  width: 2rem;
 }
 
-.w-\[95\%\] {
-  width: 95%;
+.w-\[600px\] {
+  width: 600px;
 }
 
 .w-screen {
   width: 100vw;
 }
 
-.w-\[900px\] {
-  width: 900px;
+.w-4 {
+  width: 1rem;
 }
 
-.w-\[800px\] {
-  width: 800px;
+.w-6 {
+  width: 1.5rem;
 }
 
-.w-\[600px\] {
-  width: 600px;
+.w-9 {
+  width: 2.25rem;
 }
 
 .flex-1 {
@@ -736,12 +732,12 @@ video {
   cursor: pointer;
 }
 
-.resize {
-  resize: both;
-}
-
 .items-center {
   align-items: center;
+}
+
+.self-center {
+  align-self: center;
 }
 
 .overflow-auto {
@@ -782,10 +778,6 @@ video {
 
 .border-dashed {
   border-style: dashed;
-}
-
-.border-none {
-  border-style: none;
 }
 
 .border-black {
@@ -940,14 +932,6 @@ video {
   padding-top: 0.5rem;
 }
 
-.pt-\[56\.25\%\] {
-  padding-top: 56.25%;
-}
-
-.pt-\[57\.25\%\] {
-  padding-top: 57.25%;
-}
-
 .text-left {
   text-align: left;
 }
@@ -988,11 +972,6 @@ video {
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
-}
-
-.text-5xl {
-  font-size: 3rem;
-  line-height: 1;
 }
 
 .font-medium {
@@ -1079,19 +1058,9 @@ video {
           animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.hover\:border-sky-500:hover {
-  --tw-border-opacity: 1;
-  border-color: rgb(14 165 233 / var(--tw-border-opacity));
-}
-
 .hover\:border-Retro-purple:hover {
   --tw-border-opacity: 1;
   border-color: rgb(151 0 204 / var(--tw-border-opacity));
-}
-
-.hover\:border-l-Retro-purple:hover {
-  --tw-border-opacity: 1;
-  border-left-color: rgb(151 0 204 / var(--tw-border-opacity));
 }
 
 .focus\:border-sky-500:focus {
