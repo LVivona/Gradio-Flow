@@ -56,9 +56,8 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 ```python
 def InterLauncher(name, interface, listen=2000, **kwargs):
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
-    print(listen)
     try:
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : name, "name" : "Not Applicable", "kwargs" : kwargs})
+        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : "Not Applicable", "name" : name, "kwargs" : kwargs})
     except Exception as e:
         print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
         return
