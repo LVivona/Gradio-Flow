@@ -213,4 +213,7 @@ if __name__ == "__main__":
     # Greeting().launch(listen=2000)
 ```` 
 ## Application 🏛️
-![Application](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/app.png)
+![Dark-Application](https://github.com/LVivona/Gradio-Flow/blob/8edde72f878c174f53602c4ddff0fc6d3fc7cd61/images/app.png)
+![Light-Application](https://github.com/LVivona/Gradio-Flow/blob/8edde72f878c174f53602c4ddff0fc6d3fc7cd61/images/light-app.png)
+
+
