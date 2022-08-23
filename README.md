@@ -100,7 +100,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 
 
  ## App Architecture 🏗️
-![architecture](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/images/architecture.png)
+![architecture](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/architecture.png)
  
 ## Prerequisites 📝
 You will need:
@@ -213,5 +213,4 @@ if __name__ == "__main__":
     # Greeting().launch(listen=2000)
 ```` 
 ## Application 🏛️
-![Application_dark](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/app.png)
-
+![Application](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/app.png)
