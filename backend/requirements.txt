@@ -61,10 +61,10 @@ six==1.16.0
 sniffio==1.2.0
 starlette==0.19.1
 gradioWrapper==0.0.4
-#tokenizers==0.12.1
-#torch==1.12.0
+tokenizers==0.12.1
+torch==1.12.0
 tqdm==4.64.0
-#transformers==4.20.1
+transformers==4.20.1
 typing_extensions==4.3.0
 uc-micro-py==1.0.1
 urllib3==1.26.10

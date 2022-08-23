@@ -9,7 +9,7 @@ class Dock:
 
     def __init__(self) -> None:
             self.num_ports = 20
-            self.port_range = (3002, 8000)
+            self.port_range = (7860, 7880)
 
     def portConnection(self, port : int):
             s = socket.socket(
@@ -22,7 +22,6 @@ class Dock:
             trial_count = 0 
             while trial_count <= max_trial_count:
                 port=random.randint(*self.port_range)
-                print(port)
                 if not self.portConnection(port):
                     return port
                 trial_count += 1
@@ -34,9 +33,8 @@ DOCKER_PORT = Dock()
 
 def InterLauncher(name, interface, listen=2000, **kwargs):
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
-    print(listen)
     try:
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : "Not Applicable", "name" : {name}, "kwargs" : kwargs})
+        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : "Not Applicable", "name" : name, "kwargs" : kwargs})
     except Exception as e:
         print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
         return
@@ -214,7 +212,6 @@ def GradioModule(cls):
                 fn = getattr(self.__cls__, func, None)
                 
                 if callable(fn) and not func.startswith("__") and  "__decorator__" in dir(fn) and fn.__decorator__ == "__gradio__":
-                    print(func,  callable(fn))
                     fn()
 
         def __compile(self):

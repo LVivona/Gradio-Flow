@@ -42,8 +42,11 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
  
  - [**Application**](#application-%EF%B8%8F)
 
-## Updates ⚒️
+### Updates ⚒️
 ### Backend 💽
+- errors within the function InterLauncher fixed
+- port mapping fixed
+- removed test prints
 - ``__init__`` function takes inputs within class wrapper
 - better determine registered functions within classes
 - more examples located in the ``backend/src/example``
@@ -55,7 +58,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
     print(listen)
     try:
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : {name}, "name" : "Not Applicable", "kwargs" : kwargs})
+        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : name, "name" : "Not Applicable", "kwargs" : kwargs})
     except Exception as e:
         print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
         return
@@ -89,7 +92,13 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 
 
 ### Frontend 🖥️
-- no new updates
+- new logo
+
+### In The Works 🚧
+- Appending streamlit into gradio-flow
+- Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
+
+
 
  ## App Architecture 🏗️
 ![architecture](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/architecture.png)
