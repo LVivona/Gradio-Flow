@@ -92,6 +92,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 
 ### Frontend 🖥️
 - new logo
+- appedned colours
 
 ### In The Works 🚧
 - Appending streamlit into gradio-flow
