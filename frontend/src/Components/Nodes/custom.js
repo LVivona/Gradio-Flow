@@ -3,6 +3,7 @@ import React from "react"
   export default class CustomNodeIframe extends React.Component {
     constructor({data}){
       super()
+      this.myRef = React.createRef()
       this.state = {
         reachable : true,
         selected : true,
@@ -22,14 +23,19 @@ import React from "react"
     render(){
       
       console.log(this.state.reachable)
-      var frame = document.getElementById("Iframe");
-
       return (
         <>
         { this.state.selected && this.state.reachable ? 
                 <div className='relative h-[540px] w-[600px] overflow-hidden m-0 p-0' onClick={()=>this.handelSelected()}>
                 <div className={`absolute h-full w-full ${this.state.data.colour} border-1shadow-2xl shadow-black rounded-xl -z-10`}></div>
-                <iframe src={this.state.data.host} title={this.state.data.label} frameBorder={0} allowFullScreen className=" h-full w-full p-2 overflow-y-scroll"></iframe>
+                <iframe 
+                      id="iframe"
+                      ref={this.myRef} 
+                      src={this.state.data.host} 
+                      title={this.state.data.label} 
+                      frameBorder="0" class="container h-full p-2 flex-grow space-iframe overflow-scroll " allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
+                {/* {console.log(this.myRef.current.contentWindow)} */}
+                {/* <gradio-app space={`${this.state.data.host}/api/predict`} className="w-full h-full"></gradio-app> */}
               </div>:
         <>
         <div className='break-words'> 

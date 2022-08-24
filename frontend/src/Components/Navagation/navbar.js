@@ -173,8 +173,8 @@ export default class Navbar extends Component{
         } 
         return(<>
                 <li key={`${item.name}-${item.port}`} onDragStart={(event) => this.onDragStart(event, 'custom', item, index)} 
-                    className={` text-white text-sm flex text-center items-center cursor-pointer
-                                 p-4 px-2 mt-4 ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`} rounded-md mt-2`} draggable>
+                    className={` text-white text-md flex text-center items-center cursor-pointer shadow-lg
+                                 p-7 px-2 mt-4 ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`} rounded-md mt-2`} draggable>
                     <span className="text-2xl font-medium ">            </span>
                     <span className={`text-base font-medium flex-1 text-left" ${this.state.open ? "" : "hidden"}`}>{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]} ${item.name}`}</span>    
                 </li >      
@@ -210,7 +210,7 @@ export default class Navbar extends Component{
                     Append Shared Gradio Hosts 
                 </Header>
                 <Modal.Content>
-                <div className=" text-center">This feature just allows you to append other hosted applications like gradio/streamlit to have it within the Gradio Flow interface, that may not be sending its hosting location to the api or have shared links to other people's gradio application.</div>
+                <div className=" text-center">Host other HugginFace Models or Gradio application via shared lin</div>
                 <div className={`flex items-center rounded-md bg-light-white mt-6  border-dashed`}>
                 <label className="relative block w-full">
                     <span className={`absolute inset-y-0 left-0 flex items-center pl-3`}>

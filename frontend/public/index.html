@@ -36,26 +36,6 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="Gradio-Flow"></div>
-    <script>
-    var frame = document.getElementById("Iframe");
-
-    frame.onload = function()
-      // function execute while load the iframe
-        
-      {
-        // set the height of the iframe as 
-        // the height of the iframe content
-        frame.style.height = 
-        frame.contentWindow.document.body.scrollHeight + 'px';
-        console.log(frame.contentWindow.document.body.scrollHeight)  
-
-      // set the width of the iframe as the 
-      // width of the iframe content
-      frame.style.width  = 
-        frame.contentWindow.document.body.scrollWidth+'px';
-            
-        }
-    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
