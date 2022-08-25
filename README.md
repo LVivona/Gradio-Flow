@@ -177,16 +177,12 @@ from resources import register, tabularGradio
 def Hello_World(name):
         return f"👋 Hello {name}, and welcome to Gradio Flow 🤗" 
 
-@register(inputs=["number", "number"], outputs=["number"], examples=[[1,1]])
-def add(x, y):
-    return x + y
-
 if __name__ == "__main__":
     # run single gradio
-    tabularGradio([Hello_World, add])  # tabularGradio([Hello_World, add], ["Hello World", "Add"])
+    tabularGradio([Hello_World])  # tabularGradio([Hello_World], ["Greeting"])
 
     # run it within Gradio-Flow
-    # tabularGradio([Hello_World, add], ["Hello World", "Add"], listen=2000) # tabularGradio([Hello_World, add], ["Hello World", "Add"], listen=2000)
+    # tabularGradio([Hello_World], listen=2000) # tabularGradio([Hello_World], ["Greeting"], listen=2000)
     
 ```
 
@@ -201,11 +197,6 @@ class Greeting:
     @register(["text"], ["text"], examples=[["Luca Vivona"]])
     def Hello_World(self, name):
         return f"👋 Hello {name}, and welcome to Gradio Flow 🤗" 
-
-    @register(inputs=["number", "number"], outputs=["number"], examples=[[1,1]])
-    def add(self, x, y):
-        return x + y
-
 
 if __name__ == "__main__":
     # run just gradio
