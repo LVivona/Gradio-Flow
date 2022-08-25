@@ -7,7 +7,7 @@ import ReactFlow, { Background,
                     ReactFlowProvider,
                     } from 'react-flow-renderer';
 import React ,{ useState, useCallback, useRef } from 'react';
-import Navbar from '../Navagation/Navbar';
+import Navbar from '../Navagation/navbar';
 import { useThemeDetector } from '../../helper/visual'
  
 const types = {
