@@ -1,15 +1,16 @@
 import gradio as gr
-from inspect import getfile, isclass, getmro
+from inspect import getfile
 
 import socket
-import random
 import requests
 
 class Dock:
 
     def __init__(self) -> None:
-            self.num_ports = 20
-            self.port_range = (7860, 7880)
+            self.port_map = dict()
+            for p in range(7860, 7880):
+                if not self.portConnection(p):
+                    self.port_map[p] = True
 
     def portConnection(self, port : int):
             s = socket.socket(
@@ -18,15 +19,11 @@ class Dock:
             if result == 0: return True
             return False
 
-    def determinePort(self, max_trial_count=20):
-            trial_count = 0 
-            while trial_count <= max_trial_count:
-                port=random.randint(*self.port_range)
-                if not self.portConnection(port):
-                    return port
-                trial_count += 1
-            raise Exception('Exceeded Max Trial count without finding port')
-
+    def determinePort(self):
+        for port, available in self.port_map.items():
+            if available == True:
+                return port
+        raise Exception(f'❌ 🔌 {bcolor.BOLD}{bcolor.UNDERLINE}{bcolor.FAIL}All visable ports are used up...Try close some ports {bcolor.ENDC}')
 
 DOCKER_LOCAL_HOST = '0.0.0.0'
 DOCKER_PORT = Dock()
@@ -41,7 +38,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 
     interface.launch(server_port=port,
                      server_name=f"{DOCKER_LOCAL_HOST}",
-                     inline= kwargs['inline'] if "inline" in kwargs else True,
+                     inline= kwargs['inline'] if "inline" in kwargs else False,
                      share=kwargs['share'] if "share" in kwargs else None,
                      debug=kwargs['debug'] if "debug" in kwargs else False,
                      enable_queue=kwargs['enable_queue'] if "enable_queue" in kwargs else None,
@@ -65,13 +62,16 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
     except Exception as e:    
         print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
 
-def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
+def tabularGradio(funcs, names=[], name="Tabular Temp Name", **kwargs):
     """
     takes all gradio Interfaces, and names
     from input and launch the gradio.
     """
 
-    assert len(funcs) == len(names), f"{bcolor.BOLD}{bcolor.FAIL}🐛 something went wrong!!! The function you appended dose not match the length of the names{bcolor.ENDC}"
+    fn = [fn() for fn in funcs if not isinstance(fn, gr.Interface) and  fn.__decorator__ == "__gradio__" ]
+    if len(names) == 0:
+        names = [_.__name__ for _ in fn]
+        
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
     
     # send this to the backend api for it to be read by the react frontend
@@ -83,7 +83,7 @@ def tabularGradio(funcs, names, name="Tabular Temp Name", **kwargs):
             return
     
     # provided by gradio a tabularInterface function that take function and names
-    gr.TabbedInterface(funcs, names).launch(server_port=port,
+    gr.TabbedInterface(fn, names).launch(server_port=port,
                                             server_name=f"{DOCKER_LOCAL_HOST}",
                                             inline= kwargs['inline'] if "inline" in kwargs else True,
                                             share=kwargs['share'] if "share" in kwargs else None,
@@ -154,7 +154,7 @@ def register(inputs, outputs, examples=None, **kwargs):
                                                                     css=kwargs['css'] if "css" in kwargs else None,
                                                                     live=kwargs['live'] if "live" in kwargs else False,
                                                                     allow_flagging=kwargs['allow_flagging'] if "allow_flagging" in kwargs else None,
-                                                                    theme=kwargs['theme'] if "theme" in kwargs else  'default', )
+                                                                    theme=kwargs['theme'] if "theme" in kwargs else 'default', )
 
                 if len(args[1:]) == (func.__code__.co_argcount - 1):
                     return func(*args, **wargs) 

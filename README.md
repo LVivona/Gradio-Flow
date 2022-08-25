@@ -136,8 +136,8 @@ Now that you're within the docker backend container environment you can start ad
 #### **3.** Appending Nodes To Frontend From The Backend
 
 ```console
-> cd ./src
-> python demoC.py
+> cd ./src/demo
+> python demo.py -l 2000
 //run example gradio application
 ```
 
@@ -169,13 +169,13 @@ It is quite simple, and similar within the docker build, the first way you can a
 **NOTE** If you use the gradio decorator compiler for gradio flow you need to set a listen port to 2000 or else the api will never get the key and will throw you an error, I'll also provided an example below if this isn't clear.
 
 ```python
-#backend/src/demoF.py (functional base)
+# (functional base)
 ##########
 from resources import register, tabularGradio
 
 @register(["text"], ["text"], examples=[["Luca Vivona"]])
 def Hello_World(name):
-        return f"Hello {name}, and welcome to Gradio Flow 🤗" 
+        return f"👋 Hello {name}, and welcome to Gradio Flow 🤗" 
 
 @register(inputs=["number", "number"], outputs=["number"], examples=[[1,1]])
 def add(x, y):
@@ -183,15 +183,15 @@ def add(x, y):
 
 if __name__ == "__main__":
     # run single gradio
-    tabularGradio([Hello_World(), add()], ["Hello World", "Add"])
+    tabularGradio([Hello_World, add])  # tabularGradio([Hello_World, add], ["Hello World", "Add"])
 
     # run it within Gradio-Flow
-    # tabularGradio([Hello_World(), add()], ["Hello World", "Add"], listen=2000)
+    # tabularGradio([Hello_World, add], ["Hello World", "Add"], listen=2000) # tabularGradio([Hello_World, add], ["Hello World", "Add"], listen=2000)
     
 ```
 
 ```python
-#backend/src/demoC.py (Class Base)
+#(Class Base)
 ###########
 from resources import GradioModule, register
 
@@ -200,7 +200,7 @@ class Greeting:
 
     @register(["text"], ["text"], examples=[["Luca Vivona"]])
     def Hello_World(self, name):
-        return f"Hello {name}, and welcome to Gradio Flow 🤗" 
+        return f"👋 Hello {name}, and welcome to Gradio Flow 🤗" 
 
     @register(inputs=["number", "number"], outputs=["number"], examples=[[1,1]])
     def add(self, x, y):
@@ -212,7 +212,18 @@ if __name__ == "__main__":
     Greeting().launch()
     # run it within Gradio-flow
     # Greeting().launch(listen=2000)
-```` 
+```
+
+# More Demos ➕
+Within the ``backend/src/demo`` directory there are some demos
+```command
+# type : class | function | load | None
+# port : 2000 | None 
+# python demo.py -e [type] -l [port]
+(e.g)
+> python demo.py -e class -l 2000
+> python demo.py -e class
+```
 ## Application 🏛️
 ![Dark-Application](https://github.com/LVivona/Gradio-Flow/blob/8edde72f878c174f53602c4ddff0fc6d3fc7cd61/images/app.png)
 ![Light-Application](https://github.com/LVivona/Gradio-Flow/blob/8edde72f878c174f53602c4ddff0fc6d3fc7cd61/images/light-app.png)
