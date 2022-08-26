@@ -104,8 +104,11 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 
 
 ### Frontend 🖥️
-- new logo
-- appedned colours
+- Node Menu
+    - Dynamic adjust the size of node
+    - Link to gradio to host it in seprate tab
+
+![Node Menu](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/new_feature.png)
 
 ### In The Works 🚧
 - Appending streamlit into gradio-flow
