@@ -106,9 +106,10 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 ### Frontend 🖥️
 - Node Menu
     - Dynamic adjust the size of node
+    - Delete node Button
     - Link to gradio to host it in seprate tab
 
-![Node Menu](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/new_feature.png)
+![Node Menu](https://github.com/LVivona/Gradio-Flow/blob/e81c43c10f240e715f42069b06aa6d9a955cf4f7/images/new_feature.png)
 
 ### In The Works 🚧
 - Appending streamlit into gradio-flow
