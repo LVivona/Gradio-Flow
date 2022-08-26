@@ -71,7 +71,7 @@ export default function ReactEnviorment() {
 
     return (
       <>          
-        <div className=' absolute top-4 right-5 z-50' onClick={()=> setTheme(theme ? "dark" : "")}>
+        <div className=' absolute top-4 right-5 z-50' onClick={()=> setTheme(!theme)}>
           <h1 className='text-4xl select-none' >{theme  ? '🌙' : '☀️'}</h1>  
         </div>
         <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>
