@@ -5,6 +5,17 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
  
  
 ## Tabel Of Contents 📚
+ - [**Updates**](#updates-%EF%B8%8F)
+    
+    
+    - [**Backend**](#backend-)
+    
+    
+    - [**Frontend**](#frontend-%EF%B8%8F)
+    
+    
+    - [**In The Works**](#in-the-works-)
+
  - [**App Architecture**](#app-architecture-%EF%B8%8F)
  
  - [**Prerequisites**](#prerequisites-)
@@ -40,9 +51,11 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
     
      - [**Run Gradio within Gradio-Flow**](#5-run-gradio-within-gradio-flow)
  
+ - [**More Demos**](#more-demos-)
+ 
  - [**Application**](#application-%EF%B8%8F)
 
-### Updates ⚒️
+## Updates ⚒️
 ### Backend 💽
 - errors within the function InterLauncher fixed
 - port mapping fixed
