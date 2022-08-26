@@ -42,7 +42,7 @@ export default class CustomNodeIframe extends React.Component {
 
     handelOnChange(evt, type){
       this.setState({reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  type === "width" ? parseInt(evt.target.value) : this.state.width, height : type === "height" ? parseInt(evt.target.value) : this.state.height, size : this.state.size})
-
+      type === "width" ? this.myRef.current.style.width = `${parseInt(evt.target.value)}px` : this.myRef.current.style.height = `${parseInt(evt.target.value)}px` 
     }
 
     handelSize(evt, increment, change){
