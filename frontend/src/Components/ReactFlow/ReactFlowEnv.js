@@ -1,4 +1,4 @@
-import CustomNodeIframe from "../Nodes/custom";
+import CustomNodeIframe from "../Nodes/Custom.js";
 import '../../css/dist/output.css'
 import '../../css/CustomNode.css'
 import ReactFlow, { Background,
@@ -7,7 +7,7 @@ import ReactFlow, { Background,
                     ReactFlowProvider,
                     } from 'react-flow-renderer';
 import React ,{ useState, useCallback, useRef } from 'react';
-import Navbar from '../Navagation/Navbar';
+import Navbar from '../Navagation/navbar';
 import { useThemeDetector } from '../../helper/visual'
  
 const types = {
@@ -16,12 +16,12 @@ const types = {
 
 export default function ReactEnviorment() {
  
-    const [theme, setTheme] = useState(useThemeDetector)
+    const [theme, setTheme] = useState(useThemeDetector())
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const reactFlowWrapper = useRef(null);
-  
+    console.log("theme",theme)
   
     const onNodesChange = useCallback(
       (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -71,10 +71,10 @@ export default function ReactEnviorment() {
 
     return (
       <>          
-        <div className=' absolute top-4 right-5 z-50' onClick={()=> setTheme(theme === "" ? "dark" : "")}>
-          <h1 className='text-4xl' >{theme === "dark"  ? '🌙' : '☀️'}</h1>  
+        <div className=' absolute top-4 right-5 z-50' onClick={()=> setTheme(theme ? "dark" : "")}>
+          <h1 className='text-4xl select-none' >{theme  ? '🌙' : '☀️'}</h1>  
         </div>
-        <div className={`flex h-screen w-screen ${theme} transition-all`}>
+        <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>
           <Navbar/>
           <ReactFlowProvider>
             <div className="h-screen w-screen" ref={reactFlowWrapper}>
