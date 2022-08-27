@@ -71,15 +71,15 @@ export default class CustomNodeIframe extends React.Component {
                 </div>
               </div>)
     }
-    
+        
     render(){
       if (!this.state.reachable) this.onNodeClick(this.state.id) 
       return (<>
                 <>
-                  <div className=" flex w-full h-10 top-0 cursor-pointer">
-                  <div title="Collaspse Node" className=" duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Blue rounded-xl" onClick={this.handelSelected}><CgLayoutGridSmall className="h-full w-full text-white p-1"/></div>
+                  <div className=" flex w-full h-10 top-0 cursor-pointer" onClick={this.handelEvent}>
+                  <div title="Collaspse Node" className=" duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-black h-10 w-10 mr-2 -mt-3 bg-Warm-Blue rounded-xl" onClick={this.handelSelected}><CgLayoutGridSmall className="h-full w-full text-white p-1"/></div>
 
-                   
+    
                     <div className={` flex ${this.state.selected ? '' : 'w-0 hidden'}`}>
                       <div title="Adjust Node Size" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Violet rounded-xl" onClick={this.handelSizeState}><TbResize className="h-full w-full text-white p-1"/></div>
                       <a href={this.state.data.host} target="_blank" rel="noopener noreferrer"><div title="Gradio Host Site" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Pink rounded-xl"><BiCube className="h-full w-full text-white p-1"/></div></a>
