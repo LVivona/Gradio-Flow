@@ -5,6 +5,9 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
  
  
 ## Tabel Of Contents 📚
+ - [**Application**](#application-%EF%B8%8F)
+
+
  - [**Updates**](#updates-%EF%B8%8F)
     
     
@@ -53,7 +56,11 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
  
  - [**More Demos**](#more-demos-)
  
- - [**Application**](#application-%EF%B8%8F)
+
+
+## Application 🏛️
+![Dark-Application](images/application_dark.png)
+![Light-Application](images/application_light.png)
 
 ## Updates ⚒️
 ### Backend 💽
@@ -232,8 +239,3 @@ Within the ``backend/src/demo`` directory there are some demos
 > python demo.py -e class -l 2000
 > python demo.py -e class
 ```
-## Application 🏛️
-![Dark-Application](https://github.com/LVivona/Gradio-Flow/blob/8edde72f878c174f53602c4ddff0fc6d3fc7cd61/images/app.png)
-![Light-Application](https://github.com/LVivona/Gradio-Flow/blob/8edde72f878c174f53602c4ddff0fc6d3fc7cd61/images/light-app.png)
-
-
