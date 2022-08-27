@@ -10,18 +10,19 @@ export default class Navbar extends Component{
         super() 
         this.fetch_classes()
         this.temp_host = 0
+        this.state = {open : true,
+            menu : [],
+            colour : [],
+            text : "",
+            name : "",
+            emoji : [],
+            mode : false,
+            modal : false,
+            error : false
+           }
     }
 
-    state = {open : true,
-        menu : [],
-        colour : [],
-        text : "",
-        name : "",
-        emoji : [],
-        mode : false,
-        modal : false,
-        error : false
-       }
+
 
     async fetch_classes(){
         try {
@@ -167,10 +168,6 @@ export default class Navbar extends Component{
 
     subComponents(item, index){
         
-
-        if (this.state.colour.length === 0 || this.state.emoji.length === 0){
-          this.hanelTabs()  
-        } 
         return(<>
                 <li key={`${item.name}-${item.port}`} onDragStart={(event) => this.onDragStart(event, 'custom', item, index)} 
                     className={` text-white text-md flex text-center items-center cursor-pointer shadow-lg
@@ -217,7 +214,7 @@ export default class Navbar extends Component{
                         <BsSearch className="block float-left cursor-pointer mr-2"/>
                     </span>
                     <input className={`placeholder:italic placeholder:text-slate-400 block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 ${this.state.open ? "pr-3" : "hidden"} shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1  sm:text-sm`} 
-                           placeholder={`stream localhost...`}
+                           placeholder={`stream link...`}
                            type="text" name="search"
                            onChange={(e) => {
                             this.updateText(e, "text")
@@ -232,7 +229,7 @@ export default class Navbar extends Component{
                         <Icon className="block float-left cursor-pointer mr-2" name="address card"/>
                     </span>
                     <input className={`placeholder:italic placeholder:text-slate-400 block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 ${this.state.open ? "pr-3" : "hidden"} shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1  sm:text-sm`} 
-                           placeholder={`Name...` }
+                           placeholder={`Give it name...` }
                            type="text" name="search"
                            onChange={(e) => {
                             this.updateText(e, "name")

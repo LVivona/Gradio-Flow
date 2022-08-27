@@ -47,8 +47,7 @@ export default function ReactEnviorment() {
   
         const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
         const type = event.dataTransfer.getData('application/reactflow');
-        const host = event.dataTransfer.getData('application/host');
-        const name = event.dataTransfer.getData('application/name');
+        const item  = JSON.parse(event.dataTransfer.getData('application/item'));
         const colour = event.dataTransfer.getData('application/colour');
         // check if the dropped element is valid
         if (typeof type === 'undefined' || !type) {
@@ -60,10 +59,10 @@ export default function ReactEnviorment() {
           y: event.clientY - reactFlowBounds.top,
         });
         const newNode = {
-          id: `${name}-${nodes.length}`,
+          id: `${item.name}-${nodes.length}`,
           type,
           position,
-          data: { label: `${name}`, host : `${host}`, colour : `${colour}`, delete : deleteNode },
+          data: { label: `${item.name}`, host : `${item.host}`, colour : `${colour}`, delete : deleteNode },
         };
         setNodes((nds) => nds.concat(newNode));
       },

@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, "../")
 from resources import GradioModule, register, InterLauncher, tabularGradio
-from example.examples import Pictionary
+from example.examples import Pictionary, FSD, stock_forecast
 
 import gradio as gr
 
@@ -41,6 +41,10 @@ elif args.examples == "load":
     examples = [["An adventurer is approached by a mysterious stranger in the tavern for a new quest."]]
     demo = gr.Interface.load("models/EleutherAI/gpt-neo-1.3B", description=description, examples=examples)
     InterLauncher("Demo", demo) if args.listen == None else InterLauncher("Demo", demo, listen=args.listen)
+
+elif args.examples == "FSD": FSD().launch() if args.listen == None else FSD().launch(listen=args.listen)
+
+elif args.examples == "Stonk" : stock_forecast().launch() if args.listen == None else stock_forecast().launch(listen=args.listen)
 
 else:
     Pictionary("../example/data/labels.txt", "../example/data/pytorch_model.bin").launch(live=True)  if args.listen == None else Pictionary("../example/data/labels.txt", "../example/data/pytorch_model.bin").launch(live=True, listen=args.listen)
