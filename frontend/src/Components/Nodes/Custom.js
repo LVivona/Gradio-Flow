@@ -75,7 +75,7 @@ export default class CustomNodeIframe extends React.Component {
       return (<>
         { this.state.reachable &&
                 <>
-                  <div className=" flex w-full h-10 top-0 cursor-pointer" onClick={this.handelEvent}>
+                  <div className=" flex w-full h-10 top-0 cursor-pointer">
                   <div title="Collaspse Node" className=" duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-black h-10 w-10 mr-2 -mt-3 bg-Warm-Blue rounded-xl" onClick={this.handelSelected}><CgLayoutGridSmall className="h-full w-full text-white p-1"/></div>
 
                    
