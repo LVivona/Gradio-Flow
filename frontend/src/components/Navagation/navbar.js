@@ -62,7 +62,7 @@ export default class Navbar extends Component{
             hugginFace : /^https?:\/\/*(hf.space)\/*(embed)\/*([a-zA-Z0-9+_-]+)\/*([a-zA-Z0-9+_-]+)\/*([+])?(\/)?$/
         } 
 
-        if (this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.host) }) !== -1 ||
+        if (this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.text) }) !== -1 ||
             this.state.text.includes(" ") || 
             (!pattern.local.test(this.state.text) &&
             !pattern.share.test(this.state.text) &&
