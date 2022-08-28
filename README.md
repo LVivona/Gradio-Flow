@@ -125,6 +125,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 ![Node Menu](images/new_feature.png)
 
 ### In The Works 🚧
+- Mutiple windows within the react-flow environment 
 - Appending streamlit into gradio-flow
 - Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
 
