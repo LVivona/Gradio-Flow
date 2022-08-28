@@ -115,6 +115,12 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
     - Dynamic adjust the size of node
     - Delete node Button
     - Link to gradio to host it in seprate tab
+    - Refresh Button to refresh the iframe if need be
+    - fixed some bugs from ``+ button`` for catching errors and wrong inputs
+    - ``+ button`` now includes hugginface spaces, and gradio share
+        - https://hf.space/embed/name_of_user/name_of_space/+
+        - Ex: https://hf.space/embed/marcop/musika/+
+    
 
 ![Node Menu](https://github.com/LVivona/Gradio-Flow/blob/e81c43c10f240e715f42069b06aa6d9a955cf4f7/images/new_feature.png)
 
