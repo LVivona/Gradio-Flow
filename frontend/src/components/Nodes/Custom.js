@@ -1,6 +1,6 @@
 import React from "react"
 import {TbResize} from 'react-icons/tb'
-import {BiCube} from 'react-icons/bi'
+import {BiCube, BiRefresh} from 'react-icons/bi'
 import {BsTrash} from 'react-icons/bs'
 import {CgLayoutGridSmall} from 'react-icons/cg'
 import '../../css/counter.css'
@@ -14,19 +14,20 @@ export default class CustomNodeIframe extends React.Component {
         reachable : this.isFetchable(data.host),
         selected : true,
         data : data,
-        width : 600,
-        height : 540,
-        size : false
+        width : 540,
+        height : 600,
+        size : false,
+        iframe : 0
       }
  
     }
 
     handelSelected = () => {
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : !this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size})
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : !this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe})
     }
 
     handelSizeState = () => {
-        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : !this.state.size})
+        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : !this.state.size, iframe : this.state.iframe})
       }
 
     isFetchable = async (host) => {
@@ -45,14 +46,21 @@ export default class CustomNodeIframe extends React.Component {
       this.state.data.delete(id)
     }
 
+    onRefresh(){
+      if(!this.isFetchable) this.onNodeClick(this.state.id)
+      else{
+        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe + 1})
+      }
+    }
+
     handelOnChange(evt, type){
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  type === "width" ? parseInt(evt.target.value) : this.state.width, height : type === "height" ? parseInt(evt.target.value) : this.state.height, size : this.state.size})
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  type === "width" ? parseInt(evt.target.value) : this.state.width, height : type === "height" ? parseInt(evt.target.value) : this.state.height, size : this.state.size, iframe : this.state.iframe})
         type === "width" ? this.myRef.current.style.width = `${parseInt(evt.target.value)}px` : this.myRef.current.style.height = `${parseInt(evt.target.value)}px` 
     }
 
     handelSize(evt, increment, change){
       if (evt === "increment") {
-        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  change === "width" ? this.state.width + increment : this.state.width, height : change === "height" ? this.state.height + increment : this.state.height, size : this.state.size})
+        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  change === "width" ? this.state.width + increment : this.state.width, height : change === "height" ? this.state.height + increment : this.state.height, size : this.state.size, iframe : this.state.iframe})
         change === "width" ? this.myRef.current.style.width = `${this.state.width + increment}px` : this.myRef.current.style.height = `${this.state.height + increment}px` 
       }
 
@@ -77,15 +85,16 @@ export default class CustomNodeIframe extends React.Component {
       return (<>
                 <>
                   <div className=" flex w-full h-10 top-0 cursor-pointer" onClick={this.handelEvent}>
-                  <div title="Collaspse Node" className=" duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-black h-10 w-10 mr-2 -mt-3 bg-Warm-Blue rounded-xl" onClick={this.handelSelected}><CgLayoutGridSmall className="h-full w-full text-white p-1"/></div>
+                  <div title="Collaspse Node" className=" duration-300 cursor-pointer shadow-xl border-2 border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Blue rounded-xl" onClick={this.handelSelected}><CgLayoutGridSmall className="h-full w-full text-white p-1"/></div>
 
     
                     <div className={` flex ${this.state.selected ? '' : 'w-0 hidden'}`}>
                       <div title="Adjust Node Size" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Violet rounded-xl" onClick={this.handelSizeState}><TbResize className="h-full w-full text-white p-1"/></div>
                       <a href={this.state.data.host} target="_blank" rel="noopener noreferrer"><div title="Gradio Host Site" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Pink rounded-xl"><BiCube className="h-full w-full text-white p-1"/></div></a>
                       <div title="Delete Node" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Red rounded-xl" onClick={() => this.onNodeClick(this.state.id)}><BsTrash className="h-full w-full text-white p-1"/></div>
-                    
-                      { this.state.size && <div className="duration-300 flex w-[60%] h-full  mr-2 -mt-3 space-x-4">
+                      <div title="Refresh Node" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Orange rounded-xl" onClick={() => this.onRefresh()}><BiRefresh className="h-full w-full text-white p-1"/></div>
+
+                      { this.state.size && <div className="duration-300 flex w-auto h-full  mr-2 -mt-3 space-x-4">
                         {this.Counter("width", this.state.width)}
                         {this.Counter("height", this.state.height)}
                       </div>}
@@ -97,11 +106,11 @@ export default class CustomNodeIframe extends React.Component {
                     <div className={`absolute h-full w-full ${this.state.data.colour} border-1shadow-2xl shadow-black rounded-xl -z-20`}></div>
                     <iframe 
                         id="iframe" 
+                        key={this.state.iframe}
                         src={this.state.data.host} 
                         title={this.state.data.label} 
                         frameBorder="0" 
                         className=" -z-10 container h-full p-2 flex-grow space-iframe overflow-scroll " 
-                        allow="accelerometer; ambient-light-sensor; autoplay; battery; camera; document-domain; encrypted-media; fullscreen; geolocation; gyroscope; layout-animations; legacy-image-formats; magnetometer; microphone; midi; oversized-images; payment; picture-in-picture; publickey-credentials-get; sync-xhr; usb; vr ; wake-lock; xr-spatial-tracking" 
                         sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
                   </div>
                 </>

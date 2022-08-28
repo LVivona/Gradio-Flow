@@ -7,6 +7,14 @@ module.exports = {
     extend: {
      
       colors : {
+        "Amethyst-Light" : "#9D50BB",
+        "Amethyst-Dark" : "#6E48AA",
+        "Peach-Red" : "#ED4264",
+        "Peach-Yello" : "#FFEDBC",
+        "Deep-Space-Black" : "#000000",
+        "Deep-Space-Gray" : "#434343",
+        "Sunshine-Red" : "#b92b27",
+        "Sunshine-Blue" : "#1565C0",
         "Retro-light-blue" : "#2de2e6",
         "Retro-dark-blue" : "#035ee8",
         "Retro-light-pink" : "#f6019d",

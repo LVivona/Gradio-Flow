@@ -1,6 +1,5 @@
 import CustomNodeIframe from "../Nodes/Custom.js";
 import '../../css/dist/output.css'
-import '../../css/CustomNode.css'
 import ReactFlow, { Background,
                     applyNodeChanges,
                     applyEdgeChanges,
@@ -16,12 +15,11 @@ const types = {
 
 export default function ReactEnviorment() {
 
-    const [theme, setTheme] = useState(useThemeDetector())
+    const [theme, setTheme] = useState(useThemeDetector)
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const reactFlowWrapper = useRef(null);
-
 
 
     const onNodesChange = useCallback(
@@ -40,7 +38,7 @@ export default function ReactEnviorment() {
     }, []);
 
     const deleteNode = (id) =>{setNodes((nds) => nds.filter(n => n.id !== id ))}
-
+    const deleteNodeContains = (id) =>{setNodes((nds) => nds.filter(n => !n.id.includes(`${id}-`) ))}
     const onDrop = useCallback(
       (event) => {
         event.preventDefault();
@@ -74,7 +72,7 @@ export default function ReactEnviorment() {
           <h1 className='text-4xl select-none' >{theme  ? '🌙' : '☀️'}</h1>  
         </div>
         <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>
-          <Navbar/>
+          <Navbar onDelete={deleteNodeContains}/>
           <ReactFlowProvider>
             <div className="h-screen w-screen" ref={reactFlowWrapper}>
               <ReactFlow nodes={nodes} edges={edges} nodeTypes={types} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onNodesDelete={deleteNode} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance}  fitView>

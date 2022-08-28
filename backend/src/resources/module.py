@@ -1,41 +1,77 @@
+from signal import signal, SIGKILL
 import gradio as gr
 from inspect import getfile
-
 import socket
 import requests
-
+import os 
 class Dock:
 
     def __init__(self) -> None:
             self.port_map = dict()
             for p in range(7860, 7880):
-                if not self.portConnection(p):
+                if not self.port_is_connected(p):
                     self.port_map[p] = True
+                else:
+                    self.port_map[p] = False
 
-    def portConnection(self, port : int):
-            s = socket.socket(
-                socket.AF_INET, socket.SOCK_STREAM)  
-            result = s.connect_ex(("localhost", port))
-            if result == 0: return True
-            return False
+            
 
-    def determinePort(self):
+    def port_is_connected(self, port : int) -> bool:
+        """
+            @params: 
+                - port : int
+            @return:
+                - boolean
+            check if the port is open with in our localhost
+        """
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:  
+            return s.connect_ex(("localhost", port)) == 0 
+
+
+    def determinePort(self) -> any:
+        """
+            Take the port_map that was instantiate
+            in the __init__ and loop though all ports
+            and check if it the port is available  
+        """
         for port, available in self.port_map.items():
             if available == True:
+                if self.port_is_connected(port): # check if port is in use if so then go to the next one
+                    continue
                 return port
+        
         raise Exception(f'❌ 🔌 {bcolor.BOLD}{bcolor.UNDERLINE}{bcolor.FAIL}All visable ports are used up...Try close some ports {bcolor.ENDC}')
 
-DOCKER_LOCAL_HOST = '0.0.0.0'
-DOCKER_PORT = Dock()
+
+        
+
+
+DOCKER_LOCAL_HOST = '0.0.0.0' 
+DOCKER_PORT = Dock() # Determine the best possible port 
 
 def InterLauncher(name, interface, listen=2000, **kwargs):
-    port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
+    """
+        @params:
+            - name : string
+            - interface : gradio.Interface(...)
+            - listen : int
+            - **kwargs
+        
+        Take any gradio interface object 
+        that is created by the gradio 
+        package and send it to the flaks api
+    """
+    port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort() # determine the next open port is no port is listed **kwargs
+    
     try:
+        # (POST) send the information of the gradio to the flask api
         requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : "Not Applicable", "name" : name, "kwargs" : kwargs})
-    except Exception as e:
+    except Exception as e: 
+        # If there is an Exception then notify the user and end the method
         print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
         return
 
+    # Launch the gradio application
     interface.launch(server_port=port,
                      server_name=f"{DOCKER_LOCAL_HOST}",
                      inline= kwargs['inline'] if "inline" in kwargs else False,
@@ -58,6 +94,9 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
                      quiet=kwargs['quiet'] if "quiet" in kwargs else False)
     
     try:
+        # (POST) stop the interface if user hits ctrl+c 
+        # send the information of the gradio to the flask
+        # api to remove it from the list within the flask api
         requests.post(f"http://{DOCKER_LOCAL_HOST}:{ listen }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
     except Exception as e:    
         print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
@@ -77,6 +116,7 @@ def tabularGradio(funcs, names=[], name="Tabular Temp Name", **kwargs):
     # send this to the backend api for it to be read by the react frontend
     if 'listen' in kwargs:
         try:
+            # (POST) send the information of the gradio to the flask api
             requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
         except Exception as e:
             print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
@@ -116,14 +156,21 @@ def tabularGradio(funcs, names=[], name="Tabular Temp Name", **kwargs):
 
 
 def register(inputs, outputs, examples=None, **kwargs):
+    """
+        Decorator that is appended to a function either within a class or not
+        and output either an interface or inputs and outputs for later processing
+        to launch either to Gradio-Flow or just Gradio
+    """
     def register_gradio(func):
-        
-
-        def decorator(*args, **wargs):                    
+        def decorator(*args, **wargs): 
+            
+            # if the output is a list then there should be equal or more then 1                   
             if type(outputs) is list:
                 assert len(outputs) >= 1, f"❌ {bcolor.BOLD}{bcolor.FAIL}you have no outputs 🤨... {str(type(outputs))} {bcolor.ENDC}"
             
-            fn_name = func.__name__ 
+            fn_name = func.__name__ # name of the function
+
+            # if there exist the self within the arguments and thats the first argument then this must be a class function
             if 'self' in func.__code__.co_varnames and func.__code__.co_varnames[0] == 'self' and fn_name in dir(args[0]):     
                 """
                 given the decorator is on a class then
@@ -131,6 +178,7 @@ def register(inputs, outputs, examples=None, **kwargs):
                 if not already initialize.
                 """
                
+                # if the inputs is a list then inputs list should equal the arugments list
                 if type(inputs) is list:
                     assert len(inputs) == func.__code__.co_argcount - 1, f"❌ {bcolor.BOLD}{bcolor.FAIL}inputs should have the same length as arguments{bcolor.ENDC}"
 
@@ -138,8 +186,9 @@ def register(inputs, outputs, examples=None, **kwargs):
                     self = args[0]
                     self.registered_gradio_functons
                 except AttributeError:
-                    self.registered_gradio_functons = dict()
+                    self.registered_gradio_functons = dict() # if registered_gradio_functons does not exist then create it 
                 
+                # if the function name is not within the registered_gradio_functons then register it within the registered_gradio_functons 
                 if not fn_name in self.registered_gradio_functons:
                     self.registered_gradio_functons[fn_name] = dict(inputs=inputs,
                                                                     outputs=outputs, 
@@ -156,13 +205,19 @@ def register(inputs, outputs, examples=None, **kwargs):
                                                                     allow_flagging=kwargs['allow_flagging'] if "allow_flagging" in kwargs else None,
                                                                     theme=kwargs['theme'] if "theme" in kwargs else 'default', )
 
+                # if the argument are within the function when it's called then give me the output of the function
+                # giving the user the ability to use the function if necessary 
                 if len(args[1:]) == (func.__code__.co_argcount - 1):
                     return func(*args, **wargs) 
+                
+                # return nothing if the arguments are not within it cause if the arguments do not exist it will give a error
                 return None
             else :
                 """
                 the function is not a class function
                 """
+
+                # if the inputs is a list then inputs list should equal the arugments list
                 if type(inputs) is list:    
                     assert len(inputs) == func.__code__.co_argcount, f"❌ {bcolor.BOLD}{bcolor.FAIL}inputs should have the same length as arguments{bcolor.ENDC}"
 
@@ -187,7 +242,7 @@ def register(inputs, outputs, examples=None, **kwargs):
                                     allow_flagging=kwargs['allow_flagging'] if "allow_flagging" in kwargs else None,
                                     theme='default', 
                                     )
-        decorator.__decorator__ = "__gradio__"
+        decorator.__decorator__ = "__gradio__" # siginture to tell any function that need to know that function is a registed gradio application
         return decorator
     return register_gradio
 
@@ -200,14 +255,23 @@ def GradioModule(cls):
             self.interface = self.__compile()
         
         def get_funcs_names(self):
+            """
+                Get all name for each function
+            """
             assert self.get_registered_map() != None, "this is not possible..."
             return [ name for name in self.get_registered_map().keys()]
 
         def get_registered_map(self):
+            """
+                Get all registered functions
+            """
             assert self.__cls__.registered_gradio_functons != None, "what happen!!!!"
             return self.__cls__.registered_gradio_functons
         
         def __get_funcs_attr(self):
+            """
+                Get all the function that are registered
+            """
             for func in dir(self.__cls__):
                 fn = getattr(self.__cls__, func, None)
                 
@@ -220,8 +284,8 @@ def GradioModule(cls):
             within the class that are registeed
             """
             demos, names = [], []
-            for func, param in self.get_registered_map().items():                
-                names.append(func)
+            for func, param in self.get_registered_map().items(): # loop though the registered function and append it to the TabularInterface           
+                names.append(func) 
                 try:
                     demos.append(gr.Interface(fn=getattr(self.__cls__, func, None), **param))
                 except Exception as e :
@@ -232,6 +296,13 @@ def GradioModule(cls):
             return gr.TabbedInterface(demos, names)
             
         def launch(self, **kwargs):
+            """
+                @params:
+                    **kwargs
+                Take the tabular interface and send it to the api if
+                'listen' is within the kwargs and launch the gradio interface
+                then when the gradio stops then remove it from the api
+            """
             port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort() 
             if 'listen' in kwargs:
                 try:
@@ -269,6 +340,7 @@ def GradioModule(cls):
 
     return Decorator
 
+# console colour changer 
 class bcolor:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

@@ -6,10 +6,11 @@ import { random_colour, random_emoji } from "../../helper/visual";
 import { Message, Header, Modal, Button, Icon } from 'semantic-ui-react'
 
 export default class Navbar extends Component{
-    constructor(){
-        super() 
+    constructor(props){
+        super(props) 
         this.fetch_classes()
         this.temp_host = 0
+        this.deleteNode = props.onDelete
         this.state = {open : true,
             menu : [],
             colour : [],
@@ -19,11 +20,15 @@ export default class Navbar extends Component{
             mode : false,
             modal : false,
             error : false
+
            }
     }
 
 
-
+    /**
+     *  Asynchronously call the Flask api server every second to check if there exist a gradio application info
+     *  @return null
+     */
     async fetch_classes(){
         try {
         setInterval( async () => {
@@ -47,35 +52,39 @@ export default class Navbar extends Component{
         }
     }
 
-    append_gradio = () => {
-        // var expression = /((http([s]){0,1}:\/\/){0,1}(localhost|127.0.0.1){1}(([:]){0,1}[\0-9]{4}){0,1}\/{0,1}){1}/g;
-        // var regex = new RegExp(expression);
-        // if(!this.state.text.match(regex) || (this.state.text === "http://localhost:3001/")){
-        //     this.setState({open : this.state.open,
-        //                    menu : this.state.menu,
-        //                    text: this.state.text,
-        //                    name : this.state.name,
-        //                    colour : this.state.colour,
-        //                    emoji : this.state.emoji,
-        //                    error : true,
-        //                    modal : this.state.modal })
-        //     return
-        // }
-        
-        // if((this.state.text.includes("localhost") || this.state.text.includes("127.0.0.1")) 
-        //     && this.state.menu.some(e => e.host === this.state.text)){
-        //         this.setState({open : this.state.open,
-        //                        menu : this.state.menu,
-        //                        text: this.state.text,
-        //                        name : this.state.name,
-        //                        colour : this.state.colour,
-        //                        emoji : this.state.emoji,
-        //                        error : true,
-        //                        modal : this.state.modal  })
+    /**
+     * Append new node from the user 
+     */
+    append_gradio = async () => {
+        const pattern = {
+            local : /^https?:\/\/(localhost)*(:[0-9]+)?(\/)?$/,
+            share : /^https?:\/\/*([0-9]{5})*(-gradio)*(.app)?(\/)?$/,
+            hugginFace : /^https?:\/\/*(hf.space)\/*(embed)\/*([a-zA-Z0-9+_-]+)\/*([a-zA-Z0-9+_-]+)\/*([+])?(\/)?$/
+        } 
 
-        //         return
+        if (this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.host) }) !== -1 ||
+            this.state.text.includes(" ") || 
+            (!pattern.local.test(this.state.text) &&
+            !pattern.share.test(this.state.text) &&
+            !pattern.hugginFace.test(this.state.text))){
             
-        // }
+            console.log(this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.host) }) !== -1)
+            console.log(this.state.text.includes(" ") )
+            console.log(this.state.text.includes("") )
+            console.log(!pattern.local.test(this.state.text) &&
+            !pattern.share.test(this.state.text) &&
+            !pattern.hugginFace.test(this.state.text))
+                this.setState({open : this.state.open,
+                    menu : this.state.menu,
+                    text: '',
+                    name : '',
+                    colour : this.state.colour,
+                    emoji : this.state.emoji,    
+                    error : true,
+                    modal : this.state.modal })
+                return 
+            } 
+
         fetch(this.state.text, {method : "GET", mode: 'no-cors'}).then((re) => {
             console.log(re)   
             fetch("http://localhost:2000/api/append/port", {method: 'POST', mode : 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify({file : "", kwargs : {}, name : this.state.name === "" ?`temp_class_${this.temp_host++}` : `${this.state.name}`, port: 0 , host : this.state.text}) }).then(resp => {
@@ -88,16 +97,31 @@ export default class Navbar extends Component{
                                error : false,
                                modal : false  })
 
-            }).catch(() => this.setState({open : this.state.open,
+            }).catch((err) => this.setState({open : this.state.open,
                                           menu : this.state.menu,
-                                          text: this.state.text,
+                                          text: '',
+                                          name : '',
                                           colour : this.state.colour,
                                           emoji : this.state.emoji,    
                                           error : true,
                                           modal : this.state.modal }))
+          }).catch((err)=>{
+            console.log(err)
+            this.setState({open : this.state.open,
+                menu : this.state.menu,
+                text: '',
+                name : '',
+                colour : this.state.colour,
+                emoji : this.state.emoji,    
+                error : true,
+                modal : this.state.modal })
           })
     }
 
+    /**
+     * error check the user input
+     * @param {*} bool boolean of the current state of the modal  
+     */
     handelModal = (bool) => {
         this.setState({open : this.state.open,
                        menu : this.state.menu,
@@ -109,25 +133,40 @@ export default class Navbar extends Component{
                        modal : bool})
     }
 
-
+    /**
+     * when dragged get all the information needed
+     * @param {*} event 
+     * @param {*} nodeType string 'custom' node type
+     * @param {*} item object information returned from the api
+     * @param {*} index current index
+     */
     onDragStart = (event, nodeType, item, index) => {
-        console.log(item)
         event.dataTransfer.setData('application/reactflow', nodeType);
-        event.dataTransfer.setData('application/host', item.host)
-        event.dataTransfer.setData('application/name', item.name)
         event.dataTransfer.setData('application/colour', this.state.colour[index])
         event.dataTransfer.setData('application/item',  JSON.stringify(item))
-        
         event.dataTransfer.effectAllowed = 'move';
       };
 
+    /**
+     * droped event that occurs when the user drops the Tab within the tash div.
+     * The function just deletes all nodes within React-Flow enviorment related, 
+     * and remove it from the api.
+     * @param {*} e drop event  
+     */
     onDragDrop = (e) => {
         e.preventDefault();
         var item  = JSON.parse(e.dataTransfer.getData('application/item'));
         fetch("http://localhost:2000/api/remove/port", {method : "POST", mode: 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify(item) }).then((re)=>{
+            this.deleteNode(item.name)
         })
+       
     }
 
+    /**
+     * update the tabs within the navbar
+     * @param {*} e current menu 
+     * @param {*} d integer variable of the diffence between the current menu and new menu updated ment
+     */
     hanelTabs = (e, d) => {
 
         // if less then 0 we must remove colour's and emoji's
@@ -150,22 +189,39 @@ export default class Navbar extends Component{
                 c.push(random_colour());
                 j.push(random_emoji());
             }
-            this.setState({open : this.state.open, menu : e, text: this.state.text, name: this.state.name, colour : this.state.colour.concat(c), emoji : this.state.emoji.concat(j), error : this.state.error, modal : this.state.modal })
+            this.setState({open : this.state.open, menu : e, text: this.state.text, name: this.state.name, colour : [...this.state.colour, ...c], emoji : [...this.state.emoji, ...j], error : this.state.error, modal : this.state.modal })
         }
     }
 
+    /**
+     * Append a new colour, and emoji to the colour and emoji list with in the state of the component
+     */
     appendTabs = () => {
         this.setState({open : this.state.open, menu : this.state.menu, text: this.state.text, name: this.state.name, colour : [...this.state.colour, random_colour] , emoji : [...this.state.emoji, random_emoji],  error : this.state.error, modal : this.state.modal })
     }
 
+    /**
+     * handel navagation open and close function
+     */
     handelNavbar = () => {
         this.setState({open : !this.state.open, menu : this.state.menu, text: this.state.text, name: this.state.name, colour : this.state.colour, emoji : this.state.emoji,  error : this.state.error, modal : this.state.modal  })
     }
 
+    /**
+     * 
+     * @param {*} e : event type to get the target value of the current input
+     * @param {*} type : text | name string that set the changed value of the input to the current value 
+     */
     updateText(e, type){
         this.setState({open : this.state.open, menu : this.state.menu, text: type === "text" ? e.target.value : this.state.text, name: type === "name" ? e.target.value : this.state.name, colour : this.state.colour, emoji : this.state.emoji,  error : this.state.error, modal : this.state.modal  })
     }
 
+    /**
+     * 
+     * @param {*} item : object infomation from the flask api  
+     * @param {*} index : current index with in the list
+     * @returns div component that contians infomation of gradio 
+     */
     subComponents(item, index){
         
         return(<>
@@ -213,7 +269,7 @@ export default class Navbar extends Component{
                     <span className={`absolute inset-y-0 left-0 flex items-center pl-3`}>
                         <BsSearch className="block float-left cursor-pointer mr-2"/>
                     </span>
-                    <input className={`placeholder:italic placeholder:text-slate-400 block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 ${this.state.open ? "pr-3" : "hidden"} shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1  sm:text-sm`} 
+                    <input className={`placeholder:italic placeholder:text-slate-400 block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 ${this.state.open ? "pr-3" : "hidden"} shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm bg-transparent`} 
                            placeholder={`stream link...`}
                            type="text" name="search"
                            onChange={(e) => {
@@ -240,8 +296,22 @@ export default class Navbar extends Component{
 
                 { this.state.error &&
                 <Message negative>
-                <Message.Header>🚫 Connection to url</Message.Header>
-                    <p>🤔 Either the connection is forbidden, already exist within the menu or it is unreachable... </p>  
+                <Message.Header className=" text-lg text-center">🚫 Something went wrong...</Message.Header>
+                    <br/>
+                    <h1 className=" underline pb-3 font-bold text-lg">🤔 Possible Things That could of happen <br/></h1>
+                    <ul className="font-bold">
+                            <li>- The input was empty</li>
+                            <li>- The connection was forbidden</li>
+                            <li>- The name was already taken</li>
+                            <li>- The link you gave did not pass the regex</li>
+                            <ul className="px-6">
+                                <li>- http://localhost:xxxx</li>
+                                <li>- http://xxxxx.gradio.app</li>
+                                <li>- https://hf.space/embed/$user/$space_name/+</li>
+                            </ul>
+                            <li>- link already exist within the menu</li>
+                        </ul>
+
                 </Message>
                 }
 

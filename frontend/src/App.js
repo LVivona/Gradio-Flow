@@ -1,4 +1,4 @@
-import ReactEnviorment from './Components/ReactFlow/ReactFlowEnv'
+import ReactEnviorment from './components/ReactFlow/ReactFlowEnv'
 
 export default function App() {
   return(
