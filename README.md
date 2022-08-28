@@ -120,7 +120,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
     - ``+ button`` now includes hugginface spaces, and gradio share
         - https://hf.space/embed/name_of_user/name_of_space/+
         - Ex: https://hf.space/embed/marcop/musika/+
-    
+
 
 ![Node Menu](images/new_feature.png)
 
@@ -131,7 +131,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 
 
  ## App Architecture 🏗️
-![architecture](https://github.com/commune-ai/Gradio-Flow/blob/gradio-flow/gradio-only/architecture.png)
+![architecture](images/architecture.png)
  
 ## Prerequisites 📝
 You will need:
