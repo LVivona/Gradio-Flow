@@ -2,7 +2,7 @@
 
 ## 👋 Reach Me For Inquiry or Bugs
 ```console
-@Discord-Server: https://discord.com/invite/feTf9x3ZSB
+@Discord-Server: Hugging Face https://discord.com/invite/feTf9x3ZSB
 @Discord-Name : Luca Vivona
 
 ```
