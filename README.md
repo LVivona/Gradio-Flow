@@ -119,7 +119,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
     - fixed some bugs from ``+ button`` for catching errors and wrong inputs
     - ``+ button`` now includes hugginface spaces, and gradio share
         - https://hf.space/embed/name_of_user/name_of_space/+
-        - Ex: https://hf.space/embed/marcop/musika/+
+        - Examples: (https://hf.space/embed/marcop/musika/+, https://hf.space/embed/stabilityai/stable-diffusion/+)
 
 
 ![Node Menu](images/new_feature.png)
