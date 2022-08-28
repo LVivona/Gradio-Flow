@@ -1,5 +1,13 @@
-# Gradio Flow 🤗
- 
+# Gradio Flow <img src="frontend/src/images/logo.svg" style="width:40px; height:40px;"/> 
+
+## 👋 Reach Me For Inquiry or Bugs
+```console
+@Discord-Server: https://discord.com/invite/feTf9x3ZSB
+@Discord-Name : Luca Vivona
+
+```
+
+## What Is Gradio Flow
 **A web application with a backend in [Flask](https://flask.palletsprojects.com/en/2.2.x/) and frontend in [React](https://reactjs.org), and  [React flow](https://reactflow.dev/) node base environment to
 stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streamlit.io) ) interfaces, within a single application.**
  
