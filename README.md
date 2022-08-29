@@ -1,5 +1,13 @@
-# Gradio Flow 🤗
- 
+# Gradio Flow <img src="frontend/src/images/logo.svg" style="width:40px; height:40px;"/> 
+
+## 👋 Reach Me For Inquiry or Bugs
+```console
+@Discord-Server: Hugging Face https://discord.com/invite/feTf9x3ZSB
+@Discord-Name : Luca Vivona
+
+```
+
+## What Is Gradio Flow
 **A web application with a backend in [Flask](https://flask.palletsprojects.com/en/2.2.x/) and frontend in [React](https://reactjs.org), and  [React flow](https://reactflow.dev/) node base environment to
 stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streamlit.io) ) interfaces, within a single application.**
  
@@ -125,6 +133,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 ![Node Menu](images/new_feature.png)
 
 ### In The Works 🚧
+- Mutiple windows within the react-flow environment 
 - Appending streamlit into gradio-flow
 - Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
 
@@ -194,7 +203,7 @@ python app.py -p 2000
 //**NOTE** -p 2000 just assignes it localhost port 2000 anyother port will not work
 ```
 #### **5.** Run Gradio within Gradio-Flow 
-It is quite simple, and similar within the docker build, the first way you can append your gradio to the Gradio flow is through running your application at a reachable url that is provided ed when you run Gradio and appending it via ``+ button`` within the frontend, another way that is possible is that within the directory ``./backend/src/resources`` there is a code that you can use to convert your own class or functional  base code into basic gradio tabular interface by using decorators, these decorators will send the nesarry information to the backend flask api and update the frontend menu state in which you'll will be able to interact with it within the front end creating a hub for gradio build functions(**read more** [**here**](https://github.com/LVivona/GradioWrapper)).
+It is quite simple, and similar within the docker build, the first way you can append your gradio to the Gradio flow is through running your application at a reachable url that is provided ed when you run Gradio and appending it via ``+ button`` within the frontend, another way that is possible is that within the directory ``./backend/src/resources`` there is a code that you can use to convert your own class or functional  base code into basic gradio tabular interface by using decorators, these decorators will send the nesarry information to the backend flask api and update the frontend menu state in which you'll will be able to interact with it within the front end creating a hub for gradio build functions(**read more** [**here**](https://github.com/LVivona/GradioWrapper) or look at the code [**here**](https://github.com/LVivona/Gradio-Flow/blob/main/backend/src/resources/module.py) ).
 
 **NOTE** If you use the gradio decorator compiler for gradio flow you need to set a listen port to 2000 or else the api will never get the key and will throw you an error, I'll also provided an example below if this isn't clear.
 
