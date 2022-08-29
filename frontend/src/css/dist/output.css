@@ -596,6 +596,10 @@ video {
   bottom: 0px;
 }
 
+.left-\[39\.15\%\] {
+  left: 39.15%;
+}
+
 .-right-3 {
   right: -0.75rem;
 }
@@ -624,12 +628,16 @@ video {
   right: 1.25rem;
 }
 
+.-z-20 {
+  z-index: -20;
+}
+
 .z-10 {
   z-index: 10;
 }
 
-.-z-20 {
-  z-index: -20;
+.z-20 {
+  z-index: 20;
 }
 
 .-z-10 {
@@ -692,10 +700,6 @@ video {
   display: none;
 }
 
-.h-full {
-  height: 100%;
-}
-
 .h-screen {
   height: 100vh;
 }
@@ -712,12 +716,12 @@ video {
   height: auto;
 }
 
-.h-\[600px\] {
-  height: 600px;
+.h-full {
+  height: 100%;
 }
 
-.w-\[90\%\] {
-  width: 90%;
+.h-\[600px\] {
+  height: 600px;
 }
 
 .w-10 {
@@ -813,6 +817,10 @@ video {
 
 .overflow-scroll {
   overflow: scroll;
+}
+
+.break-all {
+  word-break: break-all;
 }
 
 .rounded-md {
@@ -1017,6 +1025,12 @@ video {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-Entrepreneurial-Lies-Gray {
+  --tw-gradient-from: #8693AB;
+  --tw-gradient-to: rgb(134 147 171 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .via-purple-500 {
   --tw-gradient-to: rgb(168 85 247 / 0);
   --tw-gradient-stops: var(--tw-gradient-from), #a855f7, var(--tw-gradient-to);
@@ -1109,6 +1123,10 @@ video {
   --tw-gradient-to: #1565C0;
 }
 
+.to-Entrepreneurial-Lies-Gray {
+  --tw-gradient-to: #8693AB;
+}
+
 .p-5 {
   padding: 1.25rem;
 }
@@ -1194,9 +1212,9 @@ video {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .text-base {
@@ -1214,9 +1232,9 @@ video {
   line-height: 1.75rem;
 }
 
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 
 .font-bold {
@@ -1240,14 +1258,6 @@ video {
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
-}
-
-.opacity-40 {
-  opacity: 0.4;
-}
-
-.opacity-60 {
-  opacity: 0.6;
 }
 
 .opacity-70 {
@@ -1397,6 +1407,24 @@ video {
 .dark .dark\:bg-neutral-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(38 38 38 / var(--tw-bg-opacity));
+}
+
+.dark .dark\:bg-gradient-to-bl {
+  background-image: linear-gradient(to bottom left, var(--tw-gradient-stops));
+}
+
+.dark .dark\:from-Entrepreneurial-Lies-Gray {
+  --tw-gradient-from: #8693AB;
+  --tw-gradient-to: rgb(134 147 171 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.dark .dark\:to-Entrepreneurial-Lies-Gray {
+  --tw-gradient-to: #8693AB;
+}
+
+.dark .dark\:to-Entrepreneurial-Lies-White {
+  --tw-gradient-to: #BDD4E7;
 }
 
 .dark .dark\:text-white {

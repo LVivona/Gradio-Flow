@@ -7,6 +7,8 @@ module.exports = {
     extend: {
      
       colors : {
+        "Entrepreneurial-Lies-Gray" : "#8693AB",
+        "Entrepreneurial-Lies-White" : "#BDD4E7",
         "Amethyst-Light" : "#9D50BB",
         "Amethyst-Dark" : "#6E48AA",
         "Peach-Red" : "#ED4264",

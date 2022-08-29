@@ -180,8 +180,9 @@ export default class Navbar extends Component{
         }else{
             //append new colours
             for(var i =0; i < d; i++){
-                c.push(random_colour());
-                j.push(random_emoji());
+                    c.push(random_colour(i === 0 ? null : c[i-1]));
+                    j.push(random_emoji(i === 0 ? null : c[i-1]));
+                
             }
             this.setState({open : this.state.open, menu : e, text: this.state.text, name: this.state.name, colour : [...this.state.colour, ...c], emoji : [...this.state.emoji, ...j], error : this.state.error, modal : this.state.modal })
         }
@@ -191,7 +192,7 @@ export default class Navbar extends Component{
      * Append a new colour, and emoji to the colour and emoji list with in the state of the component
      */
     appendTabs = () => {
-        this.setState({open : this.state.open, menu : this.state.menu, text: this.state.text, name: this.state.name, colour : [...this.state.colour, random_colour] , emoji : [...this.state.emoji, random_emoji],  error : this.state.error, modal : this.state.modal })
+        this.setState({open : this.state.open, menu : this.state.menu, text: this.state.text, name: this.state.name, colour : [...this.state.colour, random_colour(this.state.colour[this.state.colour.length - 1] )] , emoji : [...this.state.emoji, random_emoji(this.state.emoji[this.state.emoji.length - 1] )],  error : this.state.error, modal : this.state.modal })
     }
 
     /**
@@ -221,10 +222,10 @@ export default class Navbar extends Component{
         return(<>
                 <li key={`${item.name}-${item.port}`} onDragStart={(event) => this.onDragStart(event, 'custom', item, index)} 
                     className={` text-white text-md flex text-center items-center cursor-grab shadow-lg
-                                 p-5 px-2 mt-4 rounded-md ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`} `} draggable>
+                                 p-5 px-2 mt-4 rounded-md ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`}  break-all -z-20`} draggable>
 
-                    <span className="flex-1 text-4xl opacity-70">{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]}`}</span>    
-                    <div className={` absolute text-base font-bold w-[90%] h-full" ${this.state.open ? "" : "hidden"}`}>{`${item.name}`}</div>
+                    <span className=" absolute text-4xl opacity-70 left-[39.15%] z-10">{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]}`}</span>    
+                    <span className={` text-base flex-1 font-bold z-20  ${this.state.open ? "" : "hidden"}`}>{`${item.name}`}</span>
 
                 </li >      
 
@@ -287,6 +288,7 @@ export default class Navbar extends Component{
                            onChange={(e) => {
                             this.updateText(e, "name")
                            }}
+                           autoComplete='off'
                            />
                 </label>
                 </div>

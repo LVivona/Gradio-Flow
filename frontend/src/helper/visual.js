@@ -15,7 +15,7 @@ const colour_map = [
      'bg-gradient-to-bl from-Green-Black via-Green-Forest to-Green-Emerald',
      'bg-gradient-to-bl from-Amethyst-Light to-Amethyst-Dark',
      'bg-gradient-to-bl from-Peach-Red to-Peach-Yello',
-     'bg-gradient-to-bl from-Deep-Space-Black to-Deep-Space-Gray',
+     'bg-gradient-to-bl from-Deep-Space-Black to-Deep-Space-Gray dark:bg-gradient-to-bl dark:from-Entrepreneurial-Lies-Gray dark:to-Entrepreneurial-Lies-White ',
      'bg-gradient-to-bl from-Sunshine-Red to-Sunshine-Blue'
 ]
 
@@ -23,16 +23,24 @@ const colour_map = [
  * Get a random emoji from emote array
  * @returns random emoji from emote array
  */
-export const random_emoji = () =>{
-    return emote[Math.floor(Math.random() * emote.length)]
+export const random_emoji = (prev) =>{
+    var e = emote[Math.floor(Math.random() * emote.length)]
+    while(e === prev){
+        e = emote[Math.floor(Math.random() * emote.length)]
+    }
+    return e
 }
 
 /**
  * Get a random color string from colour_map array
  * @returns random color css string 
  */
-export const random_colour = () => {
-    return colour_map[Math.floor(Math.random() * colour_map.length)]
+export const random_colour = (prev) => {
+    var c = colour_map[Math.floor(Math.random() * colour_map.length)]
+    while(c === prev){
+        c = colour_map[Math.floor(Math.random() * colour_map.length)]
+    }
+    return c
 }
 
 
