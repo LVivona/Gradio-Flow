@@ -1,9 +1,9 @@
 up:
-	docker-compose up -d;
+	docker compose up -d;
 down:
-	docker-compose down;
+	docker compose down;
 restart:
-	docker-compose down && docker-compose up -d --remove-orphans;
+	docker compose down && docker-compose up -d --remove-orphans;
 stop_all:
 	docker-stop $(docker ps -a -q) && docker rm $(docker ps -a -q);
 rm:
@@ -11,6 +11,6 @@ rm:
 wipe:
 	make down && make rm
 build:
-	docker-compose build
+	docker compose build
 environment:
 	docker exec -it backend bash

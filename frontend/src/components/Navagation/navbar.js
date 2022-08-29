@@ -62,18 +62,12 @@ export default class Navbar extends Component{
             hugginFace : /^https?:\/\/*(hf.space)\/*(embed)\/*([a-zA-Z0-9+_-]+)\/*([a-zA-Z0-9+_-]+)\/*([+])?(\/)?$/
         } 
 
-        if (this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.host) }) !== -1 ||
+        if (this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.text) }) !== -1 ||
             this.state.text.includes(" ") || 
             (!pattern.local.test(this.state.text) &&
             !pattern.share.test(this.state.text) &&
             !pattern.hugginFace.test(this.state.text))){
             
-            console.log(this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.host) }) !== -1)
-            console.log(this.state.text.includes(" ") )
-            console.log(this.state.text.includes("") )
-            console.log(!pattern.local.test(this.state.text) &&
-            !pattern.share.test(this.state.text) &&
-            !pattern.hugginFace.test(this.state.text))
                 this.setState({open : this.state.open,
                     menu : this.state.menu,
                     text: '',
@@ -97,7 +91,7 @@ export default class Navbar extends Component{
                                error : false,
                                modal : false  })
 
-            }).catch((err) => this.setState({open : this.state.open,
+            }).catch(() => this.setState({open : this.state.open,
                                           menu : this.state.menu,
                                           text: '',
                                           name : '',
@@ -226,11 +220,14 @@ export default class Navbar extends Component{
         
         return(<>
                 <li key={`${item.name}-${item.port}`} onDragStart={(event) => this.onDragStart(event, 'custom', item, index)} 
-                    className={` text-white text-md flex text-center items-center cursor-pointer shadow-lg
-                                 p-5 px-2 mt-4 ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`} rounded-md mt-2 cursor-grabbing`} draggable>
-                    <span className="text-2xl font-medium ">            </span>
-                    <span className={`text-base font-medium flex-1 text-left" ${this.state.open ? "" : "hidden"}`}>{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]} ${item.name}`}</span>    
+                    className={` text-white text-md flex text-center items-center cursor-grab shadow-lg
+                                 p-5 px-2 mt-4 rounded-md ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`} `} draggable>
+
+                    <span className="flex-1 text-4xl opacity-70">{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]}`}</span>    
+                    <div className={` absolute text-base font-bold w-[90%] h-full" ${this.state.open ? "" : "hidden"}`}>{`${item.name}`}</div>
+
                 </li >      
+
         </>)
     }
 

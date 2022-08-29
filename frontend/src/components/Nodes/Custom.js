@@ -47,7 +47,7 @@ export default class CustomNodeIframe extends React.Component {
     }
 
     onRefresh(){
-      if(!this.isFetchable) this.onNodeClick(this.state.id)
+      if(!this.isFetchable) this.onNodeClick(this.state.data.label)
       else{
         this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe + 1})
       }
@@ -81,7 +81,7 @@ export default class CustomNodeIframe extends React.Component {
     }
         
     render(){
-      if (!this.state.reachable) this.onNodeClick(this.state.id) 
+      if (!this.state.reachable) this.onNodeClick(this.state.data.label) 
       return (<>
                 <>
                   <div className=" flex w-full h-10 top-0 cursor-pointer" onClick={this.handelEvent}>
@@ -91,7 +91,7 @@ export default class CustomNodeIframe extends React.Component {
                     <div className={` flex ${this.state.selected ? '' : 'w-0 hidden'}`}>
                       <div title="Adjust Node Size" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Violet rounded-xl" onClick={this.handelSizeState}><TbResize className="h-full w-full text-white p-1"/></div>
                       <a href={this.state.data.host} target="_blank" rel="noopener noreferrer"><div title="Gradio Host Site" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Pink rounded-xl"><BiCube className="h-full w-full text-white p-1"/></div></a>
-                      <div title="Delete Node" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Red rounded-xl" onClick={() => this.onNodeClick(this.state.id)}><BsTrash className="h-full w-full text-white p-1"/></div>
+                      <div title="Delete Node" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Red rounded-xl" onClick={() => this.onNodeClick(this.state.data.label)}><BsTrash className="h-full w-full text-white p-1"/></div>
                       <div title="Refresh Node" className="duration-300 cursor-pointer shadow-xl border-2 dark:border-white border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Orange rounded-xl" onClick={() => this.onRefresh()}><BiRefresh className="h-full w-full text-white p-1"/></div>
 
                       { this.state.size && <div className="duration-300 flex w-auto h-full  mr-2 -mt-3 space-x-4">
