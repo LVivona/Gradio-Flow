@@ -38,11 +38,13 @@ export default function ReactEnviorment() {
     }, []);
 
     const deleteNodeContains = (id) =>{setNodes((nds) => nds.filter(n => !n.id.includes(`${id}-`) ))}
+    const deleteNode = (id) =>{setNodes((nds) => nds.filter(n => n.id !== id ))}
     
+
     const onDrop = useCallback(
       (event) => {
         event.preventDefault();
-  
+        console.log(event.dataTransfer.getData('application/reactflow'))
         const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
         const type = event.dataTransfer.getData('application/reactflow');
         const item  = JSON.parse(event.dataTransfer.getData('application/item'));
@@ -60,7 +62,8 @@ export default function ReactEnviorment() {
           id: `${item.name}-${nodes.length}`,
           type,
           position,
-          data: { label: `${item.name}`, host : `${item.host}`, colour : `${colour}`, delete : deleteNodeContains },
+          dragHandle : `#draggable`,
+          data: { label: `${item.name}`, host : `${item.host}`, colour : `${colour}`, delete : deleteNode },
         };
         setNodes((nds) => nds.concat(newNode));
       },
@@ -75,7 +78,7 @@ export default function ReactEnviorment() {
           <Navbar onDelete={deleteNodeContains}/>
           <ReactFlowProvider>
             <div className="h-screen w-screen" ref={reactFlowWrapper}>
-              <ReactFlow nodes={nodes} edges={edges} nodeTypes={types} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onNodesDelete={deleteNodeContains} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance}  fitView>
+              <ReactFlow nodes={nodes} edges={edges} nodeTypes={types} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onNodesDelete={deleteNode} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance}  fitView>
               <Background variant='dots' size={1} className=" bg-white dark:bg-neutral-800"/>
             </ReactFlow>
             </div>

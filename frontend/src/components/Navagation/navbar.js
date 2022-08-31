@@ -221,11 +221,11 @@ export default class Navbar extends Component{
         
         return(<>
                 <li key={`${item.name}-${item.port}`} onDragStart={(event) => this.onDragStart(event, 'custom', item, index)} 
-                    className={` text-white text-md flex text-center items-center cursor-grab shadow-lg
+                    className={` text-white text-md flex flex-col text-center items-center cursor-grab shadow-lg
                                  p-5 px-2 mt-4 rounded-md ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`}  break-all -z-20`} draggable>
 
-                    <span className=" absolute text-4xl opacity-70 left-[39.15%] z-10">{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]}`}</span>    
-                    <span className={` text-base flex-1 font-bold z-20  ${this.state.open ? "" : "hidden"}`}>{`${item.name}`}</span>
+                    <div className=" absolute -mt-2 text-4xl opacity-60 z-10 ">{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]}`}</div>    
+                    <h4 className={`  max-w-full font-sans text-blue-50 leading-tight font-bold text-xl flex-1 z-20  ${this.state.open ? "" : "hidden"}`} style={{"text-shadow" : "0px 1px 2px rgba(0, 0, 0, 0.25)"}} >{`${item.name}`} </h4>
 
                 </li >      
 
