@@ -8,19 +8,19 @@ import { Message, Header, Modal, Button, Icon } from 'semantic-ui-react'
 export default class Navbar extends Component{
     constructor(props){
         super(props) 
-        this.fetch_classes()
         this.temp_host = 0
         this.deleteNode = props.onDelete
         this.state = {open : true,
             menu : [],
-            colour : [],
+            colour : props.colour,
             text : "",
             name : "",
-            emoji : [],
+            emoji : props.emoji,
             mode : false,
             modal : false,
             error : false
            }
+        this.fetch_classes()
     }
 
 
@@ -79,7 +79,7 @@ export default class Navbar extends Component{
             } 
 
         fetch(this.state.text, {method : "GET", mode: 'no-cors'}).then((re) => {
-            console.log(re)   
+            //console.log(re)   
             fetch("http://localhost:2000/api/append/port", {method: 'POST', mode : 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify({file : "", kwargs : {}, name : this.state.name === "" ?`temp_class_${this.temp_host++}` : `${this.state.name}`, port: 0 , host : this.state.text}) }).then(resp => {
                 this.setState({open : this.state.open,
                                menu : this.state.menu,
@@ -99,7 +99,7 @@ export default class Navbar extends Component{
                                           error : true,
                                           modal : this.state.modal }))
           }).catch((err)=>{
-            console.log(err)
+            //console.log(err)
             this.setState({open : this.state.open,
                 menu : this.state.menu,
                 text: '',
@@ -135,7 +135,7 @@ export default class Navbar extends Component{
      */
     onDragStart = (event, nodeType, item, index) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
-        event.dataTransfer.setData('application/colour', this.state.colour[index])
+        event.dataTransfer.setData('application/style', JSON.stringify({colour : this.state.colour[index], emoji : this.state.emoji[index] }))
         event.dataTransfer.setData('application/item',  JSON.stringify(item))
         event.dataTransfer.effectAllowed = 'move';
       };
@@ -161,7 +161,10 @@ export default class Navbar extends Component{
      * @param {*} d integer variable of the diffence between the current menu and new menu updated ment
      */
     hanelTabs = (e, d) => {
-
+        if (e.length === this.state.colour.length){
+            this.setState({open : this.state.open, menu : e, text: this.state.text, name: this.state.name, colour : this.state.colour, emoji : this.state.emoji,  error : this.state.error, modal : this.state.modal })
+            return
+        }
         // if less then 0 we must remove colour's and emoji's
         // get index of the object
         // remove
@@ -178,6 +181,7 @@ export default class Navbar extends Component{
             this.setState({open : this.state.open, menu : e, text: this.state.text, name: this.state.name, colour : c, emoji : j,   error : this.state.error, modal : this.state.modal })
         }else{
             //append new colours
+            
             for(var i =0; i < d; i++){
                     c.push(random_colour(i === 0 ? null : c[i-1]));
                     j.push(random_emoji(i === 0 ? null : c[i-1]));
@@ -185,13 +189,6 @@ export default class Navbar extends Component{
             }
             this.setState({open : this.state.open, menu : e, text: this.state.text, name: this.state.name, colour : [...this.state.colour, ...c], emoji : [...this.state.emoji, ...j], error : this.state.error, modal : this.state.modal })
         }
-    }
-
-    /**
-     * Append a new colour, and emoji to the colour and emoji list with in the state of the component
-     */
-    appendTabs = () => {
-        this.setState({open : this.state.open, menu : this.state.menu, text: this.state.text, name: this.state.name, colour : [...this.state.colour, random_colour(this.state.colour[this.state.colour.length - 1] )] , emoji : [...this.state.emoji, random_emoji(this.state.emoji[this.state.emoji.length - 1] )],  error : this.state.error, modal : this.state.modal })
     }
 
     /**
@@ -224,7 +221,7 @@ export default class Navbar extends Component{
                                  p-5 px-2 mt-4 rounded-md ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`}  break-all -z-20`} draggable>
 
                     <div className=" absolute -mt-2 text-4xl opacity-60 z-10 ">{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]}`}</div>    
-                    <h4 className={`  max-w-full font-sans text-blue-50 leading-tight font-bold text-xl flex-1 z-20  ${this.state.open ? "" : "hidden"}`} style={{"text-shadow" : "0px 1px 2px rgba(0, 0, 0, 0.25)"}} >{`${item.name}`} </h4>
+                    <h4 className={`  max-w-full font-sans text-blue-50 leading-tight font-bold text-xl flex-1 z-20  ${this.state.open ? "" : "hidden"}`} style={{"textShadow" : "0px 1px 2px rgba(0, 0, 0, 0.25)"}} >{`${item.name}`} </h4>
 
                 </li >      
 
@@ -260,7 +257,7 @@ export default class Navbar extends Component{
                     Append Shared Gradio Hosts 
                 </Header>
                 <Modal.Content>
-                <div className=" text-center select-none">Host other HugginFace Models or Gradio application via shared lin</div>
+                <div className=" text-center select-none">Host other HugginFace Models or Gradio application via shared link</div>
                 <div className={`flex items-center rounded-md bg-light-white mt-6  border-dashed`}>
                 <label className="relative block w-full">
                     <span className={`absolute inset-y-0 left-0 flex items-center pl-3`}>

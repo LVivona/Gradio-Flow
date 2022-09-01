@@ -37,7 +37,6 @@ export default class CustomNodeIframe extends React.Component {
       fetch(host, {mode: 'no-cors'}).then((re) => {
         return true
       }).catch((err)=>{
-        alert(`🤪 Something went wrong the url that that was put in is not reachable...\n\n${err}`)
         return false
       })
       return false
@@ -49,8 +48,9 @@ export default class CustomNodeIframe extends React.Component {
     }
 
     onRefresh(){
-      if(!this.isFetchable) this.onNodeClick(this.state.id)
-      else{
+      if(!this.isFetchable(this.state.data.host)){ 
+        this.onNodeClick(this.state.id)
+      } else{
         this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe + 1, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
       }
     }
@@ -74,8 +74,9 @@ export default class CustomNodeIframe extends React.Component {
     }
 
     resize = (e) => {
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
-      this.myRef.current.style.height = `${parseInt(this.state.initial_size) + parseInt(e.clientY - this.state.initial_pos)}px`
+      var new_height = parseInt(this.state.initial_size) + parseInt(e.clientY - this.state.initial_pos)
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  this.state.width, height : new_height, size : this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
+      this.myRef.current.style.height = `${new_height}px`
     }
 
     Counter(focus, size){
@@ -93,7 +94,7 @@ export default class CustomNodeIframe extends React.Component {
     }
         
     render(){
-      if (!this.state.reachable) this.onNodeClick(this.state.id) 
+      if (!this.state.reachable) {this.onNodeClick(this.state.id) }
       return (<>
                 <>
                   <div className=" flex w-full h-10 top-0 cursor-pointer" onClick={this.handelEvent}>
@@ -128,8 +129,8 @@ export default class CustomNodeIframe extends React.Component {
                   {/* (Experimental) Do not uncomment */}
                    <div className={`absolute bottom-0 w-full h-10 bg-transparent border-1 shadow-2xl rounded-xl z-10 cursor-ns-resize`} 
                        draggable
-                       onDragStart={(e) => { this.initial(e)}}
-                       onDrag={(e) => { this.resize(e)}}
+                       onDragStart={(e) => { this.initial(e) }}
+                       onDrag={(e) => { this.resize(e) }}
                        ></div> 
                 </>
         </>)
