@@ -70,6 +70,17 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 ![Dark-Application](images/application_dark.png)
 ![Light-Application](images/application_light.png)
 
+## Features 🌐
+
+### Append Node ➕
+![Append](images/append_node_and_adjust_height.gif)
+
+### Add HuggingFace Space  <img src="frontend/src/images/logo.svg" style="width:20px; height:20px;"/> 
+![Huggin](images/Add_hf_space.gif)
+
+### Delete Nodes 🗑️
+![delete](images/Delete_node.gif)
+
 ## Updates ⚒️
 ### Backend 💽
 - errors within the function InterLauncher fixed
@@ -168,7 +179,7 @@ make up
 // command running: docker-compose up -d --remove-orphans;
 // **Ubuntu** sudo make up
 ```
-The React application will be running on ``http://localhost:3001`` and the Flask will be running on ``http://localhost:2000``
+The React application will be running on ``http://localhost:3000`` and the Flask will be running on ``http://localhost:2000``
 #### **2.** Entering the backend enviorment
 ```console
 make environment
