@@ -44,28 +44,30 @@ export default function ReactEnviorment() {
     const onDrop = useCallback(
       (event) => {
         event.preventDefault();
-        console.log(event.dataTransfer.getData('application/reactflow'))
-        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-        const type = event.dataTransfer.getData('application/reactflow');
-        const item  = JSON.parse(event.dataTransfer.getData('application/item'));
-        const colour = event.dataTransfer.getData('application/colour');
-        // check if the dropped element is valid
-        if (typeof type === 'undefined' || !type) {
-          return;
-        }
-  
-        const position = reactFlowInstance.project({
-          x: event.clientX - reactFlowBounds.left,
-          y: event.clientY - reactFlowBounds.top,
-        });
-        const newNode = {
-          id: `${item.name}-${nodes.length}`,
-          type,
-          position,
-          dragHandle : `#draggable`,
-          data: { label: `${item.name}`, host : `${item.host}`, colour : `${colour}`, delete : deleteNode },
-        };
-        setNodes((nds) => nds.concat(newNode));
+
+        if(event.dataTransfer.getData('application/reactflow')  !== ""){
+          const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+          const type = event.dataTransfer.getData('application/reactflow');
+          const item  = JSON.parse(event.dataTransfer.getData('application/item'));
+          const colour = event.dataTransfer.getData('application/colour');
+          // check if the dropped element is valid
+          if (typeof type === 'undefined' || !type) {
+            return;
+          }
+    
+          const position = reactFlowInstance.project({
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top,
+          });
+          const newNode = {
+            id: `${item.name}-${nodes.length}`,
+            type,
+            position,
+            dragHandle : `#draggable`,
+            data: { label: `${item.name}`, host : `${item.host}`, colour : `${colour}`, delete : deleteNode },
+          };
+          setNodes((nds) => nds.concat(newNode));
+      }
       },
       [reactFlowInstance, nodes]);
 

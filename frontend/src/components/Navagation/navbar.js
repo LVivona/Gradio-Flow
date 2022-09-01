@@ -20,7 +20,6 @@ export default class Navbar extends Component{
             mode : false,
             modal : false,
             error : false
-
            }
     }
 

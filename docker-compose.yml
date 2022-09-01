@@ -25,4 +25,3 @@ services:
       - './frontend/src:/app/src'
       - './frontend/public:/app/public'
     command: "npm start"
-    

@@ -68,15 +68,15 @@ export default class CustomNodeIframe extends React.Component {
 
     }
     
-    // (Experimental) resize nodes by dragging
-    // initial = (e) => {
-    //   this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height , size : this.state.size, iframe : this.state.iframe, initial_pos :  e.clientY, initial_size : this.myRef.current.offsetHeight })
-    // }
+    //(Experimental) resize nodes by dragging
+    initial = (e) => {
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height , size : this.state.size, iframe : this.state.iframe, initial_pos :  e.clientY, initial_size : this.myRef.current.offsetHeight })
+    }
 
-    // resize = (e) => {
-    //   this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
-    //   this.myRef.current.style.height = `${parseInt(this.state.initial_size) + parseInt(e.clientY - this.state.initial_pos)}px`
-    // }
+    resize = (e) => {
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
+      this.myRef.current.style.height = `${parseInt(this.state.initial_size) + parseInt(e.clientY - this.state.initial_pos)}px`
+    }
 
     Counter(focus, size){
       return (<div className="custom-number-input h-10 w-32 dark:text-white text-black ">
@@ -125,12 +125,12 @@ export default class CustomNodeIframe extends React.Component {
                         className=" -z-10 container h-full p-2 flex-grow space-iframe overflow-scroll " 
                         sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
                   </div>
-                  {// (Experimental) Do not uncomment
-                  /* <div className={`absolute bottom-0 w-full h-10 bg-transparent border-1 shadow-2xl rounded-xl z-10 cursor-ns-resize`} 
+                  {/* (Experimental) Do not uncomment */}
+                   <div className={`absolute bottom-0 w-full h-10 bg-transparent border-1 shadow-2xl rounded-xl z-10 cursor-ns-resize`} 
                        draggable
                        onDragStart={(e) => { this.initial(e)}}
                        onDrag={(e) => { this.resize(e)}}
-                       ></div> */}
+                       ></div> 
                 </>
         </>)
     }
