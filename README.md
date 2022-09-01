@@ -16,6 +16,9 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
  - [**Application**](#application-%EF%B8%8F)
 
 
+    - [**Features**](#features-)
+
+
  - [**Updates**](#updates-%EF%B8%8F)
     
     
