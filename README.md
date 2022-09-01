@@ -78,11 +78,13 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 ### Append Node ➕
 ![Append](images/add.gif)
 
-### Resize Node
+### Resize Node 📏
 ![Huggin](images/resize.gif)
 
 ### Delete Nodes 🗑️
 ![delete](images/delete_1.gif)
+
+### Remove Node From Dashboard 🚮
 ![delete](images/delete_2.gif)
 
 ## Updates ⚒️
