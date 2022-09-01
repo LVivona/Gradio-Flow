@@ -76,13 +76,14 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 ## Features 🌐
 
 ### Append Node ➕
-![Append](images/append_node_and_adjust_height.gif)
+![Append](images/add.gif)
 
-### Add HuggingFace Space  <img src="frontend/src/images/logo.svg" style="width:20px; height:20px;"/> 
-![Huggin](images/Add_hf_space.gif)
+### Resize Node
+![Huggin](images/resize.gif)
 
 ### Delete Nodes 🗑️
-![delete](images/Delete_node.gif)
+![delete](images/delete_1.gif)
+![delete](images/delete_2.gif)
 
 ## Updates ⚒️
 ### Backend 💽
