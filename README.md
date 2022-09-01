@@ -120,14 +120,19 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
 
 ### Frontend 🖥️
 - Node Menu
+    - Save Board Button
+        - When the pages refreshes it loads the last saved board
     - Dynamic adjust the size of node
+        - Draggable bottom to expand height
     - Delete node Button
+        - Delete All Nodes if removed from Gradio-Flow
     - Link to gradio to host it in seprate tab
     - Refresh Button to refresh the iframe if need be
     - fixed some bugs from ``+ button`` for catching errors and wrong inputs
     - ``+ button`` now includes hugginface spaces, and gradio share
         - https://hf.space/embed/name_of_user/name_of_space/+
         - Examples: (https://hf.space/embed/marcop/musika/+, https://hf.space/embed/stabilityai/stable-diffusion/+)
+
 
 
 ![Node Menu](images/new_feature.png)

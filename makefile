@@ -12,5 +12,5 @@ wipe:
 	make down && make rm
 build:
 	docker compose build
-environment:
+env:
 	docker exec -it backend bash

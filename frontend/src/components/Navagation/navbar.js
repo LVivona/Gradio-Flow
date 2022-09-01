@@ -12,15 +12,15 @@ export default class Navbar extends Component{
         this.deleteNode = props.onDelete
         this.state = {open : true,
             menu : [],
-            colour : props.colour,
+            colour : props.colour || [],
             text : "",
             name : "",
-            emoji : props.emoji,
+            emoji : props.emoji || [],
             mode : false,
             modal : false,
             error : false
            }
-        this.fetch_classes()
+       
     }
 
 
@@ -161,10 +161,6 @@ export default class Navbar extends Component{
      * @param {*} d integer variable of the diffence between the current menu and new menu updated ment
      */
     hanelTabs = (e, d) => {
-        if (e.length === this.state.colour.length){
-            this.setState({open : this.state.open, menu : e, text: this.state.text, name: this.state.name, colour : this.state.colour, emoji : this.state.emoji,  error : this.state.error, modal : this.state.modal })
-            return
-        }
         // if less then 0 we must remove colour's and emoji's
         // get index of the object
         // remove
@@ -181,7 +177,6 @@ export default class Navbar extends Component{
             this.setState({open : this.state.open, menu : e, text: this.state.text, name: this.state.name, colour : c, emoji : j,   error : this.state.error, modal : this.state.modal })
         }else{
             //append new colours
-            
             for(var i =0; i < d; i++){
                     c.push(random_colour(i === 0 ? null : c[i-1]));
                     j.push(random_emoji(i === 0 ? null : c[i-1]));
@@ -216,12 +211,12 @@ export default class Navbar extends Component{
     subComponents(item, index){
         
         return(<>
-                <li key={`${item.name}-${item.port}`} onDragStart={(event) => this.onDragStart(event, 'custom', item, index)} 
+                <li key={`${index}-li`} onDragStart={(event) => this.onDragStart(event, 'custom', item, index)} 
                     className={` text-white text-md flex flex-col text-center items-center cursor-grab shadow-lg
                                  p-5 px-2 mt-4 rounded-md ${ this.state.open ? `hover:animate-pulse ${this.state.colour[index] === null ? "" : this.state.colour[index]} ` : `hidden`}  break-all -z-20`} draggable>
 
-                    <div className=" absolute -mt-2 text-4xl opacity-60 z-10 ">{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]}`}</div>    
-                    <h4 className={`  max-w-full font-sans text-blue-50 leading-tight font-bold text-xl flex-1 z-20  ${this.state.open ? "" : "hidden"}`} style={{"textShadow" : "0px 1px 2px rgba(0, 0, 0, 0.25)"}} >{`${item.name}`} </h4>
+                    <div key={`${index}-div`}  className=" absolute -mt-2 text-4xl opacity-60 z-10 ">{`${this.state.emoji[index] === null ? "" : this.state.emoji[index]}`}</div>    
+                    <h4 key={`${index}-h4`}  className={`  max-w-full font-sans text-blue-50 leading-tight font-bold text-xl flex-1 z-20  ${this.state.open ? "" : "hidden"}`} style={{"textShadow" : "0px 1px 2px rgba(0, 0, 0, 0.25)"}} >{`${item.name}`} </h4>
 
                 </li >      
 
@@ -230,6 +225,7 @@ export default class Navbar extends Component{
 
 
     render(){
+        this.fetch_classes()
         return (<div>
         
             <div className={`z-10 flex-1 float-left bg-white dark:bg-stone-900 h-screen p-5 pt-8 ${this.state.open ? "lg:w-72 md:64 sm:w-60" : "w-10"} duration-300 absolute shadow-2xl border-black border-r-[1px] dark:border-white dark:text-white`}>
@@ -295,14 +291,14 @@ export default class Navbar extends Component{
                     <br/>
                     <h1 className=" underline pb-3 font-bold text-lg">🤔 Possible Things That could of happen <br/></h1>
                     <ul className="font-bold">
-                            <li>- The input was empty</li>
-                            <li>- The connection was forbidden</li>
-                            <li>- The name was already taken</li>
-                            <li>- The link you gave did not pass the regex</li>
+                            <li key={"error_1"}>- The input was empty</li>
+                            <li key={"error_2"}>- The connection was forbidden</li>
+                            <li key={"error_3"}>- The name was already taken</li>
+                            <li key={"error_4"}>- The link you gave did not pass the regex</li>
                             <ul className="px-6">
-                                <li>- http://localhost:xxxx</li>
-                                <li>- http://xxxxx.gradio.app</li>
-                                <li>- https://hf.space/embed/$user/$space_name/+</li>
+                                <li key={"error_5"}>- http://localhost:xxxx</li>
+                                <li key={"error_6"}>- http://xxxxx.gradio.app</li>
+                                <li key={"error_7"}>- https://hf.space/embed/$user/$space_name/+</li>
                             </ul>
                             <li>- link already exist within the menu</li>
                         </ul>
