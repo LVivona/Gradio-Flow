@@ -17,6 +17,18 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 
 
     - [**Features**](#features-)
+    
+    
+      - [**Append Node**](#append-node-)
+      
+      
+      - [**Resize Node**](#resize-node-)
+      
+      
+      - [**Delete Node**](#delete-node-%EF%B8%8F)
+      
+      
+      - [**Remove Node From Dashboard**](#remove-node-from-dashboard-)
 
 
  - [**Updates**](#updates-%EF%B8%8F)
@@ -81,7 +93,7 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 ### Resize Node 📏
 ![Huggin](images/resize.gif)
 
-### Delete Nodes 🗑️
+### Delete Node 🗑️
 ![delete](images/delete_1.gif)
 
 ### Remove Node From Dashboard 🚮
