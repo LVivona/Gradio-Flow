@@ -7,7 +7,8 @@ import ReactFlow, { Background,
 import React ,{ useState, useCallback, useRef, useEffect } from 'react';
 import Navbar from '../Navagation/navbar';
 import { useThemeDetector } from '../../helper/visual'
- 
+import {CgMoreVerticalAlt} from 'react-icons/cg' 
+
 const types = {
     custom : CustomNodeIframe,
   }
@@ -18,18 +19,16 @@ export default function ReactEnviorment() {
     const [nodes, setNodes] = useState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const reactFlowWrapper = useRef(null);
-
+    const [tool, setTool] = useState(false)
 
     useEffect(() => {
       const restore = () => {
       const flow = JSON.parse(localStorage.getItem('flowkey'));
         
         if(flow){
-          flow.nodes.map((nds) => {
-            nds.data.delete = deleteNode
-          })
+          flow.nodes.map((nds) => nds.data.delete = deleteNode)
           setNodes(flow.nodes || [])
-
+          console.log(flow)
         }
       }
       restore()
@@ -52,8 +51,8 @@ export default function ReactEnviorment() {
     
     const onSave = useCallback(() => {
       if (reactFlowInstance) {
-        alert("Saved")
         const flow = reactFlowInstance.toObject();
+        alert("The current nodes have been saved into the localstorage 💾")
         localStorage.setItem('flowkey', JSON.stringify(flow));
         var labels = [];
         var colour = [];
@@ -103,12 +102,13 @@ export default function ReactEnviorment() {
       [reactFlowInstance, nodes]);
 
     return (
-      <>          
-        <div className=' absolute top-4 right-5 z-50 cursor-default select-none text-4xl ' >
-          <h1 title={theme ? 'Dark Mode' : 'Light Mode'} onClick={() => setTheme(!theme)} >{theme  ? '🌙' : '☀️'}</h1> 
-          <h1 title="Save" className=" pt-5" onClick={() => onSave()}>💾</h1> 
+      <div className={`${theme ? "dark" : ""}`}>          
+        <div className={` absolute ${tool ? "h-[13rem]" : "h-[4rem]"} top-4 right-5 z-50 cursor-default select-none text-4xl bg-white dark:bg-stone-900 p-3  rounded-full border border-black dark:border-white duration-500`}  >
+          <CgMoreVerticalAlt className={`text-black dark:text-white ${tool ? "-rotate-0" : "rotate-90"} duration-150`} onClick={() => setTool(!tool)}/>
+          <h1 title={theme ? 'Dark Mode' : 'Light Mode'} className={`py-2 ${tool ? "visible delay-[170ms]" : "invisible"} `} onClick={() => setTheme(!theme)} >{theme  ? '🌙' : '☀️'}</h1> 
+          <h1 title="Save" className={`py-2 ${tool ? "visible delay-[170ms]" : "invisible"} `} onClick={() => onSave()}>💾</h1> 
         </div>
-        <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>
+        <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>    
           <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>
           <ReactFlowProvider>
             <div className="h-screen w-screen" ref={reactFlowWrapper}>
@@ -118,6 +118,7 @@ export default function ReactEnviorment() {
             </div>
           </ReactFlowProvider>
         </div>
-      </>
+      </div>
     );
   }
+

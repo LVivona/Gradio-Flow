@@ -45,7 +45,7 @@ export default class Navbar extends Component{
                 if(diff !== 0){
                    this.hanelTabs(menu, diff)
                 }
-        },1000);    
+        },1500);    
         }catch(e){
             console.log(e)
         }
