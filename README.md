@@ -19,7 +19,7 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
     - [**Features**](#features-)
 
 
-      - [**Light/Dark Mode**](#remove-node-from-dashboard-)  
+      - [**Light/Dark Mode**](#lightdark-mode--%EF%B8%8F)  
 
 
       - [**Append Node**](#append-node-)
