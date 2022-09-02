@@ -1,10 +1,10 @@
 # Gradio Flow <img src="frontend/src/images/logo.svg" style="width:40px; height:40px;"/> 
 
 ## 👋 Reach Me For Inquiry or Bugs
+
 ```console
 @Discord-Server: Hugging Face https://discord.com/invite/feTf9x3ZSB
 @Discord-Name : Luca Vivona
-
 ```
 
 ## What Is Gradio Flow
@@ -17,8 +17,11 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 
 
     - [**Features**](#features-)
-    
-    
+
+
+      - [**Light/Dark Mode**](#remove-node-from-dashboard-)  
+
+
       - [**Append Node**](#append-node-)
       
       
@@ -86,6 +89,9 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 ![Light-Application](images/application_light.png)
 
 ## Features 🌐
+
+### Light/Dark Mode 🌕 ☀️
+![theme](images/theme.gif)
 
 ### Append Node ➕
 ![Append](images/add.gif)
