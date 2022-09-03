@@ -1,14 +1,22 @@
 import React from "react"
 import {TbResize} from 'react-icons/tb'
 import {BiCube, BiRefresh} from 'react-icons/bi'
-import {BsTrash} from 'react-icons/bs'
+import {BsTrash, BsArrowDownRightSquare} from 'react-icons/bs'
 import {CgLayoutGridSmall} from 'react-icons/cg'
 import '../../css/counter.css'
 
+const MINIMUM_HEIGHT = 600;
+const MINIMUM_WIDTH = 540; 
 export default class CustomNodeIframe extends React.Component {
     constructor({id , data}){
       super()
       this.myRef = React.createRef()
+      this.original_width = 0;
+      this.original_height = 0;
+      this.original_x = 0;
+      this.original_y = 0;
+      this.original_mouse_x = 0;
+      this.original_mouse_y = 0;
       this.state = {
         id : id,
         reachable : this.isFetchable(data.host),
@@ -16,20 +24,18 @@ export default class CustomNodeIframe extends React.Component {
         data : data,
         width : 540,
         height : 600,
-        size : false,
+        size : true,
         iframe : 0,
-        initial_pos : 0,
-        initial_size : 0, 
       }
  
     }
 
     handelSelected = () => {
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : !this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : !this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe})
     }
 
     handelSizeState = () => {
-        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : !this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
+        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : !this.state.size, iframe : this.state.iframe})
       }
 
     isFetchable = async (host) => {
@@ -51,18 +57,18 @@ export default class CustomNodeIframe extends React.Component {
       if(!this.isFetchable(this.state.data.host)){ 
         this.onNodeClick(this.state.id)
       } else{
-        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe + 1, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
+        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe + 1})
       }
     }
 
     handelOnChange(evt, type){
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  type === "width" ? parseInt(evt.target.value) : this.state.width, height : type === "height" ? parseInt(evt.target.value) : this.state.height, size : this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  type === "width" ? parseInt(evt.target.value) : this.state.width, height : type === "height" ? parseInt(evt.target.value) : this.state.height, size : this.state.size, iframe : this.state.iframe })
         type === "width" ? this.myRef.current.style.width = `${parseInt(evt.target.value)}px` : this.myRef.current.style.height = `${parseInt(evt.target.value)}px` 
     }
 
     handelSize(evt, increment, change){
       if (evt === "increment") {
-        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  change === "width" ? this.state.width + increment : this.state.width, height : change === "height" ? this.state.height + increment : this.state.height, size : this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
+        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  change === "width" ? this.state.width + increment : this.state.width, height : change === "height" ? this.state.height + increment : this.state.height, size : this.state.size, iframe : this.state.iframe })
         change === "width" ? this.myRef.current.style.width = `${this.state.width + increment}px` : this.myRef.current.style.height = `${this.state.height + increment}px` 
       }
 
@@ -70,13 +76,75 @@ export default class CustomNodeIframe extends React.Component {
     
     //(Experimental) resize nodes by dragging
     initial = (e) => {
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height , size : this.state.size, iframe : this.state.iframe, initial_pos :  e.clientY, initial_size : this.myRef.current.offsetHeight })
+      e.dataTransfer.setDragImage(new Image(), 0, 0)
+      console.log( this.myRef.current.offsetHeight,  this.myRef.current.offsetWidth, this.myRef.current.getBoundingClientRect().left, this.myRef.current.getBoundingClientRect().top )
+      this.original_width = this.myRef.current.offsetWidth
+      this.original_height = this.myRef.current.offsetHeight
+
+      this.original_x = this.myRef.current.getBoundingClientRect().left;
+      this.original_y = this.myRef.current.getBoundingClientRect().top;
+
+      this.original_mouse_x = e.pageX
+      this.original_mouse_y = e.pageY
     }
 
-    resize = (e) => {
-      var new_height = parseInt(this.state.initial_size) + parseInt(e.clientY - this.state.initial_pos)
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  this.state.width, height : new_height, size : this.state.size, iframe : this.state.iframe, initial_pos : this.state.initial_pos, initial_size : this.state.initial_size})
-      this.myRef.current.style.height = `${new_height}px`
+    resize = (e, point) => {
+      var height = 0;
+      var width = 0;
+      // e.dataTransfer.setDragImage(new Image(), 0, 0)
+      if (point === 'bottom-right'){
+        width = this.original_width + (e.pageX - this.original_mouse_x);
+        height = this.original_height + (e.pageY - this.original_mouse_y)
+        if (width > MINIMUM_WIDTH) {
+          this.myRef.current.style.width = `${width}px`
+        }
+        if (height > MINIMUM_HEIGHT) {
+          this.myRef.current.style.height = `${height}px`
+        }
+
+      } else if (point === "bottom-left"){
+        height = this.original_height + (e.pageY - this.original_mouse_y)
+        width = this.original_width - (e.pageX - this.original_mouse_x);
+        if (height > MINIMUM_HEIGHT) {
+          this.myRef.current.style.height = `${height}px`
+        }
+        if (width > MINIMUM_WIDTH) {
+          this.myRef.current.style.width = `${width}px`
+          this.myRef.current.style.left = this.original_x + (e.pageX - this.original_mouse_x) + 'px'
+
+        }
+      } else if (point === "top-right"){
+        width = this.original_width + (e.pageX - this.original_mouse_x);
+        height = this.original_height - (e.pageY - this.original_mouse_y)
+
+        if (width > MINIMUM_WIDTH) {
+          this.myRef.current.style.width = `${width}px`
+        }
+        if (height > MINIMUM_HEIGHT) {
+          this.myRef.current.style.height = `${height}px`
+          this.myRef.current.style.top = this.original_y + (e.pageY - this.original_mouse_y) + 'px'
+        }
+      } else {
+        height = this.original_height - (e.pageY - this.original_mouse_y)
+        width = this.original_width - (e.pageX - this.original_mouse_x);
+        if (width > MINIMUM_WIDTH) {
+          this.myRef.current.style.width = `${width}px`
+          this.myRef.current.style.left = this.original_x + (e.pageX - this.original_mouse_x) + 'px'
+
+        }
+        if (height > MINIMUM_HEIGHT) {
+          this.myRef.current.style.height = `${height}px`
+          this.myRef.current.style.top = this.original_y + (e.pageY - this.original_mouse_y) + 'px'
+        }
+      }
+
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  parseInt(width) , height : parseInt(height), size : this.state.size, iframe : this.state.iframe})
+      
+    }
+
+    OnDragEnd = () => {
+      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : parseInt(this.myRef.current.style.width), height : parseInt(this.myRef.current.style.height), size : this.state.size, iframe : this.state.iframe})
+      
     }
 
     Counter(focus, size){
@@ -96,7 +164,6 @@ export default class CustomNodeIframe extends React.Component {
     render(){
       if (!this.state.reachable) {this.onNodeClick(this.state.id) }
       return (<>
-                <>
                   <div className=" flex w-full h-10 top-0 cursor-pointer" onClick={this.handelEvent}>
                   <div title="Collaspse Node" className=" duration-300 cursor-pointer shadow-xl border-2 border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Blue rounded-xl" onClick={this.handelSelected}><CgLayoutGridSmall className="h-full w-full text-white p-1"/></div>
 
@@ -115,24 +182,35 @@ export default class CustomNodeIframe extends React.Component {
                   
                   </div>               
                 
-                  <div id="draggable" className={`relative w-[540px] h-[600px] overflow-hidden m-0 p-0 shadow-2xl`} ref={this.myRef}>
-                    <div className={`absolute h-full w-full ${this.state.data.colour} border-1 shadow-2xl rounded-xl -z-20`}></div>
+                  <div id={`draggable`} className={`relative w-[540px] h-[600px] overflow-hidden m-0 p-0 shadow-2xl`} ref={this.myRef}>
+
+                    <div className={`absolute p-5 h-full w-full ${this.state.data.colour} shadow-2xl rounded-xl -z-20`}></div>
                     <iframe 
                         id="iframe" 
                         key={this.state.iframe}
                         src={this.state.data.host} 
-                        title={this.state.data.label} 
-                        frameBorder="0" 
-                        className=" -z-10 container h-full p-2 flex-grow space-iframe overflow-scroll " 
-                        sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
+                        title={this.state.data.label}
+                        frameBorder="0"
+                        scrolling="no" 
+                        className=" -z-10 container h-full p-2 flex-grow space-iframe overflow-auto" 
+                        sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"
+                        ></iframe>
                   </div>
-                  {/* (Experimental) Do not uncomment */}
-                   <div className={`absolute bottom-0 w-full h-10 bg-transparent border-1 shadow-2xl rounded-xl z-10 cursor-ns-resize`} 
-                       draggable
-                       onDragStart={(e) => { this.initial(e) }}
-                       onDrag={(e) => { this.resize(e) }}
-                       ></div> 
-                </>
+                  { this.state.size && <>
+                  
+                  <div id="remove-ghost" className={`absolute select-none -bottom-0 right-0 w-5 h-5border-2 shadow-2xl rounded-xl z-10 cursor-nwse-resize `}
+                       style={{"userDrag": "none"}} 
+                         draggable
+                         onDragStart={(e) => { this.initial(e) }}
+                         onDrag={(e) => { this.resize(e, 'bottom-right') }}
+                         onDragEnd={() => {this.OnDragEnd()}}
+                         >
+                          <BsArrowDownRightSquare className=" text-selected-text text-2xl bg-white"/>
+                          </div> 
+  
+                      </>
+                  }
+
         </>)
     }
 }

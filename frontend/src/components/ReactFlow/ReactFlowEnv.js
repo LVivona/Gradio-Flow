@@ -103,10 +103,10 @@ export default function ReactEnviorment() {
 
     return (
       <div className={`${theme ? "dark" : ""}`}>          
-        <div className={` absolute ${tool ? "h-[13rem]" : "h-[4rem]"} top-4 right-5 z-50 cursor-default select-none text-4xl bg-white dark:bg-stone-900 p-3  rounded-full border border-black dark:border-white duration-500`}  >
-          <CgMoreVerticalAlt className={`text-black dark:text-white ${tool ? "-rotate-0" : "rotate-90"} duration-150`} onClick={() => setTool(!tool)}/>
-          <h1 title={theme ? 'Dark Mode' : 'Light Mode'} className={`py-2 ${tool ? "visible delay-[170ms]" : "invisible"} `} onClick={() => setTheme(!theme)} >{theme  ? '🌙' : '☀️'}</h1> 
-          <h1 title="Save" className={`py-2 ${tool ? "visible delay-[170ms]" : "invisible"} `} onClick={() => onSave()}>💾</h1> 
+        <div className={` absolute w-auto h-auto text-4xl top-4 right-5 z-50 cursor-default select-none bg-white dark:bg-stone-900 rounded-full border border-black dark:border-white duration-500`}  >
+          <CgMoreVerticalAlt className={` text-black dark:text-white ${tool ? "-rotate-0 mr-auto ml-auto" : "rotate-90 m-1"} duration-15 `} onClick={() => setTool(!tool)}/>
+          <h1 title={theme ? 'Dark Mode' : 'Light Mode'} className={`p-4 px-1 ${tool ? "visible delay-[170ms]" : "hidden invisible"} text-3xl`} onClick={() => setTheme(!theme)} >{theme  ? '🌙' : '☀️'}</h1> 
+          <h1 title="Save" className={`p-4 px-1 ${tool ? "visible delay-[170ms]" : " hidden invisible"} text-3xl`} onClick={() => onSave()}>💾</h1> 
         </div>
         <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>    
           <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>
