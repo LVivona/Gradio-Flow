@@ -97,7 +97,7 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 ![Append](images/add.gif)
 
 ### Resize Node 📏
-![Huggin](images/resize.gif)
+![Huggin](images/resize_new.gif)
 
 ### Delete Node 🗑️
 ![delete](images/delete_1.gif)
