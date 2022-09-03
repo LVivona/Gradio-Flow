@@ -74,10 +74,8 @@ export default class CustomNodeIframe extends React.Component {
 
     }
     
-    //(Experimental) resize nodes by dragging
+    //resize nodes by dragging
     initial = (e) => {
-      e.dataTransfer.setDragImage(new Image(), 0, 0)
-      console.log( this.myRef.current.offsetHeight,  this.myRef.current.offsetWidth, this.myRef.current.getBoundingClientRect().left, this.myRef.current.getBoundingClientRect().top )
       this.original_width = this.myRef.current.offsetWidth
       this.original_height = this.myRef.current.offsetHeight
 
@@ -198,7 +196,7 @@ export default class CustomNodeIframe extends React.Component {
                   </div>
                   { this.state.size && <>
                   
-                  <div id="remove-ghost" className={`absolute select-none -bottom-0 right-0 w-5 h-5border-2 shadow-2xl rounded-xl z-10 cursor-nwse-resize `}
+                  <div id="remove-ghost" className={`absolute select-none -bottom-0 right-0 w-5 h-5border-2 shadow-2xl rounded-xl z-10 cursor-nwse-resize hover:opacity-50  `}
                        style={{"userDrag": "none"}} 
                          draggable
                          onDragStart={(e) => { this.initial(e) }}
