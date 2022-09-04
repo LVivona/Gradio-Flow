@@ -7,7 +7,9 @@ import ReactFlow, { Background,
 import React ,{ useState, useCallback, useRef, useEffect } from 'react';
 import Navbar from '../Navagation/navbar';
 import { useThemeDetector } from '../../helper/visual'
-import {CgMoreVerticalAlt} from 'react-icons/cg' 
+import {CgMoreVerticalAlt} from 'react-icons/cg'
+import {BsFillEraserFill} from 'react-icons/bs' 
+import {FaRegSave} from 'react-icons/fa'
 
 const types = {
     custom : CustomNodeIframe,
@@ -68,6 +70,16 @@ export default function ReactEnviorment() {
       }
     }, [reactFlowInstance]);
 
+    const onErase = useCallback(() => {
+      const flow = localStorage.getItem("flowkey")
+      if (reactFlowInstance && flow){
+        alert("The current nodes have been erased from the localstorage")
+        localStorage.removeItem("flowkey")
+        localStorage.removeItem('colour')
+        localStorage.removeItem('emoji')
+      }
+    },[reactFlowInstance])
+
 
     const onDrop = useCallback(
       (event) => {
@@ -103,10 +115,11 @@ export default function ReactEnviorment() {
 
     return (
       <div className={`${theme ? "dark" : ""}`}>          
-        <div className={` absolute w-auto h-auto text-4xl top-4 right-5 z-50 cursor-default select-none bg-white dark:bg-stone-900 rounded-full border border-black dark:border-white duration-500`}  >
-          <CgMoreVerticalAlt className={` text-black dark:text-white ${tool ? "-rotate-0 mr-auto ml-auto" : "rotate-90 m-1"} duration-15 `} onClick={() => setTool(!tool)}/>
-          <h1 title={theme ? 'Dark Mode' : 'Light Mode'} className={`p-4 px-1 ${tool ? "visible delay-[170ms]" : "hidden invisible"} text-3xl`} onClick={() => setTheme(!theme)} >{theme  ? '🌙' : '☀️'}</h1> 
-          <h1 title="Save" className={`p-4 px-1 ${tool ? "visible delay-[170ms]" : " hidden invisible"} text-3xl`} onClick={() => onSave()}>💾</h1> 
+        <div className={` absolute text-center ${tool ? "h-[203.3333px]" : "h-[41px]"} overflow-hidden w-[41px] text-4xl top-4 right-5 z-50 cursor-default select-none bg-white dark:bg-stone-900 rounded-full border border-black dark:border-white duration-500`}  >
+          <CgMoreVerticalAlt className={` text-black dark:text-white ${tool ? "-rotate-0 mr-auto ml-auto mt-1" : " rotate-180 mr-auto ml-auto mt-1"} duration-300`} onClick={() => setTool(!tool)}/>
+          <h1 title={theme ? 'Dark Mode' : 'Light Mode'} className={`p-4 px-1 pb-0 ${tool ? "visible" : "invisible"} text-3xl`} onClick={() => setTheme(!theme)} >{theme  ? '🌙' : '☀️'}</h1> 
+          <FaRegSave title="Save" className={`mt-6 text-black dark:text-white ${tool ? "visible" : " invisible"} ml-auto mr-auto `} onClick={() => onSave()}/> 
+          <BsFillEraserFill title="Erase" className={`mt-6 text-black dark:text-white ml-auto mr-auto ${tool ? "visible" : " invisible"} `} onClick={() => onErase()}/>
         </div>
         <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>    
           <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>

@@ -82,8 +82,8 @@ export default class CustomNodeIframe extends React.Component {
       this.original_x = this.myRef.current.getBoundingClientRect().left;
       this.original_y = this.myRef.current.getBoundingClientRect().top;
 
-      this.original_mouse_x = e.pageX
-      this.original_mouse_y = e.pageY
+      this.original_mouse_x = e.clientX
+      this.original_mouse_y = e.clientY
     }
 
     resize = (e, point) => {
@@ -91,56 +91,23 @@ export default class CustomNodeIframe extends React.Component {
       var width = 0;
       // e.dataTransfer.setDragImage(new Image(), 0, 0)
       if (point === 'bottom-right'){
-        width = this.original_width + (e.pageX - this.original_mouse_x);
-        height = this.original_height + (e.pageY - this.original_mouse_y)
+        width = this.original_width + (e.clientX - this.original_mouse_x);
+        height = this.original_height + (e.clientY - this.original_mouse_y)
         if (width > MINIMUM_WIDTH) {
           this.myRef.current.style.width = `${width}px`
-        }
-        if (height > MINIMUM_HEIGHT) {
-          this.myRef.current.style.height = `${height}px`
-        }
-
-      } else if (point === "bottom-left"){
-        height = this.original_height + (e.pageY - this.original_mouse_y)
-        width = this.original_width - (e.pageX - this.original_mouse_x);
-        if (height > MINIMUM_HEIGHT) {
-          this.myRef.current.style.height = `${height}px`
-        }
-        if (width > MINIMUM_WIDTH) {
-          this.myRef.current.style.width = `${width}px`
-          this.myRef.current.style.left = this.original_x + (e.pageX - this.original_mouse_x) + 'px'
-
-        }
-      } else if (point === "top-right"){
-        width = this.original_width + (e.pageX - this.original_mouse_x);
-        height = this.original_height - (e.pageY - this.original_mouse_y)
-
-        if (width > MINIMUM_WIDTH) {
-          this.myRef.current.style.width = `${width}px`
-        }
-        if (height > MINIMUM_HEIGHT) {
-          this.myRef.current.style.height = `${height}px`
-          this.myRef.current.style.top = this.original_y + (e.pageY - this.original_mouse_y) + 'px'
-        }
-      } else {
-        height = this.original_height - (e.pageY - this.original_mouse_y)
-        width = this.original_width - (e.pageX - this.original_mouse_x);
-        if (width > MINIMUM_WIDTH) {
-          this.myRef.current.style.width = `${width}px`
-          this.myRef.current.style.left = this.original_x + (e.pageX - this.original_mouse_x) + 'px'
+          this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  parseInt(width) , height : parseInt(height), size : this.state.size, iframe : this.state.iframe})
 
         }
         if (height > MINIMUM_HEIGHT) {
           this.myRef.current.style.height = `${height}px`
-          this.myRef.current.style.top = this.original_y + (e.pageY - this.original_mouse_y) + 'px'
-        }
-      }
+          this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  parseInt(width) , height : parseInt(height), size : this.state.size, iframe : this.state.iframe})
 
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  parseInt(width) , height : parseInt(height), size : this.state.size, iframe : this.state.iframe})
-      
+        }
+      } 
     }
 
     OnDragEnd = () => {
+      console.log("end")
       this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : parseInt(this.myRef.current.style.width), height : parseInt(this.myRef.current.style.height), size : this.state.size, iframe : this.state.iframe})
       
     }
