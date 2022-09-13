@@ -44,11 +44,11 @@ export default function Import(props){
                             <button id="shared-sub-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="shared-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold  ${subTab === 1 ? 'bg-gray-300' : '' }  hover:bg-gray-300  `}>Shared</button>
                             </li>
                         </ul>
-                        {subTab === 0 && <div className='p-5 text-black'> Coming soon ....</div>}
+                        {subTab === 0 && <Local/>}
                         {subTab === 1 && <Shared textHandler={props.textHandler} appendHandler={props.appendHandler} />}
 
                         {props.catch && <div className='p-5'>
-                                        <Message negative>
+                                        <Message floating negative>
                                         <Message.Header className=" text-lg text-center">🚫 Something went wrong...</Message.Header>
                                             <br/>
                                             <h1 className=" underline pb-3 font-bold text-lg">🤔 Possible Things That could of happen <br/></h1>
@@ -73,6 +73,22 @@ export default function Import(props){
     </div>)
 }
 
+function Local(props){
+    return (
+        <div className='p-5'>
+        <Message floating color=''>
+            
+            <Message.Header>🏗️ Comming soon...</Message.Header> 
+            <Message.Content className='p-5'>
+            This tab will allow you grab your function from a given directory and build
+            your own tabular module gradio functions
+            </Message.Content>
+
+        </Message>
+        </div>
+    )
+}
+
 function Shared(props){
     const [preview, setPreview] = useState("")
     const [fetchable, setFetch] = useState(false)
@@ -92,8 +108,11 @@ function Shared(props){
         }
     
     return (
-        <div className='w-full shadow-lg'>
-                        
+        <div className='w-full shadow-lg' onKeyPress={(e)=>{
+            if (e.key.includes("Enter")) props.appendHandler()
+        }}>
+            <div className='p-5'>
+            <Message color='' floating>            
                          <div className={`flex items-center rounded-md bg-light-white mt-6 border-dashed`}>
                             <label className="relative block w-full p-5 focus:shadow-xl">
                                 <span className={`absolute inset-y-0 left-0 flex items-center pl-8`}>
@@ -112,8 +131,10 @@ function Shared(props){
                         </div>   
                         { fetchable === true && <div className=' w-full'>
                             <h1 className=' text-xl font-sans font-bold text-center text-black mb-2'> Preview </h1>
-                            <div className='p-4 w-3/4 bg-gray-200 mr-auto ml-auto rounded-xl'>
-                                <iframe title='Preview' src={preview} className=' w-full h-80 mr-auto ml-auto'/>
+                            <div className='p-3 px-1 w-3/4 h-80 bg-gray-200 mr-auto ml-auto rounded-xl'>
+                                <div className='w-full h-full overflow-hidden relative -ml-[5px]'>
+                                <iframe title='Preview' src={preview} className=' absolute top-0 bottom-0 left-0 -right-[25px] overflow-y-scroll w-full h-full mr-auto ml-auto'/>
+                                </div>
                             </div>
                         </div>}
                         <div className={`flex items-center rounded-md bg-light-white mt-6  border-dashed`}>
@@ -131,7 +152,7 @@ function Shared(props){
                             />
                     </label>
                     </div> 
-                    <div className=' ml-4'>
+                    <div className=' right-0 ml-5'>
                         <button className="relative inline-flex justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-sans font-bold text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
                                 onClick={()=>{props.appendHandler()}}>
                             <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
@@ -139,6 +160,8 @@ function Shared(props){
                             </span>
                         </button>
                     </div>
+                </Message>
+                </div>
                 </div>  
                          
     )
