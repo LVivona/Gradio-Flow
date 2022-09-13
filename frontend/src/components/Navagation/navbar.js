@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import {BsArrowLeftShort, BsSearch} from 'react-icons/bs';
+import {BsArrowLeftShort} from 'react-icons/bs';
 import "../../css/dist/output.css"
 import {ReactComponent as ReactLogo} from '../../images/logo.svg'
 import { random_colour, random_emoji } from "../../helper/visual";
-import { Message, Header, Modal, Button, Icon } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
 import Import from '../Modal/importer'
 export default class Navbar extends Component{
     constructor(props){
@@ -199,7 +199,8 @@ export default class Navbar extends Component{
      * @param {*} e : event type to get the target value of the current input
      * @param {*} type : text | name string that set the changed value of the input to the current value 
      */
-    updateText(e, type){
+    updateText = (e, type) => {
+        console.log(this.state.open)
         this.setState({open : this.state.open, menu : this.state.menu, text: type === "text" ? e.target.value : this.state.text, name: type === "name" ? e.target.value : this.state.name, colour : this.state.colour, emoji : this.state.emoji,  error : this.state.error, modal : this.state.modal  })
     }
 

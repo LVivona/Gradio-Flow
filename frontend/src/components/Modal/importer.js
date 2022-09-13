@@ -10,6 +10,7 @@ export default function Import(props){
     const [tab, setTab] = useState("gradio")
     const [subTab, setSubTab] = useState(0)
     
+    
     return (<div>
         <Modal
             basic
@@ -37,17 +38,17 @@ export default function Import(props){
                         <div className='w-full bg-white'>
                         <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-200 border-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
                             <li class="" onClick={()=>{setSubTab(0)}}>
-                                <button id="local-sub-tab" data-tabs-target="#local" type="button" role="tab" aria-controls="local-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold ${subTab === 0 ? 'bg-gray-300' : '' } hover:bg-gray-300  dark:bg-gray-800 dark:hover:bg-gray-700 focus:bg-gray-700`}>Local</button>
+                                <button id="local-sub-tab" data-tabs-target="#local" type="button" role="tab" aria-controls="local-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold ${subTab === 0 ? 'bg-gray-300' : '' } hover:bg-gray-300 `}>Local</button>
                             </li>
                             <li class="" onClick={()=>{setSubTab(1)}}>
-                            <button id="shared-sub-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="shared-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold  ${subTab === 1 ? 'bg-gray-300' : '' }  hover:bg-gray-300  dark:bg-gray-800 dark:hover:bg-gray-700 focus:bg-gray-700`}>Shared</button>
+                            <button id="shared-sub-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="shared-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold  ${subTab === 1 ? 'bg-gray-300' : '' }  hover:bg-gray-300  `}>Shared</button>
                             </li>
                         </ul>
-                        {subTab === 0 && <></>}
+                        {subTab === 0 && <div className='p-5 text-black'> Coming soon ....</div>}
                         {subTab === 1 && <Shared textHandler={props.textHandler} appendHandler={props.appendHandler} />}
 
-                        {props.catch && 
-                                        <Message negative className='p-2'>
+                        {props.catch && <div className='p-5'>
+                                        <Message negative>
                                         <Message.Header className=" text-lg text-center">🚫 Something went wrong...</Message.Header>
                                             <br/>
                                             <h1 className=" underline pb-3 font-bold text-lg">🤔 Possible Things That could of happen <br/></h1>
@@ -64,7 +65,8 @@ export default function Import(props){
                                                     <li>- link already exist within the menu</li>
                                                 </ul>
                         
-                                        </Message>}
+                                        </Message>
+                                        </div>}
                         </div> 
                     }
                 </Modal>
@@ -72,6 +74,23 @@ export default function Import(props){
 }
 
 function Shared(props){
+    const [preview, setPreview] = useState("")
+    const [fetchable, setFetch] = useState(false)
+
+    const isFetchable = async (url) => {
+        console.log(url)
+        fetch(url, {mode : "no-cors"}).then((re) => {
+            console.log(re)
+            if(re.url.includes("http://localhost:3000")){
+                setFetch(false)    
+            } else { setFetch(true) }
+            
+          }).catch((err)=>{
+            setFetch(false)
+          })
+          setFetch(false)
+        }
+    
     return (
         <div className='w-full shadow-lg'>
                         
@@ -85,10 +104,18 @@ function Shared(props){
                                     type="text" name="search"
                                     onChange={(e) => {
                                         props.textHandler(e, "text")
-                                       }}
+                                        setPreview(e.target.value)
+                                         setFetch(isFetchable(e.target.value))
+                                    }}
                                     />
                             </label>
                         </div>   
+                        { fetchable === true && <div className=' w-full'>
+                            <h1 className=' text-xl font-sans font-bold text-center text-black mb-2'> Preview </h1>
+                            <div className='p-4 w-3/4 bg-gray-200 mr-auto ml-auto rounded-xl'>
+                                <iframe title='Preview' src={preview} className=' w-full h-80 mr-auto ml-auto'/>
+                            </div>
+                        </div>}
                         <div className={`flex items-center rounded-md bg-light-white mt-6  border-dashed`}>
                     <label className="relative block p-5 w-full focus:shadow-xl">
                         <span className={`absolute inset-y-0 left-0 flex items-center pl-7`}>
@@ -104,8 +131,8 @@ function Shared(props){
                             />
                     </label>
                     </div> 
-                    <div className='w-full ml-4'>
-                        <button className="relative p-0.5 mb-2 mr-2 overflow-hidden text-sm font-sans font-bold text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+                    <div className=' ml-4'>
+                        <button className="relative inline-flex justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-sans font-bold text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
                                 onClick={()=>{props.appendHandler()}}>
                             <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                                 Enter
