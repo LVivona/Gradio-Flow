@@ -19,7 +19,7 @@ global visable, watcher, dog
 visable = []
 
 @app.route("/")
-def Home():
+def Root():
     return jsonify({"message" :"everything is up amd running... 🚀",})
 
 @app.route("/api/append/port" , methods=["POST"])

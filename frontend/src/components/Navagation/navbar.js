@@ -4,7 +4,7 @@ import "../../css/dist/output.css"
 import {ReactComponent as ReactLogo} from '../../images/logo.svg'
 import { random_colour, random_emoji } from "../../helper/visual";
 import { Message, Header, Modal, Button, Icon } from 'semantic-ui-react'
-
+import Import from '../Modal/importer'
 export default class Navbar extends Component{
     constructor(props){
         super(props) 
@@ -242,8 +242,12 @@ export default class Navbar extends Component{
                         <Icon className=" block mr-auto ml-auto" name="plus"/>
                     </div>
                 </div>
-
-                <Modal
+                <Import open={this.state.modal} 
+                        quitHandeler={this.handelModal}
+                        textHandler={this.updateText}
+                        appendHandler={this.append_gradio}
+                        catch={this.state.error}/>
+                {/* <Modal
                     basic
                     open={this.state.modal}
                     size='small'
@@ -316,7 +320,7 @@ export default class Navbar extends Component{
                         <Icon name='checkmark' /> Append
                         </Button>
                     </Modal.Actions>                    
-                </Modal>
+                </Modal> */}
 
                 <div className=" relative z-10 h-auto overflow-auto pt-4">
                     <ul className="pt-2">
