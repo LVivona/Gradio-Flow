@@ -1,8 +1,8 @@
 import argparse
 import sys
 
-sys.path.insert(0, "../")
-from resources import GradioModule, register, InterLauncher, tabularGradio
+sys.path.insert(0, "../resources")
+from module import GradioModule, register, InterLauncher, tabularGradio
 sys.path.insert(0, "../example")
 from examples import Pictionary, FSD, stock_forecast
 
