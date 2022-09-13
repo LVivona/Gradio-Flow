@@ -2,7 +2,7 @@ import argparse
 import sys
 
 sys.path.insert(0, "../")
-from resources import GradioModule, register, InterLauncher, tabularGradio
+from src.resources import GradioModule, register, InterLauncher, tabularGradio
 from example.examples import Pictionary, FSD, stock_forecast
 
 import gradio as gr

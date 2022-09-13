@@ -7,9 +7,8 @@ import torch
 from torch import nn
 import numpy as np
 import PIL
-
 sys.path.insert(0, "../resources")
-from resources.module import GradioModule, register
+from src.resources.module import GradioModule, register
 
 
 @GradioModule

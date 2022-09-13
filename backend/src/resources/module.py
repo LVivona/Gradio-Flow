@@ -337,7 +337,6 @@ def GradioModule(cls):
                 except Exception:
                     print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛")
             return
-
     return Decorator
 
 # console colour changer 

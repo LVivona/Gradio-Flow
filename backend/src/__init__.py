@@ -1,4 +1,3 @@
-import examples
-import resource
-import src.demoF 
-import src.demoC
+from .example import *
+import src.resources
+from src.demo import *
