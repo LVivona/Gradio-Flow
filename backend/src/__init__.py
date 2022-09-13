@@ -1,3 +1,3 @@
-from .example import *
-import src.resources
+from example import *
+import resources
 from src.demo import *
