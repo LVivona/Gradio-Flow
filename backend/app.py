@@ -26,7 +26,7 @@ visable = []
 process_map = {}
 
 @app.route("/")
-def Home():
+def Root():
     return jsonify({"message" :"everything is up amd running... 🚀",})
 
 # def IS_STREAMABLE():
