@@ -10,38 +10,38 @@ export default function Import(props){
     const [tab, setTab] = useState("gradio")
     const [subTab, setSubTab] = useState(0)
     
-    
     return (<div>
         <Modal
             basic
+            className=''
             open={props.open}
-            size='larg'
+            size='fullscreen'
             >
                 <div className='w-full shadow-lg rounded-lg'>
-                    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-t-lg border-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
-                        <li class="mr-2" onClick={()=>{setTab("gradio")}}>
-                            <button id="gradio-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 rounded-tl-lg ${ tab === "gradio" ? 'bg-gray-200'  : 'hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 focus:bg-gray-700'}`}><Gradio className=" w-20 h-10"/></button>
+                    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-t-lg border-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-neutral-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
+                        <li class="" onClick={()=>{setTab("gradio")}}>
+                            <button id="gradio-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 rounded-tl-lg ${ tab === "gradio" ? 'bg-gray-200 dark:bg-neutral-700'  : 'hover:bg-gray-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 focus:bg-neutral-700'}`}><Gradio className=" w-20 h-10"/></button>
                         </li>
-                        <li class="mr-2">
-                            <button id="services-tab" data-tabs-target="#Streamlit" type="button" role="tab" aria-controls="services" aria-selected="false" className="inline-block p-4 opacity-30"><Streamlit className=" w-20 h-10"/></button>
+                        <li class="" onClick={()=>{setTab("streamlit")}}>
+                            <button id="services-tab" data-tabs-target="#Streamlit" type="button" role="tab" aria-controls="services" aria-selected="false" className={`inline-block p-4 h-full ${ tab === "streamlit" ? 'bg-gray-200 dark:bg-neutral-700'  : 'hover:bg-gray-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 focus:bg-neutral-700'}`}><Streamlit className=" w-20 h-8"/></button>
                         </li>
                     </ul>
                     <div className='absolute right-5 top-5 z-20 mr-5'
                          onClick={()=>{props.quitHandeler(false)}}>
                         <button type="button"
-                                className=" bg-neutral-300 rounded-2xl p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-300 hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                        <Exit className="w-[20px] h-[20px]"/>
+                                className=" bg-neutral-300 rounded-2xl p-2 inline-flex items-center justify-center dark:bg-neutral-700 hover:opacity-70 focus:outline-none">
+                        <Exit className=" w-[20px] h-[20px] text-gray-400 dark:text-white"/>
                         </button>
                     </div> 
                 </div>
                     { tab === "gradio" &&
                         <div className='w-full bg-white'>
-                        <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-200 border-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
+                        <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-200 border-gray-200 dark:border-gray-800 dark:text-gray-400 dark:bg-neutral-900" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
                             <li class="" onClick={()=>{setSubTab(0)}}>
-                                <button id="local-sub-tab" data-tabs-target="#local" type="button" role="tab" aria-controls="local-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold ${subTab === 0 ? 'bg-gray-300' : '' } hover:bg-gray-300 `}>Local</button>
+                                <button id="local-sub-tab" data-tabs-target="#local" type="button" role="tab" aria-controls="local-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-9 text-base font-sans font-bold ${subTab === 0 ? 'bg-gray-300 dark:bg-neutral-800' : '' } hover:bg-gray-300 hover:dark:bg-neutral-800 `}>Local</button>
                             </li>
                             <li class="" onClick={()=>{setSubTab(1)}}>
-                            <button id="shared-sub-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="shared-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold  ${subTab === 1 ? 'bg-gray-300' : '' }  hover:bg-gray-300  `}>Shared</button>
+                            <button id="shared-sub-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="shared-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 pl-[1.82rem] pr-[1.82rem] text-base font-sans font-bold  ${subTab === 1 ? 'bg-gray-300 dark:bg-neutral-800' : '' }  hover:bg-gray-300 hover:dark:bg-neutral-800`}>Shared</button>
                             </li>
                         </ul>
                         {subTab === 0 && <Local/>}
@@ -75,8 +75,8 @@ export default function Import(props){
 
 function Local(props){
     return (
-        <div className='p-5'>
-        <Message floating color=''>
+        <div className='p-5 dark:bg-neutral-700'>
+        <Message floating color={props.dark ? 'black' : ''}>
             
             <Message.Header>🏗️ Comming soon...</Message.Header> 
             <Message.Content className='p-5'>
@@ -112,13 +112,13 @@ function Shared(props){
             if (e.key.includes("Enter")) props.appendHandler()
         }}>
             <div className='p-5'>
-            <Message color='' floating>            
-                         <div className={`flex items-center rounded-md bg-light-white mt-6 border-dashed`}>
+            <Message floating>            
+                         <div className={`flex items-center rounded-md bg-light-white dark:bg-[#1b1c1d] mt-6 border-dashed`}>
                             <label className="relative block w-full p-5 focus:shadow-xl">
                                 <span className={`absolute inset-y-0 left-0 flex items-center pl-8`}>
                                     <BsSearch className="block float-left cursor-pointer text-gray-500"/>
                                 </span>
-                                <input className={`placeholder:italic placeholder:text-slate-400 text-black block w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 pr-3 focus:shadow-xl focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm bg-transparent`}  
+                                <input className={`placeholder:italic placeholder:text-slate-400 text-black dark:text-white block w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 pr-3 focus:shadow-xl focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm bg-transparent`}  
                                     placeholder={`URL`}
                                     type="text" name="search"
                                     onChange={(e) => {
@@ -137,12 +137,12 @@ function Shared(props){
                                 </div>
                             </div>
                         </div>}
-                        <div className={`flex items-center rounded-md bg-light-white mt-6  border-dashed`}>
+                        <div className={`flex items-center rounded-md bg-light-white dark:bg-[#1b1c1d] mt-6  border-dashed`}>
                     <label className="relative block p-5 w-full focus:shadow-xl">
                         <span className={`absolute inset-y-0 left-0 flex items-center pl-7`}>
                             <Icon className=" text-gray-500 block float-left cursor-pointer mr-2" name="address card"/>
                         </span>
-                        <input className={`placeholder:italic placeholder:text-slate-400 text-black block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 pr-3 focus:shadow-xl focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1  sm:text-sm`} 
+                        <input className={`placeholder:italic placeholder:text-slate-400 text-black dark:text-white block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 pr-3 focus:shadow-xl focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1  sm:text-sm`} 
                             placeholder={`Name` }
                             type="text" name="search"
                             autoComplete='off'
@@ -155,7 +155,7 @@ function Shared(props){
                     <div className=' right-0 ml-5'>
                         <button className="relative inline-flex justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-sans font-bold text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
                                 onClick={()=>{props.appendHandler()}}>
-                            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#1b1c1d] rounded-md group-hover:bg-opacity-0">
                                 Enter
                             </span>
                         </button>

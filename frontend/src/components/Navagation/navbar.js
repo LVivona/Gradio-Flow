@@ -247,7 +247,8 @@ export default class Navbar extends Component{
                         quitHandeler={this.handelModal}
                         textHandler={this.updateText}
                         appendHandler={this.append_gradio}
-                        catch={this.state.error}/>
+                        catch={this.state.error}
+                        theme={this.theme}/>
                 {/* <Modal
                     basic
                     open={this.state.modal}
