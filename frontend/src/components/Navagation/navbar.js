@@ -213,88 +213,8 @@ export default class Navbar extends Component{
                         quitHandeler={this.handelModal}
                         textHandler={this.updateText}
                         appendHandler={this.append_gradio}
-<<<<<<< HEAD
                         catch={this.state.error}/>
                 
-=======
-                        catch={this.state.error}
-                        theme={this.theme}/>
-                {/* <Modal
-                    basic
-                    open={this.state.modal}
-                    size='small'
-                >
-                <Header className="select-none space-y-4" icon>
-                    🌐 
-                    <br/>
-                    Append Shared Gradio Hosts 
-                </Header>
-                <Modal.Content>
-                <div className=" text-center select-none">Host other HugginFace Models or Gradio application via shared link</div>
-                <div className={`flex items-center rounded-md bg-light-white mt-6  border-dashed`}>
-                <label className="relative block w-full">
-                    <span className={`absolute inset-y-0 left-0 flex items-center pl-3`}>
-                        <BsSearch className="block float-left cursor-pointer mr-2"/>
-                    </span>
-                    <input className={`placeholder:italic placeholder:text-slate-400 block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 ${this.state.open ? "pr-3" : "hidden"} shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm bg-transparent`} 
-                           placeholder={`stream link...`}
-                           type="text" name="search"
-                           onChange={(e) => {
-                            this.updateText(e, "text")
-                           }}
-                        
-                           />
-                </label>
-                </div>
-                <div className={`flex items-center rounded-md bg-light-white mt-6  border-dashed`}>
-                <label className="relative block w-full">
-                    <span className={`absolute inset-y-0 left-0 flex items-center pl-3`}>
-                        <Icon className="block float-left cursor-pointer mr-2" name="address card"/>
-                    </span>
-                    <input className={`placeholder:italic placeholder:text-slate-400 block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 ${this.state.open ? "pr-3" : "hidden"} shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1  sm:text-sm`} 
-                           placeholder={`Give it name...` }
-                           type="text" name="search"
-                           onChange={(e) => {
-                            this.updateText(e, "name")
-                           }}
-                           autoComplete='off'
-                           />
-                </label>
-                </div>
-
-                { this.state.error &&
-                <Message negative>
-                <Message.Header className=" text-lg text-center">🚫 Something went wrong...</Message.Header>
-                    <br/>
-                    <h1 className=" underline pb-3 font-bold text-lg">🤔 Possible Things That could of happen <br/></h1>
-                    <ul className="font-bold">
-                            <li key={"error_1"}>- The input was empty</li>
-                            <li key={"error_2"}>- The connection was forbidden</li>
-                            <li key={"error_3"}>- The name was already taken</li>
-                            <li key={"error_4"}>- The link you gave did not pass the regex</li>
-                            <ul className="px-6">
-                                <li key={"error_5"}>- http://localhost:xxxx</li>
-                                <li key={"error_6"}>- http://xxxxx.gradio.app</li>
-                                <li key={"error_7"}>- https://hf.space/embed/$user/$space_name/+</li>
-                            </ul>
-                            <li>- link already exist within the menu</li>
-                        </ul>
-
-                </Message>
-                }
-
-                </Modal.Content>
-                    <Modal.Actions>
-                        <Button basic color='red' inverted onClick={() => {this.handelModal(false)}}>
-                        <Icon name='remove' /> Exit
-                        </Button>
-                        <Button color='green' inverted onClick={() => {this.append_gradio()}}>
-                        <Icon name='checkmark' /> Append
-                        </Button>
-                    </Modal.Actions>                    
-                </Modal> */}
-
->>>>>>> origin/main
                 <div className=" relative z-10 h-auto overflow-auto pt-4">
                     <ul className="pt-2">
                     {this.state.menu.map((menu, index) => {return this.subComponents(menu, index)})}
