@@ -62,7 +62,9 @@ export default class Navbar extends Component{
             hugginFace : /^https?:\/\/*(hf.space)\/*(embed)\/*([a-zA-Z0-9+_-]+)\/*([a-zA-Z0-9+_-]+)\/*([+])?(\/)?$/
         } 
 
-        if (this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.text) }) !== -1 ||
+        if (this.state.name.length > 20 ||
+            this.state.text === ""||
+            this.state.menu.findIndex(element => {return element.name.toLowerCase() === this.state.name.toLowerCase() || element.host.includes(this.state.text) }) !== -1 ||
             this.state.text.includes(" ") || 
             (!pattern.local.test(this.state.text) &&
             !pattern.share.test(this.state.text) &&
@@ -154,6 +156,10 @@ export default class Navbar extends Component{
         }
     }
 
+    handelError = (boolean) => {
+        this.setState({'error' : boolean})
+    }
+
     /**
      * handel navagation open and close function
      */
@@ -213,6 +219,7 @@ export default class Navbar extends Component{
                         quitHandeler={this.handelModal}
                         textHandler={this.updateText}
                         appendHandler={this.append_gradio}
+                        handelError={this.handelError}
                         catch={this.state.error}/>
                 
                 <div className=" relative z-10 h-auto overflow-auto pt-4">
@@ -231,7 +238,3 @@ export default class Navbar extends Component{
         </div>)
     }
 }
-
-/**
- *                 
- * **/

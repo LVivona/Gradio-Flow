@@ -31,11 +31,11 @@ export default class CustomNodeIframe extends React.Component {
     }
 
     handelSelected = () => {
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : !this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe})
+      this.setState({'selected' : !this.state.selected})
     }
 
     handelSizeState = () => {
-        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : !this.state.size, iframe : this.state.iframe})
+        this.setState({'size' : !this.state.size})
       }
 
     isFetchable = async (host) => {
@@ -57,18 +57,18 @@ export default class CustomNodeIframe extends React.Component {
       if(!this.isFetchable(this.state.data.host)){ 
         this.onNodeClick(this.state.id)
       } else{
-        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : this.state.width, height : this.state.height, size : this.state.size, iframe : this.state.iframe + 1})
+        this.setState({'iframe' : this.state.iframe + 1})
       }
     }
 
     handelOnChange(evt, type){
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  type === "width" ? parseInt(evt.target.value) : this.state.width, height : type === "height" ? parseInt(evt.target.value) : this.state.height, size : this.state.size, iframe : this.state.iframe })
-        type === "width" ? this.myRef.current.style.width = `${parseInt(evt.target.value)}px` : this.myRef.current.style.height = `${parseInt(evt.target.value)}px` 
+      this.setState({[`${type}`] : parseInt(evt.target.value) })
+      type === "width" ? this.myRef.current.style.width = `${parseInt(evt.target.value)}px` : this.myRef.current.style.height = `${parseInt(evt.target.value)}px` 
     }
 
     handelSize(evt, increment, change){
       if (evt === "increment") {
-        this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  change === "width" ? this.state.width + increment : this.state.width, height : change === "height" ? this.state.height + increment : this.state.height, size : this.state.size, iframe : this.state.iframe })
+        this.setState({[`${change}`] :  change === "width" ? this.state.width + increment : this.state.height + increment })
         change === "width" ? this.myRef.current.style.width = `${this.state.width + increment}px` : this.myRef.current.style.height = `${this.state.height + increment}px` 
       }
 
@@ -95,21 +95,19 @@ export default class CustomNodeIframe extends React.Component {
         height = this.original_height + (e.clientY - this.original_mouse_y)
         if (width > MINIMUM_WIDTH) {
           this.myRef.current.style.width = `${width}px`
-          this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  parseInt(width) , height : parseInt(height), size : this.state.size, iframe : this.state.iframe})
+          this.setState({'width' :  parseInt(width) , 'height' : parseInt(height)})
 
         }
         if (height > MINIMUM_HEIGHT) {
           this.myRef.current.style.height = `${height}px`
-          this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width :  parseInt(width) , height : parseInt(height), size : this.state.size, iframe : this.state.iframe})
+          this.setState({'width' :  parseInt(width) , 'height' : parseInt(height)})
 
         }
       } 
     }
 
     OnDragEnd = () => {
-      console.log("end")
-      this.setState({id : this.state.id, reachable : this.state.reachable, selected : this.state.selected, data : this.state.data, width : parseInt(this.myRef.current.style.width), height : parseInt(this.myRef.current.style.height), size : this.state.size, iframe : this.state.iframe})
-      
+      this.setState({'width' : parseInt(this.myRef.current.offsetWidth), 'height' : parseInt(this.myRef.current.offsetHeight)})
     }
 
     Counter(focus, size){
@@ -160,7 +158,7 @@ export default class CustomNodeIframe extends React.Component {
                         sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"
                         ></iframe>
                   </div>
-                  { this.state.size && <>
+                  { this.state.size && !navigator.userAgent.match(/firefox|fxios/i)  && <>
                   
                   <div id="remove-ghost" className={`absolute select-none -bottom-0 right-0 w-5 h-5border-2 shadow-2xl rounded-xl z-10 cursor-nwse-resize hover:opacity-50  `}
                        style={{"userDrag": "none"}} 

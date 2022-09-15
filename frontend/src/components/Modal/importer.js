@@ -9,7 +9,7 @@ import {BsSearch} from 'react-icons/bs';
 export default function Import(props){
     const [tab, setTab] = useState("gradio")
     const [subTab, setSubTab] = useState(0)
-    
+
     return (<div>
         <Modal
             basic
@@ -19,15 +19,21 @@ export default function Import(props){
             >
                 <div className='w-full shadow-lg rounded-lg'>
                     <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-t-lg border-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
-                        <li className="" onClick={()=>{setTab("gradio")}}>
+                        <li className="" onClick={()=>{
+                            setTab("gradio") 
+                            props.catch ? props.handelError(false) : props.handelError(props.catch)  }}>
                             <button id="gradio-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 rounded-tl-lg ${ tab === "gradio" ? 'bg-gray-200'  : 'hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 focus:bg-gray-700'}`}><Gradio className=" w-20 h-10"/></button>
                         </li>
-                        <li className="" onClick={()=>{setTab("streamlit")}}>
+                        <li className="" onClick={()=>{
+                            setTab("streamlit")
+                            props.catch ? props.handelError(false) : props.handelError(props.catch) }}>
                             <button id="services-tab" data-tabs-target="#Streamlit" type="button" role="tab" aria-controls="services" aria-selected="false" className={`inline-block p-4 rounded-tl-lg ${ tab === "streamlit" ? 'bg-gray-200'  : 'hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 focus:bg-gray-700'}`}><Streamlit className=" w-20 h-10"/></button>
                         </li>
                     </ul>
                     <div className='absolute right-5 top-5 z-20 mr-5'
-                         onClick={()=>{props.quitHandeler(false)}}>
+                         onClick={()=>{
+                            props.quitHandeler(false)
+                            props.catch ? props.handelError(false) : props.handelError(props.catch) }}>
                         <button type="button"
                                 className=" bg-neutral-300 rounded-2xl p-2 inline-flex items-center justify-center dark:bg-neutral-700 hover:opacity-70 focus:outline-none">
                         <Exit className=" w-[20px] h-[20px] text-gray-400 dark:text-white"/>
@@ -37,15 +43,19 @@ export default function Import(props){
                     { tab === "gradio" &&
                         <div className='w-full bg-white'>
                         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-200 border-gray-200 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
-                            <li className="" onClick={()=>{setSubTab(0)}}>
+                            <li className="" onClick={()=>{
+                                setSubTab(0)
+                                props.catch ? props.handelError(false) : props.handelError(props.catch) }}>
                                 <button id="local-sub-tab" data-tabs-target="#local" type="button" role="tab" aria-controls="local-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold ${subTab === 0 ? 'bg-gray-300' : '' } hover:bg-gray-300 `}>Local</button>
                             </li>
-                            <li className="" onClick={()=>{setSubTab(1)}}>
+                            <li className="" onClick={()=>{
+                                setSubTab(1)
+                                props.catch ? props.handelError(false) : props.handelError(props.catch) }}>
                             <button id="shared-sub-tab" data-tabs-target="#Gradio" type="button" role="tab" aria-controls="shared-gradio" aria-selected={tab === "gradio" ? "true" : "false"} className={`inline-block p-4 px-6 text-base font-sans font-bold  ${subTab === 1 ? 'bg-gray-300' : '' }  hover:bg-gray-300  `}>Shared</button>
                             </li>
                         </ul>
                         {subTab === 0 && <Local/>}
-                        {subTab === 1 && <Shared textHandler={props.textHandler} appendHandler={props.appendHandler} />}
+                        {subTab === 1 && <Shared textHandler={props.textHandler} appendHandler={props.appendHandler} handelError={props.handelError} catch={props.catch}/>}
 
                         {props.catch && <div className='p-5'>
                                         <Message floating negative>
@@ -94,12 +104,26 @@ function Shared(props){
     const [fetchable, setFetch] = useState(false)
 
     const isFetchable = async (url) => {
-        console.log(url)
+        const pattern = {
+            share : /^https?:\/\/*([0-9]{5})*(-gradio)*(.app)?(\/)?$/,
+            hugginFace : /^https?:\/\/*(hf.space)\/*(embed)\/*([a-zA-Z0-9+_-]+)\/*([a-zA-Z0-9+_-]+)\/*([+])?(\/)?$/
+        } 
+
+        if (!pattern.share.test(url) &&
+            !pattern.hugginFace.test(url)){
+                setFetch(false)
+                return
+            }
+
+        
         fetch(url, {mode : "no-cors"}).then((re) => {
             console.log(re)
             if(re.url.includes("http://localhost:3000")){
                 setFetch(false)    
-            } else { setFetch(true) }
+            } else { 
+                setFetch(true)
+                props.catch ? props.handelError(false) : props.handelError(props.catch)  
+            }
             
           }).catch((err)=>{
             setFetch(false)
@@ -143,7 +167,7 @@ function Shared(props){
                             <Icon className=" text-gray-500 block float-left cursor-pointer mr-2" name="address card"/>
                         </span>
                         <input className={`placeholder:italic placeholder:text-slate-400 text-black dark:text-white block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 pr-3 focus:shadow-xl focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1  sm:text-sm`} 
-                            placeholder={`Name` }
+                            placeholder={`Name ( > 20 Characters)` }
                             type="text" name="search"
                             autoComplete='off'
                             onChange={(e) => {
