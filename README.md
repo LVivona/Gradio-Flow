@@ -107,72 +107,28 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 
 ## Updates ⚒️
 ### Backend 💽
-- errors within the function InterLauncher fixed
-- port mapping fixed
-- removed test prints
-- ``__init__`` function takes inputs within class wrapper
-- better determine registered functions within classes
-- more examples located in the ``backend/src/example``
-    - just import and launch or run them within the demoE.py file in ``backend/src``
-- launch interface functions that takes the interface and appends it within the gradio-flow so if it's (load, from_pipline, Block, or any other prebuilt interface you have you can append them into Gradio-Flow)
-
-```python
-def InterLauncher(name, interface, listen=2000, **kwargs):
-    port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
-    try:
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : "Not Applicable", "name" : name, "kwargs" : kwargs})
-    except Exception as e:
-        print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
-        return
-
-    interface.launch(server_port=port,
-                     server_name=f"{DOCKER_LOCAL_HOST}",
-                     inline= kwargs['inline'] if "inline" in kwargs else True,
-                     share=kwargs['share'] if "share" in kwargs else None,
-                     debug=kwargs['debug'] if "debug" in kwargs else False,
-                     enable_queue=kwargs['enable_queue'] if "enable_queue" in kwargs else None,
-                     max_threads=kwargs['max_threads'] if "max_threads" in kwargs else None,
-                     auth=kwargs['auth'] if "auth" in kwargs else None,
-                     auth_message=kwargs['auth_message'] if "auth_message" in kwargs else None,
-                     prevent_thread_lock=kwargs['prevent_thread_lock'] if "prevent_thread_lock" in kwargs else False,
-                     show_error=kwargs['show_error'] if "show_error" in kwargs else True,
-                     show_tips=kwargs['show_tips'] if "show_tips" in kwargs else False,
-                     height=kwargs['height'] if "height" in kwargs else 500,
-                     width=kwargs['width'] if "width" in kwargs else 900,
-                     encrypt=kwargs['encrypt'] if "encrypt" in kwargs else False,
-                     favicon_path=kwargs['favicon_path'] if "favicon_path" in kwargs else None,
-                     ssl_keyfile=kwargs['ssl_keyfile'] if "ssl_keyfile" in kwargs else None,
-                     ssl_certfile=kwargs['ssl_certfile'] if "ssl_certfile" in kwargs else None,
-                     ssl_keyfile_password=kwargs['ssl_keyfile_password'] if "ssl_keyfile_password" in kwargs else None,
-                     quiet=kwargs['quiet'] if "quiet" in kwargs else False)
-    
-    try:
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{ listen }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
-    except Exception as e:    
-        print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
-```
+- Module fixes
+- Demo file
 
 
 ### Frontend 🖥️
 - Node Menu
-    - Save Board Button
-        - When the pages refreshes it loads the last saved board
-    - Dynamic adjust the size of node
-        - Draggable bottom to expand height
-    - Delete node Button
-        - Delete All Nodes if removed from Gradio-Flow
-    - Link to gradio to host it in seprate tab
-    - Refresh Button to refresh the iframe if need be
     - fixed some bugs from ``+ button`` for catching errors and wrong inputs
     - ``+ button`` now includes hugginface spaces, and gradio share
         - https://hf.space/embed/name_of_user/name_of_space/+
         - Examples: (https://hf.space/embed/marcop/musika/+, https://hf.space/embed/stabilityai/stable-diffusion/+)
+        - better user interface for shared links
+- Node
+    - within firefox draggable size change not availible due to code error
+    - scrollable iframe 
 
 
 
 ![Node Menu](images/new_feature.png)
 
 ### In The Works 🚧
+- App Name change
+- Streamlit application within Gradio-Flow
 - Mutiple windows within the react-flow environment 
 - Appending streamlit into gradio-flow
 - Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
