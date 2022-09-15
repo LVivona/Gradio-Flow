@@ -150,14 +150,13 @@ export default class CustomNodeIframe extends React.Component {
                   <div id={`draggable`} className={`relative w-[540px] h-[600px] overflow-hidden m-0 p-0 shadow-2xl`} ref={this.myRef}>
 
                     <div className={`absolute p-5 h-full w-full ${this.state.data.colour} shadow-2xl rounded-xl -z-20`}></div>
-                    <iframe 
+                                        <iframe 
                         id="iframe" 
                         key={this.state.iframe}
                         src={this.state.data.host} 
                         title={this.state.data.label}
                         frameBorder="0"
-                        scrolling="no" 
-                        className=" -z-10 container h-full p-2 flex-grow space-iframe overflow-auto" 
+                        className="p-2 -z-10 h-full w-full ml-auto mr-auto overflow-y-scroll" 
                         sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"
                         ></iframe>
                   </div>
