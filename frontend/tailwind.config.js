@@ -12,7 +12,7 @@ module.exports = {
         "Amethyst-Light" : "#9D50BB",
         "Amethyst-Dark" : "#6E48AA",
         "Peach-Red" : "#ED4264",
-        "Peach-Yello" : "#FFEDBC",
+        "Peach-Yellow" : "#FFEDBC",
         "Deep-Space-Black" : "#000000",
         "Deep-Space-Gray" : "#434343",
         "Sunshine-Red" : "#b92b27",
