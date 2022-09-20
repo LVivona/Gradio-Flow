@@ -12,9 +12,9 @@ export default class Navbar extends Component{
     constructor(props){
         super(props) 
         this.temp_host = 0
-        this.fetch_classes()
         this.deleteNode = props.onDelete
-        this.state = {open : true,
+        this.state = {
+            open : true,
             menu : [],
             colour : props.colour || [],
             text : "",
@@ -27,28 +27,26 @@ export default class Navbar extends Component{
        
     }
 
+    componentDidMount(){
+        this.fetch_classes()   
+
+    }
 
     /**
      *  Asynchronously call the Flask api server every second to check if there exist a gradio application info
      *  @return null
      */
-    async fetch_classes(){
+    fetch_classes = async () => {
         try {
         setInterval( async () => {
-            const menu = []
             await fetch("http://localhost:2000/api/open/ports", { method: 'GET', mode : 'cors',})
                 .then(response => response.json())
                 .then(data => {
-                    for (var i = 0; i < data.length; i++){
-                        menu.push(data[i])
-                    }
+                    this.handelTabs(this.state.menu,data, data)
+                    this.setState({menu : data})
                 })
                 .catch(error => {console.log(error)})
-                
-                var diff = menu.length - this.state.menu.length
-                if(diff !== 0){
-                    this.handelTabs(menu, diff)
-                }
+    
         },1000);    
         }catch(e){
             console.log(e)
@@ -137,25 +135,26 @@ export default class Navbar extends Component{
         // remove
         var c = []
         var j = []
-        if(d < 0){
+        if (d.length - e.length === 0) return
+        else if(d.length - e.length <= 0){
             var a = this.state.menu.filter(item => !e.includes(item)) // get the items not in menu anymore
             c = this.state.colour
             j = this.state.emoji
-            for(var k=0; k < d; k++){
+            for(var k=0; k < d.length; k++){
                 c.splice(this.state.menu.indexOf(a[k]), 1)
                 j.splice(this.state.menu.indexOf(a[k]), 1)
             }
-            this.setState({'menu' : e, 'colour' : c, 'emoji' : j})
+            this.setState({'colour' : c, 'emoji' : j})
         }else{
             //append new colours
-            for(var i =0; i < d; i++){
+            for(var i =0; i < d.length; i++){
                     c.push(random_colour(i === 0 ? null : c[i-1]));
                     j.push(random_emoji(i === 0 ? null : c[i-1]));
                 
             }
             const colour = [...this.state.colour]
             const emoji  = [...this.state.emoji]
-            this.setState({'menu' : e, 'colour' : [...colour, ...c], 'emoji' : [...emoji, ...j],})
+            this.setState({'colour' : [...colour, ...c], 'emoji' : [...emoji, ...j],})
         }
     }
 

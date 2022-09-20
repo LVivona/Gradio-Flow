@@ -42,6 +42,7 @@ export default function ReactEnviorment() {
         if(flow){
           flow.nodes.map((nds) => nds.data.delete = deleteNode)
           setNodes(flow.nodes || [])
+          setEdges(flow.edges || [])
           console.log(flow)
         }
       }
