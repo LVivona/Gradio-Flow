@@ -11,14 +11,20 @@ import ReactFlow, { Background,
                     } from 'react-flow-renderer';
 import React ,{ useState, useCallback, useRef, useEffect } from 'react';
 import Navbar from '../Navagation/navbar';
+import CustomEdge from '../Edges/Custom'
 import { useThemeDetector } from '../../helper/visual'
 import {CgMoreVerticalAlt} from 'react-icons/cg'
 import {BsFillEraserFill} from 'react-icons/bs' 
 import {FaRegSave} from 'react-icons/fa'
 
-const types = {
+const NODE = {
     custom : CustomNodeIframe,
   }
+
+const EDGE = {
+    custom : CustomEdge
+}
+
 
 export default function ReactEnviorment() {
 
@@ -42,6 +48,8 @@ export default function ReactEnviorment() {
       restore()
     },[])
 
+    const deleteEdge = (id) => setEdges((eds) => eds.filter(e => e.id !== id))
+
 
     const onNodesChange = useCallback(
       (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -61,7 +69,7 @@ export default function ReactEnviorment() {
     const onConnect = useCallback(
       (params) => {
         console.log(params)
-        setEdges((els) => addEdge({...params, animated : true, style : {stroke : "#00FF4A", strokeWidth : "3"}, markerEnd: {type: MarkerType.ArrowClosed, color : "#00FF4A"}}, els))
+        setEdges((els) => addEdge({...params, type: "custom", animated : true, style : {stroke : "#00FF4A", strokeWidth : "3"}, markerEnd: {type: MarkerType.ArrowClosed, color : "#00FF4A"}, data : { delete : deleteEdge}}, els))
         fetch("http://localhost:2000/api/append/connection", {method : "POST", mode : 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify({"source": params.source, "target" : params.target})}).then( res => {
           console.log(res)
         }).catch(error => {
@@ -80,7 +88,7 @@ export default function ReactEnviorment() {
 
     const deleteNodeContains = (id) =>{setNodes((nds) => nds.filter(n => !n.id.includes(`${id}-`) ))}
     const deleteNode = (id) =>{setNodes((nds) => nds.filter(n => n.id !== id ))}
-    
+
     const onSave = useCallback(() => {
       if (reactFlowInstance) {
         const flow = reactFlowInstance.toObject();
@@ -155,7 +163,7 @@ export default function ReactEnviorment() {
           <ReactFlowProvider>
           <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>
             <div className="h-screen w-screen" ref={reactFlowWrapper}>
-              <ReactFlow nodes={nodes} edges={edges} nodeTypes={types} onNodesChange={onNodesChange} onNodesDelete={deleteNode} onEdgesChange={onEdgesChange} onEdgeUpdate={onEdgeUpdate} onConnect={onConnect} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance}  fitView>
+              <ReactFlow nodes={nodes} edges={edges} nodeTypes={NODE} edgeTypes={EDGE} onNodesChange={onNodesChange} onNodesDelete={deleteNode} onEdgesChange={onEdgesChange} onEdgeUpdate={onEdgeUpdate} onConnect={onConnect} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance}  fitView>
                 <Background variant='dots' size={1} className=" bg-white dark:bg-neutral-800"/>
                 <Controls/>
               </ReactFlow>

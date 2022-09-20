@@ -69,7 +69,7 @@ export default class CustomNodeIframe extends React.Component {
 
     handelSize(evt, increment, change){
       if (evt === "increment") {
-        this.setState(prevState => ({[`${change}`] :  change === "width" ? prevState.width + increment : prevState.height + increment }))
+        this.setState({[`${change}`] :  change === "width" ? this.state.width + increment : this.state.height + increment })
         change === "width" ? this.myRef.current.style.width = `${this.state.width + increment}px` : this.myRef.current.style.height = `${this.state.height + increment}px` 
       }
 
