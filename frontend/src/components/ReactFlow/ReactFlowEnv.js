@@ -3,6 +3,11 @@ import '../../css/dist/output.css'
 import ReactFlow, { Background,
                     applyNodeChanges,
                     ReactFlowProvider,
+                    addEdge,
+                    updateEdge,
+                    applyEdgeChanges,
+                    Controls,
+                    MarkerType
                     } from 'react-flow-renderer';
 import React ,{ useState, useCallback, useRef, useEffect } from 'react';
 import Navbar from '../Navagation/navbar';
@@ -19,6 +24,7 @@ export default function ReactEnviorment() {
 
     const [theme, setTheme] = useState(useThemeDetector)
     const [nodes, setNodes] = useState([]);
+    const [edges, setEdges] = useState([])
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const reactFlowWrapper = useRef(null);
     const [tool, setTool] = useState(false)
@@ -42,6 +48,30 @@ export default function ReactEnviorment() {
       [setNodes]
     );
   
+    const onEdgesChange = useCallback(
+      (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+      [setEdges]
+    );
+
+    const onEdgeUpdate = useCallback(
+      (oldEdge, newConnection) => setEdges((els) => updateEdge(oldEdge, newConnection, els)),
+      []
+    );
+
+    const onConnect = useCallback(
+      (params) => {
+        console.log(params)
+        setEdges((els) => addEdge({...params, animated : true, style : {stroke : "#00FF4A", strokeWidth : "3"}, markerEnd: {type: MarkerType.ArrowClosed, color : "#00FF4A"}}, els))
+        fetch("http://localhost:2000/api/append/connection", {method : "POST", mode : 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify({"source": params.source, "target" : params.target})}).then( res => {
+          console.log(res)
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      [setEdges]
+    );
+
+
   
     const onDragOver = useCallback((event) => {
       event.preventDefault();
@@ -122,12 +152,13 @@ export default function ReactEnviorment() {
           <BsFillEraserFill title="Erase" className={`mt-6 text-black dark:text-white ml-auto mr-auto ${tool ? "visible" : " invisible"} `} onClick={() => onErase()}/>
         </div>
         <div className={`flex h-screen w-screen ${theme ? "dark" : ""} transition-all`}>    
-          <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>
           <ReactFlowProvider>
+          <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>
             <div className="h-screen w-screen" ref={reactFlowWrapper}>
-              <ReactFlow nodes={nodes} nodeTypes={types} onNodesChange={onNodesChange} onNodesDelete={deleteNode} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance}  fitView>
-              <Background variant='dots' size={1} className=" bg-white dark:bg-neutral-800"/>
-            </ReactFlow>
+              <ReactFlow nodes={nodes} edges={edges} nodeTypes={types} onNodesChange={onNodesChange} onNodesDelete={deleteNode} onEdgesChange={onEdgesChange} onEdgeUpdate={onEdgeUpdate} onConnect={onConnect} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance}  fitView>
+                <Background variant='dots' size={1} className=" bg-white dark:bg-neutral-800"/>
+                <Controls/>
+              </ReactFlow>
             </div>
           </ReactFlowProvider>
         </div>

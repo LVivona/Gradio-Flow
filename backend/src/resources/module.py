@@ -62,10 +62,10 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
         package and send it to the flaks api
     """
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort() # determine the next open port is no port is listed **kwargs
-    
+    packet = {"port" : port, "host" : f'http://localhost:{port}', "file" : "Not Applicable", "name" : name, "kwargs" : kwargs}
     try:
         # (POST) send the information of the gradio to the flask api
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : "Not Applicable", "name" : name, "kwargs" : kwargs})
+        requests.post(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/append/port", json=packet)
     except Exception as e: 
         # If there is an Exception then notify the user and end the method
         print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
@@ -93,13 +93,14 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
                      ssl_keyfile_password=kwargs['ssl_keyfile_password'] if "ssl_keyfile_password" in kwargs else None,
                      quiet=kwargs['quiet'] if "quiet" in kwargs else False)
     
-    try:
-        # (POST) stop the interface if user hits ctrl+c 
-        # send the information of the gradio to the flask
-        # api to remove it from the list within the flask api
-        requests.post(f"http://{DOCKER_LOCAL_HOST}:{ listen }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
-    except Exception as e:    
-        print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
+    if stream_exist(packet=packet, listen=listen):
+        try:
+            # (POST) stop the interface if user hits ctrl+c 
+            # send the information of the gradio to the flask
+            # api to remove it from the list within the flask api
+            requests.post(f"http://{DOCKER_LOCAL_HOST}:{ listen }/api/remove/port", json=packet)
+        except Exception as e:    
+            print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
 
 def tabularGradio(funcs, names=[], name="Tabular Temp Name", **kwargs):
     """
@@ -112,12 +113,13 @@ def tabularGradio(funcs, names=[], name="Tabular Temp Name", **kwargs):
         names = [_.__name__ for _ in fn]
         
     port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort()
-    
+    packet = None
     # send this to the backend api for it to be read by the react frontend
     if 'listen' in kwargs:
+        packet = {"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs}
         try:
             # (POST) send the information of the gradio to the flask api
-            requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
+            requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json=packet)
         except Exception as e:
             print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛 \n {e}")
             return
@@ -145,9 +147,10 @@ def tabularGradio(funcs, names=[], name="Tabular Temp Name", **kwargs):
                                             quiet=kwargs['quiet'] if "quiet" in kwargs else False)
     
     # Ctrl+C that ends the process and then continue the code which will remove from the api
-    if 'listen' in kwargs:
+    if 'listen' in kwargs and stream_exist(packet=packet,listen=kwargs['listen']):
+        
         try:
-            requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : 'Not Applicable', "name" : name, "kwargs" : kwargs})
+            requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json=packet)
         except Exception as e:    
             print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛 \n {e}")
     
@@ -304,9 +307,11 @@ def GradioModule(cls):
                 then when the gradio stops then remove it from the api
             """
             port= kwargs["port"] if "port" in kwargs else DOCKER_PORT.determinePort() 
+            packet = None
             if 'listen' in kwargs:
+                packet = { type : { 'format' : "class", 'stream' : "gradio" }, "port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.__cls__.__class__), "name" : self.__cls__.__class__.__name__, "kwargs" : kwargs}
                 try:
-                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.__cls__.__class__), "name" : self.__cls__.__class__.__name__, "kwargs" : kwargs})
+                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/append/port", json=packet)
                 except Exception:
                     print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛")
                     return
@@ -331,13 +336,24 @@ def GradioModule(cls):
                                   ssl_certfile=kwargs['ssl_certfile'] if "ssl_certfile" in kwargs else None,
                                   ssl_keyfile_password=kwargs['ssl_keyfile_password'] if "ssl_keyfile_password" in kwargs else None,
                                   quiet=kwargs['quiet'] if "quiet" in kwargs else False) 
-            if 'listen' in kwargs:
+            if 'listen' in kwargs and stream_exist(packet=packet, listen=kwargs[ 'listen' ]):
                 try:
-                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json={"port" : port, "host" : f'http://localhost:{port}', "file" : getfile(self.__cls__.__class__), "name" : self.__cls__.__class__.__name__, "kwargs" : kwargs})
+                    requests.post(f"http://{DOCKER_LOCAL_HOST}:{ kwargs[ 'listen' ] }/api/remove/port", json=packet)
                 except Exception:
                     print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The api either lost connection or was turned off...🐛")
             return
     return Decorator
+
+def stream_exist(packet, listen):
+    """
+    Given the port is still up this will return if the 
+    json sent in the beginning still exsit with the api
+    """
+    state = requests.get(f"http://{DOCKER_LOCAL_HOST}:{listen}/api/open/ports").json()
+    for mod in state:
+        if packet == mod:
+            return True
+    return False
 
 # console colour changer 
 class bcolor:

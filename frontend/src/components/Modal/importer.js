@@ -55,7 +55,7 @@ export default function Import(props){
                             </li>
                         </ul>
                         {subTab === 0 && <Local/>}
-                        {subTab === 1 && <Shared textHandler={props.textHandler} appendHandler={props.appendHandler} handelError={props.handelError} catch={props.catch}/>}
+                        {subTab === 1 && <Shared type="gradio" textHandler={props.textHandler} appendHandler={props.appendHandler} handelError={props.handelError} catch={props.catch}/>}
 
                         {props.catch && <div className='p-5'>
                                         <Message floating negative>
@@ -79,6 +79,12 @@ export default function Import(props){
                                         </div>}
                         </div> 
                     }
+                    { tab === "streamlit" && 
+                    <div className='w-full bg-white'>
+                        <Shared type="streamlit" textHandler={props.textHandler} appendHandler={props.appendHandler} handelError={props.handelError} catch={props.catch}/>
+                    </div>
+                    }
+
                 </Modal>
     </div>)
 }
@@ -99,7 +105,7 @@ function Local(props){
     )
 }
 
-function Shared(props){
+function Stream(props){
     const [preview, setPreview] = useState("")
     const [fetchable, setFetch] = useState(false)
 
@@ -133,7 +139,7 @@ function Shared(props){
     
     return (
         <div className='w-full shadow-lg' onKeyPress={(e)=>{
-            if (e.key.includes("Enter")) props.appendHandler()
+            if (e.key.includes("Enter")) props.appendHandler(props.type)
         }}>
             <div className='p-5'>
             <Message floating>            
@@ -178,7 +184,98 @@ function Shared(props){
                     </div> 
                     <div className=' right-0 ml-5'>
                         <button className="relative inline-flex justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-sans font-bold text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
-                                onClick={()=>{props.appendHandler()}}>
+                                onClick={()=>{props.appendHandler(props.type)}}>
+                            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#1b1c1d] rounded-md group-hover:bg-opacity-0">
+                                Enter
+                            </span>
+                        </button>
+                    </div>
+                </Message>
+                </div>
+                </div>  
+    )
+}
+
+function Shared(props){
+    const [preview, setPreview] = useState("")
+    const [fetchable, setFetch] = useState(false)
+
+    const isFetchable = async (url) => {
+        const pattern = {
+            share : /^https?:\/\/*([0-9]{5})*(-gradio)*(.app)?(\/)?$/,
+            hugginFace : /^https?:\/\/*(hf.space)\/*(embed)\/*([a-zA-Z0-9+_-]+)\/*([a-zA-Z0-9+_-]+)\/*([+])?(\/)?$/
+        } 
+
+        if (!pattern.share.test(url) &&
+            !pattern.hugginFace.test(url)){
+                setFetch(false)
+                return
+            }
+
+        
+        fetch(url, {mode : "no-cors"}).then((re) => {
+            console.log(re)
+            if(re.url.includes("http://localhost:3000")){
+                setFetch(false)    
+            } else { 
+                setFetch(true)
+                props.catch ? props.handelError(false) : props.handelError(props.catch)  
+            }
+            
+          }).catch((err)=>{
+            setFetch(false)
+          })
+          setFetch(false)
+        }
+    
+    return (
+        <div className='w-full shadow-lg' onKeyPress={(e)=>{
+            if (e.key.includes("Enter")) props.appendHandler(props.type)
+        }}>
+            <div className='p-5'>
+            <Message floating>            
+                         <div className={`flex items-center rounded-md bg-light-white mt-6 border-dashed`}>
+                            <label className="relative block w-full p-5 focus:shadow-xl">
+                                <span className={`absolute inset-y-0 left-0 flex items-center pl-8`}>
+                                    <BsSearch className="block float-left cursor-pointer text-gray-500"/>
+                                </span>
+                                <input className={`placeholder:italic placeholder:text-slate-400 text-black dark:text-white block w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 pr-3 focus:shadow-xl focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm bg-transparent`}  
+                                    placeholder={`URL`}
+                                    type="text" name="search"
+                                    onChange={(e) => {
+                                        props.textHandler(e, "text")
+                                        setPreview(e.target.value)
+                                         setFetch(isFetchable(e.target.value))
+                                    }}
+                                    />
+                            </label>
+                        </div>   
+                        { fetchable === true && <div className=' w-full'>
+                            <h1 className=' text-xl font-sans font-bold text-center text-black mb-2'> Preview </h1>
+                            <div className='p-3 px-1 w-3/4 h-80 bg-gray-200 mr-auto ml-auto rounded-xl'>
+                                <div className='w-full h-full overflow-hidden relative -ml-[5px]'>
+                                <iframe title='Preview' src={preview} className=' absolute top-0 bottom-0 left-0 -right-[25px] overflow-y-scroll w-full h-full mr-auto ml-auto'/>
+                                </div>
+                            </div>
+                        </div>}
+                        <div className={`flex items-center rounded-md bg-light-white dark:bg-[#1b1c1d] mt-6  border-dashed`}>
+                    <label className="relative block p-5 w-full focus:shadow-xl">
+                        <span className={`absolute inset-y-0 left-0 flex items-center pl-7`}>
+                            <Icon className=" text-gray-500 block float-left cursor-pointer mr-2" name="address card"/>
+                        </span>
+                        <input className={`placeholder:italic placeholder:text-slate-400 text-black dark:text-white block bg-transparent w-full border border-slate-300 border-dashed rounded-md py-2 pl-9 pr-3 focus:shadow-xl focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1  sm:text-sm`} 
+                            placeholder={`Name ( > 20 Characters)` }
+                            type="text" name="search"
+                            autoComplete='off'
+                            onChange={(e) => {
+                                props.textHandler(e, "name")
+                               }}
+                            />
+                    </label>
+                    </div> 
+                    <div className=' right-0 ml-5'>
+                        <button className="relative inline-flex justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-sans font-bold text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+                                onClick={()=>{props.appendHandler(props.type)}}>
                             <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#1b1c1d] rounded-md group-hover:bg-opacity-0">
                                 Enter
                             </span>

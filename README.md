@@ -112,6 +112,10 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 
 
 ### Frontend 🖥️
+- Node
+    - Append edges together
+        - (In the works) Connection API paramters; Allow people to use Gradio Flow as a module base platform
+
 - Node Menu
     - fixed some bugs from ``+ button`` for catching errors and wrong inputs
     - ``+ button`` now includes hugginface spaces, and gradio share
@@ -128,9 +132,7 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 
 ### In The Works 🚧
 - App Name change
-- Streamlit application within Gradio-Flow
 - Mutiple windows within the react-flow environment 
-- Appending streamlit into gradio-flow
 - Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
 
 

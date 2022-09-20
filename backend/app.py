@@ -72,6 +72,11 @@ def append_port():
     visable.append(current)
     return jsonify({"executed" : True})
 
+@app.route("/api/append/connection", methods=["POST"])
+def append_connection():
+    current = request.json
+    return jsonify({"executed" : True})
+
 @app.route("/api/remove/port" , methods=["POST"])
 def remove_port():
     current = request.json

@@ -1,4 +1,5 @@
 import React from "react"
+import { Handle, Position } from "react-flow-renderer"
 import {TbResize} from 'react-icons/tb'
 import {BiCube, BiRefresh} from 'react-icons/bi'
 import {BsTrash, BsArrowDownRightSquare} from 'react-icons/bs'
@@ -20,22 +21,22 @@ export default class CustomNodeIframe extends React.Component {
       this.state = {
         id : id,
         reachable : this.isFetchable(data.host),
-        selected : true,
+        selected : false,
         data : data,
         width : 540,
         height : 600,
-        size : true,
+        size : false,
         iframe : 0,
       }
  
     }
 
     handelSelected = () => {
-      this.setState({'selected' : !this.state.selected})
+      this.setState(prevState => ({'selected' : !prevState.selected, 'size' : false }))
     }
 
     handelSizeState = () => {
-        this.setState({'size' : !this.state.size})
+        this.setState(prevState => ({'size' : !prevState.size}))
       }
 
     isFetchable = async (host) => {
@@ -57,7 +58,7 @@ export default class CustomNodeIframe extends React.Component {
       if(!this.isFetchable(this.state.data.host)){ 
         this.onNodeClick(this.state.id)
       } else{
-        this.setState({'iframe' : this.state.iframe + 1})
+        this.setState(prevState => ({'iframe' : prevState.iframe + 1}))
       }
     }
 
@@ -68,7 +69,7 @@ export default class CustomNodeIframe extends React.Component {
 
     handelSize(evt, increment, change){
       if (evt === "increment") {
-        this.setState({[`${change}`] :  change === "width" ? this.state.width + increment : this.state.height + increment })
+        this.setState(prevState => ({[`${change}`] :  change === "width" ? prevState.width + increment : prevState.height + increment }))
         change === "width" ? this.myRef.current.style.width = `${this.state.width + increment}px` : this.myRef.current.style.height = `${this.state.height + increment}px` 
       }
 
@@ -128,7 +129,7 @@ export default class CustomNodeIframe extends React.Component {
       if (!this.state.reachable) {this.onNodeClick(this.state.id) }
       return (<>
                   <div className=" flex w-full h-10 top-0 cursor-pointer" onClick={this.handelEvent}>
-                  <div title="Collaspse Node" className=" duration-300 cursor-pointer shadow-xl border-2 border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Blue rounded-xl" onClick={this.handelSelected}><CgLayoutGridSmall className="h-full w-full text-white p-1"/></div>
+                  <div title={this.state.selected ? "Collaspse Node" : "Expand Node"} className=" duration-300 cursor-pointer shadow-xl border-2 border-white h-10 w-10 mr-2 -mt-3 bg-Warm-Blue rounded-xl" onClick={this.handelSelected}><CgLayoutGridSmall className="h-full w-full text-white p-1"/></div>
 
     
                     <div className={` flex ${this.state.selected ? '' : 'w-0 hidden'}`}>
@@ -145,7 +146,7 @@ export default class CustomNodeIframe extends React.Component {
                   
                   </div>               
                 
-                  <div id={`draggable`} className={`relative w-[540px] h-[600px] overflow-hidden m-0 p-0 shadow-2xl`} ref={this.myRef}>
+                  <div id={`draggable`} className={`relative overflow-hidden m-0 p-0 shadow-2xl ${this.state.selected ? "w-[540px] h-[600px]" : "hidden"} duration-200`} ref={this.myRef}>
 
                     <div className={`absolute p-5 h-full w-full ${this.state.data.colour} shadow-2xl rounded-xl -z-20`}></div>
                                         <iframe 
@@ -158,6 +159,32 @@ export default class CustomNodeIframe extends React.Component {
                         sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"
                         ></iframe>
                   </div>
+                  
+                  {/*Input*/}
+                  <Handle type="target"
+                          id="input"
+                          position={Position.Left}
+                          style={!this.state.selected ? 
+                                {"paddingRight" : "5px" , "marginTop" : "15px", "height" : "25px", "width" : "25px",  "borderRadius" : "3px", "zIndex" : "10000", "background" : "white", "boxShadow" : "3px 3px #888888"}
+                                :{"paddingRight" : "5px" ,"height" : "25px", "width" : "25px",  "borderRadius" : "3px", "zIndex" : "10000", "background" : "white", "boxShadow" : "3px 3px #888888"}}
+                          />
+                  
+                  {/*Output*/}
+                  <Handle type="source" id="output" position={Position.Right} style={ !this.state.selected ?
+                      {"paddingLeft" : "5px", "marginTop" : "15px" ,"height" : "25px", "width" : "25px",  "borderRadius" : "3px", "zIndex" : "10000", "background" : "white", "boxShadow" : "3px 3px #888888"}
+                      : {"paddingLeft" : "5px", "marginTop" : "0px" ,"height" : "25px", "width" : "25px",  "borderRadius" : "3px", "zIndex" : "10000", "background" : "white", "boxShadow" : "3px 3px #888888"}}/>
+
+                  {
+                    !this.state.selected &&
+                    <div 
+                    id={`draggable`}
+                    className={` w-[340px] h-[140px]  text-white text-md flex flex-col text-center items-center cursor-grab shadow-lg
+                                 p-5 px-2 rounded-md hover:animate-pulse break-all -z-20 ${this.state.data.colour}`}>
+
+                    <div  className="absolute text-6xl opacity-60 z-10 pt-8 ">{this.state.data.emoji}</div>    
+                    <h2 className={`max-w-full font-sans text-blue-50 leading-tight font-bold text-3xl flex-1 z-20 pt-10`} style={{"textShadow" : "0px 1px 2px rgba(0, 0, 0, 0.25)"}} >{this.state.data.label}</h2>
+                    </div >     
+                  }
                   { this.state.size && !navigator.userAgent.match(/firefox|fxios/i)  && <>
                   
                   <div id="remove-ghost" className={`absolute select-none -bottom-0 right-0 w-5 h-5border-2 shadow-2xl rounded-xl z-10 cursor-nwse-resize hover:opacity-50  `}
@@ -172,6 +199,7 @@ export default class CustomNodeIframe extends React.Component {
   
                       </>
                   }
+                
 
         </>)
     }

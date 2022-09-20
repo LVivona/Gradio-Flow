@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import {BsArrowLeftShort} from 'react-icons/bs';
-import "../../css/dist/output.css"
-import {ReactComponent as ReactLogo} from '../../images/logo.svg'
-import { random_colour, random_emoji } from "../../helper/visual";
 import { Icon } from 'semantic-ui-react'
 import Import from '../Modal/importer'
+import { random_colour, random_emoji } from "../../helper/visual";
+
+import "../../css/dist/output.css"
+
+import {BsArrowLeftShort} from 'react-icons/bs';
+import {ReactComponent as ReactLogo} from '../../images/logo.svg'
+
 export default class Navbar extends Component{
     constructor(props){
         super(props) 
@@ -55,7 +58,7 @@ export default class Navbar extends Component{
     /**
      * Append new node from the user 
      */
-    append_gradio = async () => {
+    appendStreamNode = async (type) => {
         const pattern = {
             local : /^https?:\/\/(localhost)*(:[0-9]+)?(\/)?$/,
             share : /^https?:\/\/*([0-9]{5})*(-gradio)*(.app)?(\/)?$/,
@@ -78,7 +81,7 @@ export default class Navbar extends Component{
             } 
 
         fetch(this.state.text, {method : "GET", mode: 'no-cors'}).then((re) => {
-            fetch("http://localhost:2000/api/append/port", {method: 'POST', mode : 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify({file : "", kwargs : {}, name : this.state.name === "" ?`temp_class_${this.temp_host++}` : `${this.state.name}`, port: 0 , host : this.state.text}) }).then(resp => {
+            fetch("http://localhost:2000/api/append/port", {method: 'POST', mode : 'cors', headers : { 'Content-Type' : 'application/json' }, body: JSON.stringify({file : "", kwargs : { type : type }, name : this.state.name === "" ?`temp_class_${this.temp_host++}` : `${this.state.name}`, port: 0 , host : this.state.text}) }).then(resp => {
                 this.setState({'text': "",'name' : "",'error' : false,'modal' : false  })
 
             }).catch(() => this.setState({'text': '', 'name' : '',  'error' : true, }))
@@ -218,7 +221,7 @@ export default class Navbar extends Component{
                 <Import open={this.state.modal} 
                         quitHandeler={this.handelModal}
                         textHandler={this.updateText}
-                        appendHandler={this.append_gradio}
+                        appendHandler={this.appendStreamNode}
                         handelError={this.handelError}
                         catch={this.state.error}/>
                 
