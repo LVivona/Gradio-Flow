@@ -136,8 +136,8 @@ export default class Navbar extends Component{
         var c = []
         var j = []
         if (d.length - e.length === 0) return
-        else if(d.length - e.length <= 0){
-            var a = this.state.menu.filter(item => !e.includes(item)) // get the items not in menu anymore
+        else if(d.length - e.length < 0){
+            var a = this.state.menu.filter(item => e.includes(item)) // get the items not in menu anymore
             c = this.state.colour
             j = this.state.emoji
             for(var k=0; k < d.length; k++){

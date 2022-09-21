@@ -1,4 +1,8 @@
-# Gradio Flow <img src="frontend/src/images/logo.svg" style="width:40px; height:40px;"/> 
+<div position="absolute" align="center">
+<h1 style="">Gradio Flow <img src="frontend/src/images/logo.svg" style="width:40px; height:40px;"/></h1>
+</div>
+<img src="./images/Header.gif"/> 
+
 
 ## 👋 Reach Me For Inquiry or Bugs
 
