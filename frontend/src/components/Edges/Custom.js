@@ -18,7 +18,6 @@ export default function CustomEdge({
   targetY,
   sourcePosition,
   targetPosition,
-  style = {},
   markerEnd,
   data
 }) {
@@ -41,7 +40,7 @@ export default function CustomEdge({
     <>
       <path
         id={id}
-        style={style}
+        style={{stroke : "#00FF4A", strokeWidth : "6"}}
         className="react-flow__edge-path"
         d={edgePath}
         markerEnd={markerEnd}

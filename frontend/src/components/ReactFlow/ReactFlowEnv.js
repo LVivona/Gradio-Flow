@@ -12,6 +12,7 @@ import ReactFlow, { Background,
 import React ,{ useState, useCallback, useRef, useEffect } from 'react';
 import Navbar from '../Navagation/navbar';
 import CustomEdge from '../Edges/Custom'
+import CustomLine from "../Edges/CustomLine.js";
 import { useThemeDetector } from '../../helper/visual'
 import {CgMoreVerticalAlt} from 'react-icons/cg'
 import {BsFillEraserFill} from 'react-icons/bs' 
@@ -165,7 +166,7 @@ export default function ReactEnviorment() {
           <ReactFlowProvider>
           <Navbar onDelete={deleteNodeContains} colour={JSON.parse(localStorage.getItem('colour'))} emoji={JSON.parse(localStorage.getItem('emoji'))}/>
             <div className="h-screen w-screen" ref={reactFlowWrapper}>
-              <ReactFlow nodes={nodes} edges={edges} nodeTypes={NODE} edgeTypes={EDGE} onNodesChange={onNodesChange} onNodesDelete={deleteNode} onEdgesChange={onEdgesChange} onEdgeUpdate={onEdgeUpdate} onConnect={onConnect} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance}  fitView>
+              <ReactFlow nodes={nodes} edges={edges} nodeTypes={NODE} edgeTypes={EDGE} onNodesChange={onNodesChange} onNodesDelete={deleteNode} onEdgesChange={onEdgesChange} onEdgeUpdate={onEdgeUpdate} onConnect={onConnect} onDragOver={onDragOver} onDrop={onDrop} onInit={setReactFlowInstance} connectionLineComponent={CustomLine} fitView>
                 <Background variant='dots' size={1} className=" bg-white dark:bg-neutral-800"/>
                 <Controls/>
               </ReactFlow>
