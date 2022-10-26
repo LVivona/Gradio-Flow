@@ -138,6 +138,7 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 - App Name change
 - Mutiple windows within the react-flow environment 
 - Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
+- cleaner node resizer [already built](https://github.com/LVivona/wholetensor/blob/master/ModuleFlow/src/components/Nodes/Custom.js)
 
 
 
