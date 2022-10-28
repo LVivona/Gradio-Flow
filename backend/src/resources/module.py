@@ -78,7 +78,7 @@ def InterLauncher(name, interface, listen=2000, **kwargs):
                      share=kwargs['share'] if "share" in kwargs else None,
                      debug=kwargs['debug'] if "debug" in kwargs else False,
                      enable_queue=kwargs['enable_queue'] if "enable_queue" in kwargs else None,
-                     max_threads=kwargs['max_threads'] if "max_threads" in kwargs else None,
+                     max_threads=kwargs['max_threads'] if "max_threads" in kwargs else 40,
                      auth=kwargs['auth'] if "auth" in kwargs else None,
                      auth_message=kwargs['auth_message'] if "auth_message" in kwargs else None,
                      prevent_thread_lock=kwargs['prevent_thread_lock'] if "prevent_thread_lock" in kwargs else False,
@@ -131,7 +131,7 @@ def tabularGradio(funcs, names=[], name="Tabular Temp Name", **kwargs):
                                             share=kwargs['share'] if "share" in kwargs else None,
                                             debug=kwargs['debug'] if "debug" in kwargs else False,
                                             enable_queue=kwargs['enable_queue'] if "enable_queue" in kwargs else None,
-                                            max_threads=kwargs['max_threads'] if "max_threads" in kwargs else None,
+                                            max_threads=kwargs['max_threads'] if "max_threads" in kwargs else 40,
                                             auth=kwargs['auth'] if "auth" in kwargs else None,
                                             auth_message=kwargs['auth_message'] if "auth_message" in kwargs else None,
                                             prevent_thread_lock=kwargs['prevent_thread_lock'] if "prevent_thread_lock" in kwargs else False,
@@ -315,14 +315,14 @@ def GradioModule(cls):
                 except Exception:
                     print(f"**{bcolor.BOLD}{bcolor.FAIL}CONNECTION ERROR{bcolor.ENDC}** 🐛The listening api is either not up or you choose the wrong port.🐛")
                     return
-
+            print(port)
             self.interface.launch(server_port=port,
-                                  server_name=f"{DOCKER_LOCAL_HOST}",
+                                  server_name=DOCKER_LOCAL_HOST,
                                   inline= kwargs['inline'] if "inline" in kwargs else None,
                                   share=kwargs['share'] if "share" in kwargs else None,
                                   debug=kwargs['debug'] if "debug" in kwargs else False,
                                   enable_queue=kwargs['enable_queue'] if "enable_queue" in kwargs else None,
-                                  max_threads=kwargs['max_threads'] if "max_threads" in kwargs else None,
+                                  max_threads=kwargs['max_threads'] if "max_threads" in kwargs else 40,
                                   auth=kwargs['auth'] if "auth" in kwargs else None,
                                   auth_message=kwargs['auth_message'] if "auth_message" in kwargs else None,
                                   prevent_thread_lock=kwargs['prevent_thread_lock'] if "prevent_thread_lock" in kwargs else False,
