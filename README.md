@@ -111,34 +111,31 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 
 ## Updates ⚒️
 ### Backend 💽
-- Module fixes
-- Demo file
-
+- [ ] Bug fixes for max_thread when launching gradio
 
 ### Frontend 🖥️
-- Node
-    - Append edges together
-        - (In the works) Connection API paramters; Allow people to use Gradio Flow as a module base platform
+- [ ] Node
+    - [ ] Append edges together (**removed for now**)
+        - [ ] (In the works) Connection API paramters; Allow people to use Gradio Flow as a module base platform
+    - [ ] within firefox draggable size change not availible due to code error (FIXED)
+    - [ ] more responsive size adjuster
+    - [ ] converted custom node from class component to functional react component
 
 - Node Menu
-    - fixed some bugs from ``+ button`` for catching errors and wrong inputs
-    - ``+ button`` now includes hugginface spaces, and gradio share
-        - https://hf.space/embed/name_of_user/name_of_space/+
-        - Examples: (https://hf.space/embed/marcop/musika/+, https://hf.space/embed/stabilityai/stable-diffusion/+)
-        - better user interface for shared links
-- Node
-    - within firefox draggable size change not availible due to code error
-    - scrollable iframe 
+    - [ ] fixed some bugs from ``+ button`` for catching errors and wrong inputs
+    - [ ] ``+ button`` now includes hugginface spaces, and gradio share
+        - [ ] https://hf.space/embed/name_of_user/name_of_space/+
+        - [ ] Examples: (https://hf.space/embed/marcop/musika/+, https://hf.space/embed/stabilityai/stable-diffusion/+)
+        - [ ] better user interface for shared links
 
 
 
-![Node Menu](images/new_feature.png)
+<img width="1440" alt="image" src="https://user-images.githubusercontent.com/66436951/198501746-8abd6042-c3aa-4aa5-9a4f-72f11f92d4aa.png">
 
 ### In The Works 🚧
-- App Name change
-- Mutiple windows within the react-flow environment 
-- Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
-- cleaner node resizer [already built](https://github.com/LVivona/wholetensor/blob/master/ModuleFlow/src/components/Nodes/Custom.js)
+- [ ] Mutiple windows within the react-flow environment 
+- [ ] Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
+- [ ] Convert Flask API to FastAPI to complement new feture that allow user so add gradio endpoints (In the works)
 
 
 
