@@ -36,6 +36,13 @@ export default function ReactEnviorment() {
     const reactFlowWrapper = useRef(null);
     const [tool, setTool] = useState(false)
 
+    const deleteNodeContains = (id) =>{setNodes((nds) => nds.filter(n => !n.id.includes(`${id}-`) ))}
+    const deleteEdge = useCallback((id) => setEdges((eds) => eds.filter(e => e.id !== id)), [setEdges])
+    const deleteNode = useCallback((id) =>{
+      setNodes(() => nodes.filter(n => n.id !== id ))
+    }, [setNodes, nodes])
+
+
     useEffect(() => {
       const restore = () => {
       const flow = JSON.parse(localStorage.getItem('flowkey'));
@@ -49,9 +56,8 @@ export default function ReactEnviorment() {
         }
       }
       restore()
-    },[])
+    },[deleteNode, deleteEdge])
 
-    const deleteEdge = (id) => setEdges((eds) => eds.filter(e => e.id !== id))
 
 
     const onNodesChange = useCallback(
@@ -79,7 +85,7 @@ export default function ReactEnviorment() {
           console.log(error)
         })
       },
-      [setEdges]
+      [setEdges, deleteEdge]
     );
 
 
@@ -89,8 +95,6 @@ export default function ReactEnviorment() {
       event.dataTransfer.dropEffect = 'move';
     }, []);
 
-    const deleteNodeContains = (id) =>{setNodes((nds) => nds.filter(n => !n.id.includes(`${id}-`) ))}
-    const deleteNode = (id) =>{setNodes((nds) => nds.filter(n => n.id !== id ))}
 
     const onSave = useCallback(() => {
       if (reactFlowInstance) {
@@ -152,7 +156,7 @@ export default function ReactEnviorment() {
           setNodes((nds) => nds.concat(newNode));
       }
       },
-      [reactFlowInstance, nodes]);
+      [reactFlowInstance, nodes, deleteNode]);
 
     return (
       <div className={`${theme ? "dark" : ""}`}>          
