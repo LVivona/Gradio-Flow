@@ -136,6 +136,7 @@ stream both [Gradio](https://gradio.app) ( and later [Streamlit](https://streaml
 - [ ] Mutiple windows within the react-flow environment 
 - [ ] Directory tree search that looks for files that contain classes and functions that are registered under the decorators that are in ``backend/src/resources`` allowing you to append all your registered functions with only using the frontend.
 - [ ] Convert Flask API to FastAPI to complement new feture that allow user so add gradio endpoints (In the works)
+- [ ] API Input and Output components  
 
 
 
